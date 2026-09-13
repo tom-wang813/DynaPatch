@@ -1,0 +1,25 @@
+defaults:
+  - model: resnet50
+  - optional dataset: null
+  - optional method: null
+  - optional task: null
+  - optional fault: null
+  - optional train: null
+  - optional eval: null
+  - optional runtime: null
+  - optional bank: null
+  - optional conditioning: null
+  - _self_
+  - experiment: null
+
+# Global Runtime Settings
+seed: 42
+device: 'cpu' 
+num_trials: 1
+num_iterations: 20
+
+# Default Experiment Parameters (can be overridden)
+batch_size: 1
+num_experts: 50
+models_to_test: ['resnet50', 'vgg16', 'vit', 'convnext', 'densenet121']
+num_experts_list: [10, 50, 100, 200, 500, 1000]

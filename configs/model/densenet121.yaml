@@ -1,0 +1,14 @@
+name: DenseNet121
+type: DenseNet
+architecture: densenet121
+checkpoint_path: null
+pretrained_weights: null
+
+feature_dim: 1024
+shallow_dim: 1024
+out_dim: 1024
+split_idx: 11
+
+hypernet_hidden_dim: 128
+hypernet_num_hidden_layers: 1
+hypernet_style: plain

@@ -1,0 +1,8 @@
+stage: backbone_finetune
+epochs: 5
+batch_size: 64
+optimizer: adamw
+lr: 1.0e-4
+weight_decay: 1.0e-4
+grad_clip_norm: null
+early_stop_metric: eval_acc

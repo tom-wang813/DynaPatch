@@ -1,0 +1,12 @@
+name: ConvNeXt_Tiny
+type: ConvNeXt
+architecture: convnext
+
+feature_dim: 768
+shallow_dim: 96
+out_dim: 768
+split_idx: 2
+
+hypernet_hidden_dim: 128
+hypernet_num_hidden_layers: 1
+hypernet_style: plain

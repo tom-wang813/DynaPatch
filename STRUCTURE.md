@@ -16,19 +16,27 @@ dynapatch-anon-repro/
                                   (deploy_eval.py), shared bundle builder (stage3.py)
     baselines/                  - arachne_de.py (real Arachne, our re-impl., DE search),
                                   distrep_pso.py (real DistRep, our re-impl., PSO search),
-                                  head_repair.py (HeadFT/FullFT config logic; driver script
-                                  not included, see README "Known limitations")
+                                  head_repair.py (HeadFT/FullFT/DistRep-original config logic),
+                                  arachne.py (TopKSearch config logic -- NOT real Arachne, see
+                                  scripts/run_fewshot_arachne.sh)
     data/, training/, evaluation/, utils/
 
   scripts/
     paper_latex_tables.py       - GPU-free: LaTeX tables from outputs/*.csv,*.json (entrypoint)
     names.py                    - shared setting/method-name/column constants
+    reproduce_all.sh            - full-retrain: backbone + DynaPatch + all 6 baselines,
+                                  one (dataset, backbone, seed) at a time (entrypoint)
+    train_backbone.py           - Hydra-composed frozen-backbone trainer
+    train_head_repair_baseline.py - HeadFT / FullFT / DistRep-original (--mode flag selects)
+    train_arachne_baseline.py   - TopKSearch (NOT real Arachne, see its own driver below)
+    prepare_lisa_classification.py, prepare_tt100k_classification.py
+                                 - raw annotations -> ImageFolder classification crops
     run_resolved_experiment.py  - config-driven training/deploy-eval runner (DynaPatch)
     run_arachne_de.py, run_distrep_pso.py       - real-baseline entrypoints (self-contained)
     run_mainline_all.sh, queue_mainline_baselines.sh,
-    queue_arachne_de.sh, queue_distrep_pso.sh   - orchestration across 12 settings x 3 seeds
+    queue_arachne_de.sh, queue_distrep_pso.sh,
     run_fewshot_{arachne,distrep,headrepair}.sh,
-    queue_real_baselines.sh      - need $DYNAPATCH_BASELINE_REPO (external, not shipped)
+    queue_real_baselines.sh      - orchestration across 12 settings x 3 seeds (all self-contained)
     check_environment.py, validate_assets.py, check_seed_split_leak.py   - sanity checks
     sample_frame.py, collect_csv.py, best_data.py, table_rq4_final.py,
     gate_protocol_b.py, gate_zoo.py, analysis_*.py, analyze_*.py    - analysis pipeline that
@@ -39,9 +47,14 @@ dynapatch-anon-repro/
                                   dump_prior_features.py (NN-Patching/PatchNAS feature cache)
 
   configs/
+    config.yaml, dataset/, model/, train/, runtime/   - Hydra composition groups for
+                                  train_backbone.py only (dataset={gtsrb,tt100k_signs,
+                                  lisa_signs}, model={resnet50,convnext,densenet121,vgg16},
+                                  train=backbone_finetune, runtime={local_cpu,local_gpu})
     v8_source/<dataset>/<backbone>/{train,deploy}.yaml   - the REAL, live per-setting configs
-                                                           (confirmed: every queue/run script
-                                                           reads this tree, not any other)
+                                                           for DynaPatch + all baselines except
+                                                           backbone training (confirmed: every
+                                                           queue/run script reads this tree)
     risk/                        - critical-class definitions (per dataset)
     analysis/                    - configs for a subset of the analysis scripts above
     matrix/traffic_sign_12_settings.csv   - the (dataset, backbone) setting matrix
@@ -88,10 +101,14 @@ What was deliberately left out of this anonymized repo (and why)
 - Frozen backbone checkpoints and repair checkpoints (binaries, ~2.2 GB+) -- not committed to
   this git-based artifact; artifacts/checkpoints/MANIFEST.md documents what they are.
 
-- main.py -- a Hydra entrypoint requiring a configs/config.yaml that never existed in the
-  source repository; confirmed dead code (never invoked by any script), removed rather than
-  shipped as a broken entrypoint.
+- main.py -- a generic Hydra dispatcher for experiment.stage in {stage3_repair, deploy_eval}.
+  Superseded by scripts/run_resolved_experiment.py, which does the same dispatch from a flat
+  --config path instead of full Hydra composition and is what every queue/run script actually
+  calls; confirmed never invoked by any script, removed rather than shipped as a second,
+  redundant entrypoint. (Its Hydra config group, configs/config.yaml, IS shipped -- it is
+  needed separately by scripts/train_backbone.py, which is unrelated to main.py's two stages.)
 
-- src/baselines/arachne.py, src/baselines/selective.py -- confirmed not imported by any
-  script in this codebase (the historical "TopKSearch" baseline that reuses the arachne.py
-  name lives in run_fewshot_arachne.sh's external sibling-repo call, not in this file).
+- src/baselines/selective.py -- confirmed not imported by any script in this codebase, kept
+  anyway (harmless, no identifying content). src/baselines/arachne.py IS load-bearing here:
+  scripts/train_arachne_baseline.py (the "TopKSearch" baseline, see its own header for why it
+  must never be called "Arachne") imports it via src/baselines/__init__.py.

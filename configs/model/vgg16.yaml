@@ -1,0 +1,11 @@
+name: VGG16
+type: VGG
+architecture: vgg16
+
+feature_dim: 25088
+shallow_dim: 64
+out_dim: 25088
+split_idx: 5
+hypernet_hidden_dim: 64
+hypernet_num_hidden_layers: 1
+hypernet_style: plain

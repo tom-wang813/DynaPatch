@@ -23,8 +23,11 @@ Summary: 12/12 settings have shipped raw data + split manifests + final result C
 the GPU-free table-recomputation path in README.md). 0/12 have shipped checkpoint binaries
 (backbone or repair) -- these are documented in `artifacts/checkpoints/MANIFEST.md` /
 `manifest.json` but not committed to this repository (~2.2 GB of backbone checkpoints alone;
-see README.md "Known limitations"). Retraining from `data/` + `configs/v8_source/` regenerates
-them.
+see README.md "Known limitations"). `bash scripts/reproduce_all.sh <dataset> <backbone> <seed>`
+regenerates everything from `data/` + `configs/`: the frozen backbone (if its checkpoint is
+missing), DynaPatch, and all 6 of the paper's baselines (Arachne, DistrRep, HeadFT, FullFT,
+NNPatch, PatchNAS) -- see README.md "Full retrain" for the one disclosed hyperparameter caveat
+(HeadFT/FullFT/DistRep-original's training batch size).
 
 Confirm what is actually present on disk with:
 

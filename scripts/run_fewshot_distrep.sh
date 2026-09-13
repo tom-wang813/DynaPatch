@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
-# run_fewshot_distrep.sh -- DistRep (weight-retraining rival) few-shot, run in an EXTERNAL
-# checkout (set via $DYNAPATCH_BASELINE_REPO, not shipped in this repo) but with ALL data
-# pointed at this repo's splits + subsamples (abs paths), so the comparison is on the
-# identical backbone/splits/failures. Output lands back in this repo.
-# DistRep = gradient retrain (full_finetune_distr, 12ep), no gate.
+# run_fewshot_distrep.sh -- "DistRep-original" (weight-retraining upper bound, --mode
+# full_finetune_distr = plain full fine-tune, NOT the real 3-phase PSO method -- that is
+# scripts/run_distrep_pso.py / src/baselines/distrep_pso.py, a separate, faithful
+# re-implementation). Runs entirely LOCALLY: every data path already lives in this repo.
+# DistRep-original = gradient retrain (full_finetune_distr, 12ep), no gate.
+#
+# KNOWN GAP: train_loop.batch_size below falls back to configs/v8_source/<ds>/<bb>/train.yaml's
+# own value, since the resolved config the original run read it from (in a non-anonymized
+# sibling repository) is not part of this artifact -- see README.md "Known limitations". Set
+# BATCH explicitly if you know the original value.
 #
 # Usage: bash scripts/run_fewshot_distrep.sh <ds>/<bb> "<seeds>" "<ks>"
 set -euo pipefail
 RV="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ORIG="${DYNAPATCH_BASELINE_REPO:?Set DYNAPATCH_BASELINE_REPO to a checkout that provides train_head_repair_baseline.py and the resolved baseline configs under outputs/baselines_rq4/ -- this driver script is not self-contained in this anonymized repro repo, see README.md}"
+cd "$RV"
 SETTING="$1"; SEEDS="$2"; KS="$3"
 ds="${SETTING%/*}"; bb="${SETTING#*/}"
 # CR_SUBSET varies how much clean data the repair is allowed to see (the access-budget axis);
@@ -22,11 +27,12 @@ EPOCHS="${EPOCHS:-12}"
 # clean set while this arm keeps the global one would be an unfair comparison in our favour --
 # the same class of bias as the 40-vs-12 epoch mismatch found the same day. Empty = global.
 CLEAN_DIR="${CLEAN_DIR:-}"
-cd "$ORIG"
-PY=".venv/bin/python"
+BATCH="${BATCH:-}"
+PY="${PY:-uv run python}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}" PYTORCH_ALLOC_CONF=expandable_segments:True
-src="outputs/baselines_rq4/${ds}/${bb}/distrrep/config_resolved.yaml"
-train_bs="$($PY -c "from omegaconf import OmegaConf;print(int(OmegaConf.load('$src').train_loop.batch_size))")"
+src="configs/v8_source/${ds}/${bb}/train.yaml"
+[ -f "$src" ] || { echo "no config for ${ds}/${bb}: $src" >&2; exit 1; }
+train_bs="${BATCH:-$($PY -c "from omegaconf import OmegaConf;print(int(OmegaConf.load('$src').train_loop.batch_size))")}"
 
 for seed in $SEEDS; do
   d="$RV/artifacts/bug_sets/v8_splits_seed${seed}/${ds}_${bb}"

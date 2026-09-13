@@ -7,9 +7,11 @@ Runtime environment for the anonymized DynaPatch reproduction repository.
 - Python: `>=3.10`
 - Environment tool: `uv` (metadata in `pyproject.toml`)
 - Dependencies: torch, torchvision, numpy, pandas, scipy, scikit-learn, omegaconf, pyyaml,
-  pillow, matplotlib, seaborn, psutil — see `pyproject.toml`. No Hydra (the one script that used
-  it, `main.py`, was dead code depending on a config file that did not exist, and is not
-  included here).
+  pillow, matplotlib, seaborn, psutil, hydra-core — see `pyproject.toml`. Hydra is used only by
+  `scripts/train_backbone.py` (`configs/{config.yaml,dataset,model,train,runtime}/`); every
+  other training/deploy script uses a flat `--config <path.yaml>` + `--overrides` convention
+  instead (`scripts/run_resolved_experiment.py`, `train_head_repair_baseline.py`,
+  `train_arachne_baseline.py`).
 
 ## Setup
 
@@ -28,16 +30,27 @@ seconds to run.
 
 ## GPU path (retrain)
 
-- DynaPatch (DPGen+DPGate) training/deploy-eval: `scripts/run_resolved_experiment.py` with
-  `configs/v8_source/<dataset>/<backbone>/{train,deploy}.yaml`. Device selected via
-  `runtime.device` in the config or `CUDA_VISIBLE_DEVICES`.
-- Arachne(DE) / DistRep(PSO): `scripts/run_arachne_de.py` / `scripts/run_distrep_pso.py`.
-- HeadFT / FullFT / DistrRep-fullFT / TopKSearch: require `DYNAPATCH_BASELINE_REPO` (external,
-  not shipped here — see README.md "Known limitations").
+Everything below runs locally; no external checkout is required.
 
-Training/deploy-eval needs a starting frozen backbone checkpoint per (dataset, backbone); these
-binaries are not shipped in this repository (~2.2 GB total across 12 settings) — see
-`artifacts/checkpoints/MANIFEST.md`.
+```bash
+bash scripts/reproduce_all.sh <dataset> <backbone> <seed> [outdir]
+```
+
+trains a missing frozen backbone (`scripts/train_backbone.py`, shared across the 3 repair
+seeds), then DynaPatch train+deploy (`scripts/run_resolved_experiment.py`), then all 6 of the
+paper's baselines: Arachne(DE)/DistRep(PSO) (`run_arachne_de.py`/`run_distrep_pso.py`, real
+re-implementations), HeadFT/FullFT/DistRep-original (`train_head_repair_baseline.py --mode ...`),
+and TopKSearch (`train_arachne_baseline.py`, NOT real Arachne). NNPatch/PatchNAS run separately
+(`dump_prior_features.py` + `baseline_prior_patches.py`) since they operate across settings, not
+per-setting. Device selected via `runtime.device`/`--device`/`DEVICE` env var depending on script.
+
+Backbone checkpoints (~2.2 GB across 12 settings) are not shipped as binaries — see
+`artifacts/checkpoints/MANIFEST.md`; `reproduce_all.sh` trains a missing one automatically.
+
+Known, disclosed caveat: HeadFT/FullFT/DistRep-original's `train_loop.batch_size` falls back to
+`configs/v8_source/<ds>/<bb>/train.yaml`'s own value (a real, in-repo number) rather than a
+value whose original provenance could not be traced — see README.md "Known limitations". Set
+`BATCH=<value>` to override.
 
 ## Data expectations
 

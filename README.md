@@ -39,41 +39,66 @@ end-to-end from raw predictions rather than trusting the shipped intermediate CS
 the full retrain path (below) plus the analysis scripts under `scripts/analysis_*.py` /
 `scripts/gate_*.py`, which are included for reference but expect those large intermediate dumps.
 
-### 2. Full retrain: DynaPatch's own training + 2 of 6 baselines, from data + frozen backbones
+### 2. Full retrain: backbones + DynaPatch + all 6 baselines, from data
 
-Self-contained in this repo, given the shipped `data/` and a GPU:
+Runs entirely LOCALLY — no external checkout needed. One entrypoint per (dataset, backbone,
+seed) setting:
 
 ```bash
-# DynaPatch (DPGen + DPGate), one setting/seed at a time
-uv run python scripts/run_resolved_experiment.py --config configs/v8_source/<dataset>/<backbone>/train.yaml
-uv run python scripts/run_resolved_experiment.py --config configs/v8_source/<dataset>/<backbone>/deploy.yaml
-
-# Real Arachne (our PyTorch differential-evolution re-implementation) and real DistRep (PSO)
-uv run python scripts/run_arachne_de.py ...
-uv run python scripts/run_distrep_pso.py ...
+uv sync
+bash scripts/reproduce_all.sh <dataset> <backbone> <seed> [outdir]
+# e.g. bash scripts/reproduce_all.sh gtsrb resnet50 101 outputs/repro_run
 ```
 
-`scripts/run_mainline_all.sh`, `scripts/queue_mainline_baselines.sh`, `scripts/queue_arachne_de.sh`,
-`scripts/queue_distrep_pso.sh` orchestrate these across the 12 settings x 3 seeds.
+This trains the frozen backbone if its checkpoint is missing (`scripts/train_backbone.py`,
+shared across the 3 repair seeds), then runs DynaPatch (DPGen+DPGate) train+deploy, then all 6
+of the paper's baselines:
 
-Frozen backbone checkpoints (12 = 3 datasets x 4 backbones) are needed as the starting point for
-this path and are **not shipped in this repository** (~2.2 GB total; see "Known limitations").
-Retraining the 4 backbones themselves, and running the other 4 baselines (HeadFT, FullFT,
-DistrRep's original full-fine-tune variant, and the greedy "TopKSearch" baseline that predates
-the real Arachne(DE) re-implementation and must never be called "Arachne" — see
-`scripts/run_fewshot_arachne.sh`'s header), depend on driver scripts (`train_backbone.py`,
-`prepare_*_classification.py`, `train_head_repair_baseline.py`, `train_arachne_baseline.py`)
-that live in a separate, non-anonymized sibling repository and are **not included here** (see
-"Known limitations"). `scripts/run_fewshot_{arachne,distrep,headrepair}.sh` and
-`scripts/queue_real_baselines.sh` require `DYNAPATCH_BASELINE_REPO` to point at a checkout
-providing those scripts; they fail fast with an explanatory message if it is unset.
+| Baseline | Driver | Status |
+|---|---|---|
+| DynaPatch | `scripts/run_resolved_experiment.py` | self-contained |
+| Arachne (real, DE re-implementation) | `scripts/run_arachne_de.py` / `src/baselines/arachne_de.py` | self-contained |
+| DistrRep (real, 3-phase PSO re-implementation) | `scripts/run_distrep_pso.py` / `src/baselines/distrep_pso.py` | self-contained |
+| HeadFT | `scripts/train_head_repair_baseline.py --mode head_only` | self-contained |
+| FullFT | `scripts/train_head_repair_baseline.py --mode full_finetune` | self-contained |
+| NNPatch (NN-Patching) | `scripts/dump_prior_features.py` + `scripts/baseline_prior_patches.py` | self-contained (cross-setting; run separately, see below) |
+| PatchNAS | same as NNPatch (`baseline_prior_patches.py` produces both) | self-contained |
+
+`scripts/train_head_repair_baseline.py` also drives two secondary, non-headline variants used
+elsewhere in the paper's ablations: `--mode full_finetune_distr` ("DistRep-original", a plain
+full-fine-tune upper bound distinct from the real PSO method above) and
+`scripts/train_arachne_baseline.py` ("TopKSearch", a greedy top-k weight search that predates
+the real Arachne(DE) re-implementation and must never be reported as "Arachne" — see that
+script's header). `reproduce_all.sh` runs both of these too.
+
+`scripts/run_mainline_all.sh`, `scripts/queue_mainline_baselines.sh`, `scripts/queue_arachne_de.sh`,
+`scripts/queue_distrep_pso.sh`, `scripts/queue_real_baselines.sh` orchestrate these across the 12
+settings x 3 seeds. `scripts/prepare_lisa_classification.py` / `prepare_tt100k_classification.py`
+convert each dataset's raw detection/annotation format into the `ImageFolder` classification
+crops `data/{lisa_signs_clf,tt100k_signs_clf}` expects, if starting from raw source data instead
+of the shipped crops.
+
+**Known, disclosed gap** (not silently smoothed over): `train_head_repair_baseline.py`'s
+`train_loop.batch_size` for HeadFT/FullFT/DistRep-original was originally read from a resolved
+config produced by an earlier training run; that specific resolved-config file's provenance
+could not be traced with certainty, so this repo falls back to `configs/v8_source/<ds>/<bb>/
+train.yaml`'s own `train_loop.batch_size` (a real, in-repo number) instead of guessing. This is
+disclosed rather than silently assumed to be bit-identical to the paper's shipped numbers for
+this one hyperparameter — set `BATCH=<value>` to override if you know the original value. See
+"Known limitations" below.
 
 ## Method code
 
 `src/models/dynapatch/` (hypernetwork, patch operator, router, deployment gate, prototype/repair
 banks), `src/experiment/{train_stage3.py,deploy_eval.py,stage3.py,runner.py}` (training/eval
-loops), `src/baselines/{arachne_de.py,distrep_pso.py,head_repair.py}` (baseline
+loops), `src/baselines/{arachne_de.py,distrep_pso.py,head_repair.py,arachne.py}` (baseline
 implementations), `src/data/`, `src/training/`, `src/evaluation/`.
+
+Training drivers: `scripts/train_backbone.py` (Hydra-composed, `configs/{dataset,model,train,
+runtime}/`), `scripts/train_head_repair_baseline.py` (HeadFT/FullFT/DistRep-original, flat
+`--config` + `--mode`), `scripts/train_arachne_baseline.py` (TopKSearch), `scripts/run_arachne_de.py`
+/ `scripts/run_distrep_pso.py` (Arachne(DE)/DistRep(PSO)), `scripts/run_resolved_experiment.py`
+(DynaPatch train/deploy).
 
 ## Data
 
@@ -110,14 +135,18 @@ reproduction convenience only and does not relicense them.
    paper's tables from final per-cell CSVs, not from raw per-sample predictions. `scripts/analysis_*.py`,
    `scripts/gate_*.py` and similar are included for methodological transparency (they show exactly
    how each shipped CSV was computed) but will not run standalone without those larger dumps.
-2. **Frozen backbone checkpoints (~2.2 GB) are not shipped.** `artifacts/checkpoints/manifest.json`
+2. **Frozen backbone checkpoints (~2.2 GB) are not shipped as binaries.** `artifacts/checkpoints/manifest.json`
    / `MANIFEST.md` document what each checkpoint is; `scripts/validate_assets.py` will correctly
-   report them as missing until they are supplied.
-3. **4 of 6 baselines' training drivers are not included.** HeadFT, FullFT, the DistrRep
-   full-fine-tune variant, and the (mislabeled, non-headline) "TopKSearch" baseline are driven by
-   scripts that live only in a separate, non-anonymized sibling repository. Only Arachne(DE) and
-   DistRep(PSO) — the two real, paper-headline baseline re-implementations — are fully
-   self-contained here.
-Item 3 above is the most significant open gap in this artifact and should be resolved (either by
-porting the missing drivers, or by scoping the paper's reproducibility claim explicitly to the
-two paths above) before this repository is finalized as the camera-ready artifact link.
+   report them as missing until they are supplied or retrained (`scripts/reproduce_all.sh` trains
+   a missing backbone automatically).
+3. **HeadFT/FullFT/DistRep-original's exact `train_loop.batch_size` is a documented fallback, not
+   a verified-original value.** See "Full retrain" above. This affects gradient step count for
+   those 3 non-headline-method training runs only; it does not affect DynaPatch, Arachne(DE),
+   DistRep(PSO), NNPatch, or PatchNAS.
+4. **TT100K-Signs / LISA-Signs raw source data and their exact download locations are not
+   documented here.** `scripts/prepare_{lisa,tt100k}_classification.py` convert an already-
+   downloaded raw annotation format into the classification crops this repo ships pre-built
+   under `data/`; if you need to regenerate those crops from scratch rather than use the shipped
+   ones, you must separately obtain the LISA Traffic Sign Dataset and TT100K raw data
+   (their standard public releases), matching the raw layout those two prepare scripts expect
+   (`--raw-root`, defaulting to `data/lisa_raw` / `data/tt100k_raw`).

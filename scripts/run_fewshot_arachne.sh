@@ -1,28 +1,26 @@
 #!/usr/bin/env bash
-# run_fewshot_arachne.sh -- "TopKSearch": greedy top-k last-layer weight search, few-shot, run in
-# the ORIGINAL repo with all data pointed at the review repo's splits+subsamples. Mirrors
-# run_fewshot_distrep.sh.
+# run_fewshot_arachne.sh -- "TopKSearch": greedy top-k last-layer weight search, few-shot. Runs
+# entirely LOCALLY (no external checkout needed): every data path already lives in this repo.
 #
-# ⚠️ THIS IS NOT ARACHNE. The file name and the output tree keep the old name only so existing
-# results stay addressable. src/baselines/arachne.py calls itself "Arachne-STYLE" and shares
-# neither of Arachne's two core components: fault localisation is |grad| top-k rather than
-# Arachne's bidirectional gradient-loss x forward-impact criterion, and the repair search is
-# greedy coordinate descent (3 rounds) rather than Differential Evolution; it is also confined to the final linear
-# layer. Its measured RR is 0.000-0.100 across all 12 settings. Arachne is by Sohn/Kang/Yoo (KAIST,
-# TOSEM 2022, https://github.com/coinse/arachne); this project's advisors publish directly on top
-# of it, so this column must never be labelled "Arachne". Analyzers now print it
-# as TopKSearch. To get a real Arachne column, run the authors' implementation.
-# See note/PITFALLS.md 2026-07-28.
+# WARNING: THIS IS NOT ARACHNE. The file name and the output tree keep the old name only so
+# existing results stay addressable. src/baselines/arachne.py calls itself "Arachne-STYLE" and
+# shares neither of Arachne's two core components: fault localisation is |grad| top-k rather
+# than Arachne's bidirectional gradient-loss x forward-impact criterion, and the repair search
+# is greedy coordinate descent (3 rounds) rather than Differential Evolution; it is also
+# confined to the final linear layer. Its measured RR is 0.000-0.100 across all 12 settings.
+# Arachne is by Sohn/Kang/Yoo (KAIST, TOSEM 2022, https://github.com/coinse/arachne); this
+# column must never be labelled "Arachne". The real re-implementation is
+# scripts/run_arachne_de.py / src/baselines/arachne_de.py (Differential Evolution).
 #
 # Usage: bash scripts/run_fewshot_arachne.sh <ds>/<bb> "<seeds>" "<ks>"
 set -euo pipefail
 RV="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ORIG="${DYNAPATCH_BASELINE_REPO:?Set DYNAPATCH_BASELINE_REPO to a checkout that provides train_arachne_baseline.py and the resolved baseline configs under outputs/baselines_lsr_v8_s101/ -- this driver script is not self-contained in this anonymized repro repo, see README.md}"
+cd "$RV"
 SETTING="$1"; SEEDS="$2"; KS="$3"; ds="${SETTING%/*}"; bb="${SETTING#*/}"
-cd "$ORIG"; PY=".venv/bin/python"
+PY="${PY:-uv run python}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}" PYTORCH_ALLOC_CONF=expandable_segments:True
-src="$(ls outputs/baselines_lsr_v8_s101/${ds}/${bb}/arachne_style/config_resolved.yaml 2>/dev/null | head -1)"
-[ -n "$src" ] || { echo "no arachne config for ${ds}/${bb}"; exit 1; }
+src="configs/v8_source/${ds}/${bb}/train.yaml"
+[ -f "$src" ] || { echo "no config for ${ds}/${bb}: $src" >&2; exit 1; }
 
 for seed in $SEEDS; do
   d="$RV/artifacts/bug_sets/v8_splits_seed${seed}/${ds}_${bb}"

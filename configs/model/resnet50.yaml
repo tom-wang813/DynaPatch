@@ -1,0 +1,15 @@
+name: ResNet50
+type: ResNet
+architecture: resnet50
+checkpoint_path: null
+pretrained_weights: null
+
+# Dimensions mapping
+feature_dim: 2048   # Last conv layer output
+shallow_dim: 64     # Split point dimension
+out_dim: 2048       # Hypernet output
+split_idx: 4
+
+hypernet_hidden_dim: 128
+hypernet_num_hidden_layers: 1
+hypernet_style: plain

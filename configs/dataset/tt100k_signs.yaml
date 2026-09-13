@@ -1,0 +1,11 @@
+name: tt100k_signs
+data_root: data/tt100k_signs_clf
+download: false
+num_classes: 181
+input_channels: 3
+input_resolution: 224
+train_split: train
+clean_split: test
+bug_split: bug_candidates
+mean: [0.485, 0.456, 0.406]
+std: [0.229, 0.224, 0.225]

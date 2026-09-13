@@ -6,30 +6,32 @@
 # `last_layer_delta` are the cheap repairs that ARE available when the backbone is frozen, and
 # they are the honest test of whether a conditioned hypernet patch earns its complexity.
 #
-# Same cross-repo trick as run_fewshot_distrep.sh: executed in the ORIGINAL repo, every data
-# path pointed at the review repo's splits/subsamples, output written back to the review repo.
-# Hyperparameters mirror the DistRep column (12 epochs, ce clean replay @1.0) so the three
-# baselines differ only in WHICH weights they are allowed to touch.
+# Runs entirely LOCALLY (no external checkout needed): every data path already lives in this
+# repo (artifacts/bug_sets/, configs/v8_source/). Hyperparameters mirror the DistRep column
+# (12 epochs, ce clean replay @1.0) so the three baselines differ only in WHICH weights they are
+# allowed to touch.
 #
 # Usage: bash scripts/run_fewshot_headrepair.sh <ds>/<bb> "<seeds>" "<ks>" <head_only|last_layer_delta>
 #
-# Env overrides (added 2026-07-29 for the coupling-vs-capacity control; same convention as
-# run_fewshot_safepatch.sh). Defaults reproduce the shipped baseline exactly, so an unset
-# environment leaves every existing result bit-identical:
+# Env overrides (same convention as run_fewshot_safepatch.sh). Defaults reproduce the shipped
+# baseline exactly, so an unset environment leaves every existing result bit-identical:
 #   CR_WEIGHT  clean-replay weight        (default 1.0; 0.0 removes the preservation term)
 #   EPOCHS     training budget            (default 12)
 #   OUT_TAG    suffix on the output tree  (default empty -- ALWAYS set it for an ablation,
 #              otherwise the run overwrites the mainline baseline)
+#   BATCH      overrides train_loop.batch_size. KNOWN GAP: the original run read this from a
+#              DistRep resolved-config file produced by an earlier training run in a
+#              (non-anonymized) sibling repository, which is not part of this artifact and whose
+#              exact value could not be recovered. Default here falls back to
+#              configs/v8_source/<ds>/<bb>/train.yaml's own train_loop.batch_size -- this is a
+#              real, in-repo number, but is NOT verified to be bit-identical to the batch size
+#              used for the paper's shipped baseline numbers. Set BATCH explicitly if you know
+#              the original value.
 set -euo pipefail
 RV="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ORIG="${DYNAPATCH_BASELINE_REPO:?Set DYNAPATCH_BASELINE_REPO to a checkout that provides train_head_repair_baseline.py and the resolved baseline configs under outputs/baselines_rq4/ -- this driver script is not self-contained in this anonymized repro repo, see README.md}"
+cd "$RV"
 SETTING="$1"; SEEDS="$2"; KS="$3"; MODE="${4:-head_only}"
 CR_WEIGHT="${CR_WEIGHT:-1.0}"; EPOCHS="${EPOCHS:-12}"; OUT_TAG="${OUT_TAG:-}"
-# BATCH (added 2026-07-29): overrides train_loop.batch_size. Empty = whatever the DistRep resolved
-# config says, which is what every recorded baseline used. This exists because matching EPOCHS is
-# not the same as matching training: ours ships batch 8-32 while the baselines inherit 32-64, so
-# at equal epochs we take 2-4x more gradient steps in all 12 settings. Aligning the budget means
-# aligning STEPS, not epochs.
 BATCH="${BATCH:-}"
 case "$MODE" in
   head_only)        TAG="headonly" ;;
@@ -37,11 +39,11 @@ case "$MODE" in
   *) echo "unsupported mode: $MODE (use head_only | last_layer_delta)" >&2; exit 2 ;;
 esac
 ds="${SETTING%/*}"; bb="${SETTING#*/}"
-cd "$ORIG"
-PY=".venv/bin/python"
+PY="${PY:-uv run python}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}" PYTORCH_ALLOC_CONF=expandable_segments:True
-src="outputs/baselines_rq4/${ds}/${bb}/distrrep/config_resolved.yaml"
-train_bs="$($PY -c "from omegaconf import OmegaConf;print(int(OmegaConf.load('$src').train_loop.batch_size))")"
+src="configs/v8_source/${ds}/${bb}/train.yaml"
+[ -f "$src" ] || { echo "no config for ${ds}/${bb}: $src" >&2; exit 1; }
+train_bs="${BATCH:-$($PY -c "from omegaconf import OmegaConf;print(int(OmegaConf.load('$src').train_loop.batch_size))")}"
 
 for seed in $SEEDS; do
   d="$RV/artifacts/bug_sets/v8_splits_seed${seed}/${ds}_${bb}"

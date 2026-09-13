@@ -14,6 +14,7 @@ from common import ROOT, load_manifest
 
 
 REQUIRED_MODULES = [
+    "hydra",
     "omegaconf",
     "numpy",
     "pandas",
