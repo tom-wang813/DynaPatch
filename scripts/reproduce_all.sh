@@ -97,9 +97,15 @@ else
   BACKBONE_ROOT="$(dirname "$(dirname "$BACKBONE_CKPT")")"
   EXP_ID="$(basename "$BACKBONE_ROOT")"
   echo "  training backbone -> ${BACKBONE_ROOT} (this is SHARED across all 3 repair seeds for ${DS}/${BB})"
+  # BATCH overrides the batch size for every stage below (backbone included), not just
+  # HeadFT/FullFT/DistRep-original -- useful on a shared GPU where free VRAM varies with what
+  # other jobs are currently running (see README.md "GPU setup"). Unset -> configs/train/
+  # backbone_finetune.yaml's own default (64).
+  BACKBONE_BATCH_OVERRIDE=()
+  [ -n "${BATCH:-}" ] && BACKBONE_BATCH_OVERRIDE=("train.batch_size=${BATCH}")
   $RUN scripts/train_backbone.py dataset="$DS" model="$MODEL_GROUP" train=backbone_finetune runtime=local_gpu \
     +experiment.id="$EXP_ID" +experiment.name="$EXP_ID" +experiment.stage=backbone_finetune \
-    +artifacts.root="$BACKBONE_ROOT" runtime.device="$DEVICE"
+    +artifacts.root="$BACKBONE_ROOT" runtime.device="$DEVICE" "${BACKBONE_BATCH_OVERRIDE[@]}"
 fi
 
 echo "######## [1/5] DynaPatch train (DPGen+DPGate): ${DS}/${BB} seed=${SEED} ########"
