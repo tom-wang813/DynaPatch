@@ -16,6 +16,22 @@ dependencies = [
     "scikit-learn>=1.5.0",
     "scipy>=1.15.3",
     "seaborn>=0.13.2",
-    "torch>=2.10.0",
-    "torchvision>=0.25.0",
+    "torch==2.6.0",
+    "torchvision==0.21.0",
 ]
+
+# Pinned to a CUDA 12.4 build rather than the newest available wheel: an unpinned `torch` here
+# resolves to a CUDA 13.x build that requires a driver newer than many lab/cluster machines
+# (and this artifact's own test machine) actually have installed, which silently falls back to
+# CPU-only (`torch.cuda.is_available() == False`) with no error at `uv sync` time. CUDA 12.4
+# wheels work with any driver >= 550.x (nvidia-smi's reported "CUDA Version" column), which is
+# broadly available. If your machine has an older driver still, see README.md "GPU setup"; if
+# you specifically want a newer CUDA build, override the index/version at your own risk.
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }

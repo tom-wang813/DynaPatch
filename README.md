@@ -123,6 +123,15 @@ repo), nothing further is needed for the full-retrain path.
 uv sync
 ```
 
+### GPU setup
+
+`torch`/`torchvision` are pinned to CUDA 12.4 builds (works with any NVIDIA driver reporting
+CUDA Version >= 12.4 in `nvidia-smi`) rather than the newest available wheel, specifically
+because an unpinned install silently falls back to CPU (`torch.cuda.is_available() == False`,
+no error) on machines with an older driver — this was caught on this artifact's own test
+machine. To pin a specific physical GPU: `export CUDA_VISIBLE_DEVICES=0` (the retrain scripts
+also default `DEVICE=cuda:0`, override with `DEVICE=cuda:<n>` or `--device` as shown above).
+
 ## License
 
 Code is released under the MIT License (`LICENSE`). The bundled datasets (GTSRB, TT100K-Signs,
