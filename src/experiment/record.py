@@ -112,7 +112,7 @@ def write_notes_stub(cfg: DictConfig, destination: Path) -> None:
             f"- Record class: `{track}`.",
             "",
             "Hypothesis:",
-            f"- {cfg.experiment.notes}",
+            f"- {cfg.experiment.get('notes', '(no notes provided for this run)')}",
             "",
             "Boundary:",
             "- This note was auto-generated at run bootstrap and should be completed after execution.",

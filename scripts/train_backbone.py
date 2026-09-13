@@ -8,7 +8,7 @@ from pathlib import Path
 import hydra
 import torch
 import torch.nn.functional as F
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig, OmegaConf, open_dict
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -75,6 +75,18 @@ def _run_epoch(
 def main(cfg: DictConfig) -> None:
     """Train a plain classifier backbone for downstream bug-set construction."""
     _validate_backbone_config(cfg)
+    # The `train=` Hydra group (configs/train/*.yaml) composes into cfg.train, but
+    # build_classification_dataloaders and the optimizer setup below share code with the
+    # DynaPatch/baseline pipelines, which read hyperparameters from a `train_loop` section
+    # (a distinct key in their resolved configs/v8_source/*.yaml files). Alias it here so both
+    # invocation styles resolve to the same hyperparameters without duplicating them.
+    # Same reason: build_classification_dataloaders also expects an `evaluation` section
+    # (present in the resolved DynaPatch/baseline configs); backbone training has no separate
+    # eval-time hyperparameters, so default it to empty and let it fall back to train batch size.
+    with open_dict(cfg):
+        cfg.train_loop = cfg.train
+        if "evaluation" not in cfg:
+            cfg.evaluation = {}
     runner = ExperimentRunner(cfg)
     record = runner.bootstrap()
 
