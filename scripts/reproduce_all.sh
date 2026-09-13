@@ -64,13 +64,40 @@ fi
 # Same dot-path overrides run_fewshot_safepatch.sh applies -- the v8_source/*/train.yaml files
 # carry stale default split paths (an old v7 output tree) that only ever worked because every
 # real invocation overrides them explicitly; see STRUCTURE.md.
-SPLIT_OVERRIDES=(
+#
+# TRAIN vs DEPLOY must NOT share one override set. src/data/factory.py's
+# build_bug_repair_dataloaders() builds dataloaders["bug_eval"] from data.bug_val_indices_path
+# WHEN IT IS SET, falling back to data.bug_eval_indices_path only if bug_val is absent (see
+# note/PITFALLS.md, "Arachne 的 RR_held 一直是在证据集上重测一遍" -- the same silent-fallback
+# bug, previously found in a baseline script, caught here in DynaPatch's own deploy step by a
+# CPU/GPU smoke test: with bug_val_indices_path set, deploy-eval's "repair_holdout_unseen" split
+# silently evaluated on the 27-sample bug_train set instead of the true 34-sample held-out set,
+# producing a non-comparable, inflated RR). scripts/run_repairbench_v8.sh (the script that
+# actually produced the paper's numbers) never sets bug_val_indices_path for its deploy calls --
+# only for train, where it is intentional (early-stopping must not see the gate-calibration
+# slice). Mirror that split here: DEPLOY_OVERRIDES omits bug_val_indices_path entirely and
+# points clean_eval_indices_path at the true test split (clean_eval), not the train-time
+# calibration split (clean_calib) that TRAIN_OVERRIDES uses.
+TRAIN_OVERRIDES=(
   "data.bug_indices_path=${SPLIT_DIR}/${DS}_bug_indices.json"
   "data.bug_eval_indices_path=${SPLIT_DIR}/${DS}_bug_eval_indices.json"
   "data.bug_train_indices_path=${SPLIT_DIR}/${DS}_bug_train_indices.json"
   "data.bug_val_indices_path=${SPLIT_DIR}/${DS}_bug_train_indices.json"
   "data.clean_eval_indices_path=${SPLIT_DIR}/${DS}_clean_calib_indices.json"
 )
+DEPLOY_OVERRIDES=(
+  "data.bug_indices_path=${SPLIT_DIR}/${DS}_bug_indices.json"
+  "data.bug_train_indices_path=${SPLIT_DIR}/${DS}_bug_train_indices.json"
+  "data.bug_eval_indices_path=${SPLIT_DIR}/${DS}_bug_eval_indices.json"
+  "data.clean_eval_indices_path=${SPLIT_DIR}/${DS}_clean_eval_indices.json"
+)
+# The 6 baselines' own driver scripts (train_head_repair_baseline.py, train_arachne_baseline.py,
+# run_arachne_de.py, run_distrep_pso.py) do not go through build_bug_repair_dataloaders' val/eval
+# fallback -- they were checked against this same run's shipped predictions (34/34 samples,
+# indices matching data/*_bug_eval_indices.json) and are unaffected, so they keep using
+# TRAIN_OVERRIDES (renamed from the old shared SPLIT_OVERRIDES; same content) for both their
+# training and their own held-out dump.
+SPLIT_OVERRIDES=("${TRAIN_OVERRIDES[@]}")
 CR10=(loss.lambda_robust=0.0 loss.lambda_field=0.0 loss.lambda_clean_replay=1.0)
 EXTRA_MODEL_CKPT=()
 [ "$DS" = tt100k_signs ] && [ "$BB" = vgg16 ] && \
@@ -111,14 +138,14 @@ fi
 echo "######## [1/5] DynaPatch train (DPGen+DPGate): ${DS}/${BB} seed=${SEED} ########"
 $RUN scripts/run_resolved_experiment.py --config "$TRAIN_CFG" \
   --output-root "${OUT}/dynapatch/train" --seed "$SEED" \
-  --overrides "${SPLIT_OVERRIDES[@]}" "${CR10[@]}" "${EXTRA_MODEL_CKPT[@]}" \
+  --overrides "${TRAIN_OVERRIDES[@]}" "${CR10[@]}" "${EXTRA_MODEL_CKPT[@]}" \
     "train_loop.early_stop_metric=heldout_repaired" "runtime.device=${DEVICE}"
 
 echo "  DynaPatch deploy-eval: ${DS}/${BB} seed=${SEED}"
 $RUN scripts/run_resolved_experiment.py --config "$DEPLOY_CFG" \
   --output-root "${OUT}/dynapatch/deploy" --seed "$SEED" \
   --deployment-checkpoint-path "${OUT}/dynapatch/train/checkpoints/repair_best.pt" \
-  --overrides "${SPLIT_OVERRIDES[@]}" "${CR10[@]}" "${EXTRA_MODEL_CKPT[@]}" "runtime.device=${DEVICE}"
+  --overrides "${DEPLOY_OVERRIDES[@]}" "${CR10[@]}" "${EXTRA_MODEL_CKPT[@]}" "runtime.device=${DEVICE}"
 
 echo "######## [2/5] Arachne(DE) and DistRep(PSO) -- self-contained real re-implementations ########"
 echo "  -- Arachne(DE) --"
