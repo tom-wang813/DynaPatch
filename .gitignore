@@ -9,3 +9,4 @@ __pycache__/
 # README.md / ENVIRONMENT.md for how to (re)obtain each dataset.
 /data/
 note/tables/
+outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
