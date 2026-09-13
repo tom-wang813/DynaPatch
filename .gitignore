@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+
+# Raw dataset images (~680 MB, ~75k files) are deliberately NOT git-tracked: they are
+# redistributions of GTSRB / TT100K-Signs / LISA-Signs under those datasets' own licenses
+# (see README.md "License"), and committing tens of thousands of small files caused repeated
+# git corruption on this NFS-backed filesystem. The files remain on disk for local use; see
+# README.md / ENVIRONMENT.md for how to (re)obtain each dataset.
+/data/
+note/tables/

@@ -1,0 +1,49 @@
+{
+  "experiment_id": "patch_reassignment_v1",
+  "engineering_stage": "configurable_experiment",
+  "description": "Destroy the input-to-patch-effect matching while preserving the observed logit-effect distribution.",
+  "rq": "Mechanism: does input-specific matching, especially direction matching, explain held-out repair?",
+  "hypothesis": "DynaPatch works partly because different inputs receive different correction directions matched to their error modes.",
+  "falsifier": "The median RR_held advantage of the original assignment over global reassignment is at most 0.02, or fewer than 24 of 36 cells exceed the null 97.5th percentile.",
+  "support_rule": "Support if the median advantage is greater than 0.05 and at least 30 of 36 cells exceed the null 97.5th percentile.",
+  "date": "2026-09-03",
+  "data": {
+    "dump_pattern": "outputs/effect_dump_ep40ns_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions",
+    "dump_pattern_overrides": {
+      "vgg16": "outputs/effect_dump_lastaffine_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions",
+      "convnext_tiny": "outputs/effect_dump_lastaffine_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions"
+    },
+    "split": "repair_holdout_unseen",
+    "datasets": ["gtsrb", "tt100k_signs", "lisa_signs"],
+    "backbones": ["resnet50", "convnext_tiny", "densenet121", "vgg16"],
+    "seeds": [101, 202, 303],
+    "population": "Rows where the frozen base prediction is wrong."
+  },
+  "interventions": [
+    "original",
+    "global_effect_shuffle",
+    "global_direction_shuffle",
+    "global_magnitude_shuffle",
+    "within_true_class_shuffle",
+    "within_failure_type_shuffle"
+  ],
+  "metrics": [
+    "RR_held",
+    "macro_RR",
+    "coverage_at_0.5",
+    "target_margin_gain",
+    "flip_rate"
+  ],
+  "permutations": 200,
+  "random_seed": 7401,
+  "minimum_class_n": 5,
+  "compute": {
+    "device": "CPU analysis from saved logits; invocation pins CUDA_VISIBLE_DEVICES=0",
+    "num_gpus": 0,
+    "expected_bottleneck": "CPU and small-array I/O",
+    "expected_runtime": "under 10 minutes"
+  },
+  "output_dir": "outputs/patch_reassignment_v1",
+  "entrypoint": "scripts/analysis_patch_reassignment.py",
+  "stopping_rule": "PROMOTE if the support rule passes; ABANDON the specialization mechanism if the falsifier fires; otherwise EXTEND with a classifier-weight-space test."
+}

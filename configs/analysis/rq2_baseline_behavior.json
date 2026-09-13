@@ -1,0 +1,68 @@
+{
+  "analysis_date": "2026-09-04",
+  "sources": {
+    "main_metrics": "outputs/csv/all_metrics_best_config.csv",
+    "failure_type_per_setting": "outputs/mechanism_profiles/failure_type_summary_per_setting.csv",
+    "failure_type_per_type": "outputs/mechanism_profiles/failure_type_per_type.csv",
+    "regression_per_setting": "outputs/mechanism_profiles/regression_profile_per_setting.csv"
+  },
+  "output_dir": "outputs/rq2_baseline_behavior",
+  "figure_dir": "note/figures/rq2_baseline_behavior",
+  "settings": [
+    "gtsrb/resnet50",
+    "gtsrb/convnext_tiny",
+    "gtsrb/vgg16",
+    "gtsrb/densenet121",
+    "tt100k_signs/resnet50",
+    "tt100k_signs/convnext_tiny",
+    "tt100k_signs/vgg16",
+    "tt100k_signs/densenet121",
+    "lisa_signs/resnet50",
+    "lisa_signs/convnext_tiny",
+    "lisa_signs/vgg16",
+    "lisa_signs/densenet121"
+  ],
+  "baseline_methods": [
+    "FullFT",
+    "HeadFT",
+    "Arachne",
+    "DistrRep",
+    "NN-Patching",
+    "PatchNAS"
+  ],
+  "dynapatch_operating_points": [
+    "DynaPatch (ungated)",
+    "DynaPatch (gated)"
+  ],
+  "type_distribution_methods": [
+    "FullFT",
+    "HeadFT",
+    "Arachne",
+    "DistrRep",
+    "FixedPatch",
+    "NN-Patching",
+    "PatchNAS",
+    "DynaPatch (ungated)",
+    "DynaPatch (gated)"
+  ],
+  "ecdf_plot_methods": [
+    "FullFT",
+    "NN-Patching",
+    "PatchNAS",
+    "DynaPatch (ungated)"
+  ],
+  "regression_plot_methods": [
+    "FullFT",
+    "HeadFT",
+    "Arachne",
+    "DistrRep",
+    "FixedPatch",
+    "NN-Patching",
+    "PatchNAS",
+    "DynaPatch (ungated)",
+    "DynaPatch (gated)"
+  ],
+  "coverage_threshold": 0.5,
+  "min_type_support": 5,
+  "comparison_tolerance": 1e-12
+}

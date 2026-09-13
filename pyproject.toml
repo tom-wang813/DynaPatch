@@ -1,0 +1,20 @@
+[project]
+name = "dynapatch"
+version = "0.1.0"
+description = "DynaPatch: deployment-time gating for critical-class safety in neural repair (anonymized reproduction artifact)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib>=3.10.8",
+    "numpy>=2.2.6",
+    "omegaconf>=2.3.0",
+    "pandas>=2.3.3",
+    "pillow>=10.0.0",
+    "psutil>=7.2.2",
+    "pyyaml>=6.0.1",
+    "scikit-learn>=1.5.0",
+    "scipy>=1.15.3",
+    "seaborn>=0.13.2",
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
+]

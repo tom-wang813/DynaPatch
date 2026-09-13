@@ -1,0 +1,230 @@
+{
+  "aggregate": {
+    "global_direction_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        35,
+        0,
+        1
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        35,
+        0,
+        1
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 30,
+      "cells_original_above_null_p975_eligible": 30,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.16608173076923075,
+      "median_RR_held_eligible": 0.16608173076923075,
+      "median_coverage_at_0.5": 0.06177380952380952,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.6422100113442996,
+      "median_macro_RR": 0.14825128337976873,
+      "median_moved_fraction": 0.9923815789473686,
+      "median_original_minus_mean_RR": 0.43665567660550453,
+      "median_original_minus_mean_RR_eligible": 0.43665567660550453,
+      "median_target_margin_gain": 1.657085576532463
+    },
+    "global_effect_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        36,
+        0,
+        0
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        36,
+        0,
+        0
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 29,
+      "cells_original_above_null_p975_eligible": 29,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.16931089743589745,
+      "median_RR_held_eligible": 0.16931089743589745,
+      "median_coverage_at_0.5": 0.06473958333333332,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.6342055236728839,
+      "median_macro_RR": 0.15206352865693526,
+      "median_moved_fraction": 0.9914518613607191,
+      "median_original_minus_mean_RR": 0.4337306201550387,
+      "median_original_minus_mean_RR_eligible": 0.4337306201550387,
+      "median_target_margin_gain": 1.3207608673627056
+    },
+    "global_magnitude_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        25,
+        3,
+        8
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        25,
+        3,
+        8
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 10,
+      "cells_original_above_null_p975_eligible": 10,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.5584302325581396,
+      "median_RR_held_eligible": 0.5584302325581396,
+      "median_coverage_at_0.5": 0.8933194444444447,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.9274994682359614,
+      "median_macro_RR": 0.4073953176600069,
+      "median_moved_fraction": 0.9918100128369705,
+      "median_original_minus_mean_RR": 0.011862061867795759,
+      "median_original_minus_mean_RR_eligible": 0.011862061867795759,
+      "median_target_margin_gain": 11.979395764279325
+    },
+    "original": {
+      "W_T_L_original_vs_null_mean": [
+        0,
+        36,
+        0
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        0,
+        36,
+        0
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": null,
+      "cells_original_above_null_p975_eligible": null,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.5888544891640867,
+      "median_RR_held_eligible": 0.5888544891640867,
+      "median_coverage_at_0.5": 0.8944444444444444,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.968525824964132,
+      "median_macro_RR": 0.43015408920581333,
+      "median_moved_fraction": 0.0,
+      "median_original_minus_mean_RR": 0.0,
+      "median_original_minus_mean_RR_eligible": 0.0,
+      "median_target_margin_gain": 11.356687851968871
+    },
+    "within_failure_type_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        21,
+        9,
+        6
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        21,
+        9,
+        6
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 8,
+      "cells_original_above_null_p975_eligible": 8,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.5596220930232558,
+      "median_RR_held_eligible": 0.742531914893617,
+      "median_coverage_at_0.5": 0.8730158730158731,
+      "median_eligible_fraction": 0.6275642843637739,
+      "median_flip_rate": 0.9580421686746987,
+      "median_macro_RR": 0.413614482859095,
+      "median_moved_fraction": 0.45152444932879565,
+      "median_original_minus_mean_RR": 0.0017529614203002364,
+      "median_original_minus_mean_RR_eligible": 0.0023740678408727955,
+      "median_target_margin_gain": 11.356687851968871
+    },
+    "within_true_class_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        31,
+        3,
+        2
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        31,
+        3,
+        2
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 19,
+      "cells_original_above_null_p975_eligible": 19,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.5361377708978328,
+      "median_RR_held_eligible": 0.5923819124423964,
+      "median_coverage_at_0.5": 0.812840909090909,
+      "median_eligible_fraction": 0.8313953488372093,
+      "median_flip_rate": 0.9131181597873672,
+      "median_macro_RR": 0.4121671166477201,
+      "median_moved_fraction": 0.6438856589147288,
+      "median_original_minus_mean_RR": 0.031854838709677424,
+      "median_original_minus_mean_RR_eligible": 0.03585755813953484,
+      "median_target_margin_gain": 10.109644801739535
+    }
+  },
+  "completed_at": "2026-09-05T14:47:01.887663+00:00",
+  "config": {
+    "compute": {
+      "device": "CPU analysis from saved logits, no model loading or GPU computation",
+      "expected_bottleneck": "CPU and small-array I/O",
+      "expected_runtime": "under 10 minutes",
+      "num_gpus": 0
+    },
+    "data": {
+      "backbones": [
+        "resnet50",
+        "convnext_tiny",
+        "densenet121",
+        "vgg16"
+      ],
+      "datasets": [
+        "gtsrb",
+        "tt100k_signs",
+        "lisa_signs"
+      ],
+      "dump_pattern": "outputs/prior_patch_persample/{dataset}_{backbone}_s{seed}/NN-Patching/tau",
+      "patched_pred_col": "patch_pred_raw",
+      "population": "Rows where the frozen base prediction is wrong. patched_logits/patch_pred_raw are NN-Patching's own raw patch-head output, UNCONDITIONAL on its own router (routing is a separate, later decision -- not part of what this experiment tests).",
+      "seeds": [
+        101,
+        202,
+        303
+      ],
+      "split": "held",
+      "split_file": "bug_eval"
+    },
+    "date": "2026-09-05",
+    "description": "Same counterfactual reassignment as patch_reassignment_v1, run on NN-Patching's own raw (un-routed) patch output instead of DynaPatch-NoGate's. Decided 2026-09-04 (note/RESEARCH_STATE.md), executed 2026-09-05.",
+    "engineering_stage": "configurable_experiment",
+    "entrypoint": "scripts/analysis_patch_reassignment.py",
+    "experiment_id": "patch_reassignment_nnpatching_v1",
+    "falsifier": "The median RR_held advantage of the original assignment over global reassignment is at most 0.02, or fewer than 24 of 36 cells exceed the null 97.5th percentile.",
+    "hypothesis": "NN-Patching's patch head also produces a correction whose held-out repair rate depends on matching each failure to its own logit-space effect, not just on the effect's magnitude.",
+    "interventions": [
+      "original",
+      "global_effect_shuffle",
+      "global_direction_shuffle",
+      "global_magnitude_shuffle",
+      "within_true_class_shuffle",
+      "within_failure_type_shuffle"
+    ],
+    "metrics": [
+      "RR_held",
+      "macro_RR",
+      "coverage_at_0.5",
+      "target_margin_gain",
+      "flip_rate"
+    ],
+    "minimum_class_n": 5,
+    "output_dir": "outputs/patch_reassignment_nnpatching_v1",
+    "permutations": 200,
+    "random_seed": 7402,
+    "rq": "RQ1 (extended): does destroying the failure-type-to-correction match hurt every per-input patch method, not just DynaPatch, i.e. is 'different failures need different repair directions' a general principle rather than a DynaPatch-specific one?",
+    "stopping_rule": "PROMOTE if the support rule passes; report alongside DynaPatch-NoGate's own result (patch_reassignment_v1) as the same test applied to a second method, not a win/loss comparison between the two.",
+    "support_rule": "Support if the median advantage is greater than 0.05 and at least 30 of 36 cells exceed the null 97.5th percentile."
+  },
+  "decision": "INCONCLUSIVE",
+  "experiment_id": "patch_reassignment_nnpatching_v1",
+  "git_commit": "563afa50e2da23ff3bfec4da92bc73bbf3d24f4c",
+  "sanity": {
+    "cells": 36,
+    "maximum_reconstruction_error": 0.0,
+    "missing_inputs": [],
+    "rows": 216
+  }
+}

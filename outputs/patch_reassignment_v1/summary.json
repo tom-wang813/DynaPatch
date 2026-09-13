@@ -1,0 +1,232 @@
+{
+  "aggregate": {
+    "global_direction_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        36,
+        0,
+        0
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        36,
+        0,
+        0
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 35,
+      "cells_original_above_null_p975_eligible": 35,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.1641142490372272,
+      "median_RR_held_eligible": 0.1641142490372272,
+      "median_coverage_at_0.5": 0.06329613095238094,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.2671648426812585,
+      "median_macro_RR": 0.12553254312891876,
+      "median_moved_fraction": 0.9917206721623335,
+      "median_original_minus_mean_RR": 0.3369852941176471,
+      "median_original_minus_mean_RR_eligible": 0.3369852941176471,
+      "median_target_margin_gain": 1.045721629598074
+    },
+    "global_effect_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        36,
+        0,
+        0
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        36,
+        0,
+        0
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 35,
+      "cells_original_above_null_p975_eligible": 35,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.16231191950464396,
+      "median_RR_held_eligible": 0.16231191950464396,
+      "median_coverage_at_0.5": 0.03313311688311688,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.2570479804825156,
+      "median_macro_RR": 0.12517247976661022,
+      "median_moved_fraction": 0.991681832593532,
+      "median_original_minus_mean_RR": 0.32794117647058824,
+      "median_original_minus_mean_RR_eligible": 0.32794117647058824,
+      "median_target_margin_gain": 0.9157911945544728
+    },
+    "global_magnitude_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        29,
+        0,
+        7
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        29,
+        0,
+        7
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 10,
+      "cells_original_above_null_p975_eligible": 10,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.4577644230769231,
+      "median_RR_held_eligible": 0.4577644230769231,
+      "median_coverage_at_0.5": 0.6034671052631579,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.5893990384615384,
+      "median_macro_RR": 0.3289460784313726,
+      "median_moved_fraction": 0.9913727013316422,
+      "median_original_minus_mean_RR": 0.02160186251920121,
+      "median_original_minus_mean_RR_eligible": 0.02160186251920121,
+      "median_target_margin_gain": 4.5396966510274
+    },
+    "original": {
+      "W_T_L_original_vs_null_mean": [
+        0,
+        36,
+        0
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        0,
+        36,
+        0
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": null,
+      "cells_original_above_null_p975_eligible": null,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.5032051282051282,
+      "median_RR_held_eligible": 0.5032051282051282,
+      "median_coverage_at_0.5": 0.6583333333333333,
+      "median_eligible_fraction": 1.0,
+      "median_flip_rate": 0.6219066785927251,
+      "median_macro_RR": 0.3481546032478601,
+      "median_moved_fraction": 0.0,
+      "median_original_minus_mean_RR": 0.0,
+      "median_original_minus_mean_RR_eligible": 0.0,
+      "median_target_margin_gain": 4.7961698624870674
+    },
+    "within_failure_type_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        25,
+        6,
+        5
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        25,
+        6,
+        5
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 1,
+      "cells_original_above_null_p975_eligible": 1,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.4970272435897436,
+      "median_RR_held_eligible": 0.6135893455098935,
+      "median_coverage_at_0.5": 0.6490789473684211,
+      "median_eligible_fraction": 0.6275642843637739,
+      "median_flip_rate": 0.6229967948717949,
+      "median_macro_RR": 0.3473120438763373,
+      "median_moved_fraction": 0.4519641000189072,
+      "median_original_minus_mean_RR": 0.008880843495935015,
+      "median_original_minus_mean_RR_eligible": 0.014603765468863744,
+      "median_target_margin_gain": 4.7961698624870674
+    },
+    "within_true_class_shuffle": {
+      "W_T_L_original_vs_null_mean": [
+        34,
+        0,
+        2
+      ],
+      "W_T_L_original_vs_null_mean_eligible": [
+        34,
+        0,
+        2
+      ],
+      "cells": 36,
+      "cells_original_above_null_p975": 12,
+      "cells_original_above_null_p975_eligible": 12,
+      "cells_with_eligible_rows": 36,
+      "median_RR_held": 0.44956043956043956,
+      "median_RR_held_eligible": 0.5213686497326203,
+      "median_coverage_at_0.5": 0.5407692307692307,
+      "median_eligible_fraction": 0.8313953488372093,
+      "median_flip_rate": 0.5806810897435897,
+      "median_macro_RR": 0.32521613692878937,
+      "median_moved_fraction": 0.6443604651162792,
+      "median_original_minus_mean_RR": 0.03201655982905985,
+      "median_original_minus_mean_RR_eligible": 0.041523611111111136,
+      "median_target_margin_gain": 4.500688603423868
+    }
+  },
+  "completed_at": "2026-09-05T14:46:01.058296+00:00",
+  "config": {
+    "compute": {
+      "device": "CPU analysis from saved logits; invocation pins CUDA_VISIBLE_DEVICES=0",
+      "expected_bottleneck": "CPU and small-array I/O",
+      "expected_runtime": "under 10 minutes",
+      "num_gpus": 0
+    },
+    "data": {
+      "backbones": [
+        "resnet50",
+        "convnext_tiny",
+        "densenet121",
+        "vgg16"
+      ],
+      "datasets": [
+        "gtsrb",
+        "tt100k_signs",
+        "lisa_signs"
+      ],
+      "dump_pattern": "outputs/effect_dump_ep40ns_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions",
+      "dump_pattern_overrides": {
+        "convnext_tiny": "outputs/effect_dump_lastaffine_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions",
+        "vgg16": "outputs/effect_dump_lastaffine_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions"
+      },
+      "population": "Rows where the frozen base prediction is wrong.",
+      "seeds": [
+        101,
+        202,
+        303
+      ],
+      "split": "repair_holdout_unseen"
+    },
+    "date": "2026-09-03",
+    "description": "Destroy the input-to-patch-effect matching while preserving the observed logit-effect distribution.",
+    "engineering_stage": "configurable_experiment",
+    "entrypoint": "scripts/analysis_patch_reassignment.py",
+    "experiment_id": "patch_reassignment_v1",
+    "falsifier": "The median RR_held advantage of the original assignment over global reassignment is at most 0.02, or fewer than 24 of 36 cells exceed the null 97.5th percentile.",
+    "hypothesis": "DynaPatch works partly because different inputs receive different correction directions matched to their error modes.",
+    "interventions": [
+      "original",
+      "global_effect_shuffle",
+      "global_direction_shuffle",
+      "global_magnitude_shuffle",
+      "within_true_class_shuffle",
+      "within_failure_type_shuffle"
+    ],
+    "metrics": [
+      "RR_held",
+      "macro_RR",
+      "coverage_at_0.5",
+      "target_margin_gain",
+      "flip_rate"
+    ],
+    "minimum_class_n": 5,
+    "output_dir": "outputs/patch_reassignment_v1",
+    "permutations": 200,
+    "random_seed": 7401,
+    "rq": "Mechanism: does input-specific matching, especially direction matching, explain held-out repair?",
+    "stopping_rule": "PROMOTE if the support rule passes; ABANDON the specialization mechanism if the falsifier fires; otherwise EXTEND with a classifier-weight-space test.",
+    "support_rule": "Support if the median advantage is greater than 0.05 and at least 30 of 36 cells exceed the null 97.5th percentile."
+  },
+  "decision": "SUPPORT",
+  "experiment_id": "patch_reassignment_v1",
+  "git_commit": "563afa50e2da23ff3bfec4da92bc73bbf3d24f4c",
+  "sanity": {
+    "cells": 36,
+    "maximum_reconstruction_error": 0.0,
+    "missing_inputs": [],
+    "rows": 216
+  }
+}

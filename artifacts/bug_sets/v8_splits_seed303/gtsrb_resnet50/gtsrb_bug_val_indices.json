@@ -1,0 +1,1 @@
+{"indices": [4271, 12104, 3490, 1741, 5149, 6739, 9303, 339, 5556, 6787], "count": 10, "metadata": {"split_policy": "shuffled_by_bug_split_seed_then_first_half_support_second_half_eval", "bug_split_seed": 303, "support_train_fraction": 0.8}}

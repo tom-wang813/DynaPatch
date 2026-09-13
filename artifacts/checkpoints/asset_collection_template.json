@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "instructions": {
+    "purpose": "Fill this file when collecting real paper assets for the external reproduction package.",
+    "status_values": ["missing", "collected", "verified"],
+    "notes": "Replace placeholder paths with the final shipped or mounted locations."
+  },
+  "datasets": [
+    {
+      "dataset": "gtsrb",
+      "data_root": "data/gtsrb",
+      "status": "missing",
+      "notes": "Prepared classification root for the paper-facing GTSRB pipeline."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "data_root": "data/tt100k_signs_clf",
+      "status": "missing",
+      "notes": "Prepared classification root for TT100K signs."
+    },
+    {
+      "dataset": "lisa_signs",
+      "data_root": "data/lisa_signs_clf",
+      "status": "missing",
+      "notes": "Prepared classification root for LISA signs."
+    }
+  ],
+  "frozen_backbones": [
+    {
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "checkpoint_path": "outputs/exp_gtsrb_resnet50_backbone_public_v2/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "checkpoint_path": "outputs/exp_gtsrb_convnext_tiny_backbone_public_v2/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "checkpoint_path": "outputs/exp_gtsrb_vgg16_backbone_public_v2/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "checkpoint_path": "outputs/exp_gtsrb_densenet121_backbone_public_v2/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "checkpoint_path": "outputs/exp_tt100k_signs_resnet50_backbone_public_v7/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "checkpoint_path": "outputs/exp_tt100k_signs_convnext_tiny_backbone_public_v7/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "checkpoint_path": "outputs/exp_tt100k_signs_vgg16_backbone_public_v1/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "checkpoint_path": "outputs/exp_tt100k_signs_densenet121_backbone_public_v7/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "checkpoint_path": "outputs/exp_lisa_signs_resnet50_backbone_public_v7a/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "checkpoint_path": "outputs/exp_lisa_signs_convnext_tiny_backbone_public_v7a/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "checkpoint_path": "outputs/exp_lisa_signs_vgg16_backbone_public_v1/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "checkpoint_path": "outputs/exp_lisa_signs_densenet121_backbone_public_v1/checkpoints/backbone_last.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    }
+  ],
+  "repair_checkpoints": [
+    {
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "experiment_id": "s3b_residualln_bugval_smooth_cleanreplay_patchl2_safetyrisk_small_bs32",
+      "checkpoint_path": "outputs/repairbench_v9b/gtsrb/resnet50/s3b_residualln_bugval_smooth_cleanreplay_patchl2_safetyrisk_small_bs32/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "experiment_id": "s3b_residualln_bugval_smooth_cleanreplay_patchl2_safetyrisk_small_bs16",
+      "checkpoint_path": "outputs/repairbench_v9b/gtsrb/convnext_tiny/s3b_residualln_bugval_smooth_cleanreplay_patchl2_safetyrisk_small_bs16/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "experiment_id": "s2_residualln_bugval_smooth_cleanreplay_patchl2_certmedium",
+      "checkpoint_path": "outputs/repairbench_v7/gtsrb/vgg16/s2_residualln_bugval_smooth_cleanreplay_patchl2_certmedium/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "experiment_id": "s1_residualln_bugval_smooth_cleanreplay_patchl2_certsmall",
+      "checkpoint_path": "outputs/repairbench_v7/gtsrb/densenet121/s1_residualln_bugval_smooth_cleanreplay_patchl2_certsmall/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7/tt100k_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7/tt100k_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7/tt100k_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7/tt100k_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7a/lisa_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7a/lisa_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7a/lisa_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
+      "checkpoint_path": "outputs/repairbench_v7a/lisa_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
+      "status": "missing",
+      "sha256": null,
+      "source": null
+    }
+  ]
+}

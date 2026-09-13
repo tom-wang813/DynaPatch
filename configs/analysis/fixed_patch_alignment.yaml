@@ -1,0 +1,37 @@
+analysis_id: fixed_patch_alignment_held_test
+engineering_stage: configurable_experiment
+description: >-
+  Test whether the selected FixedPatch direction aligns with held-test
+  failure-specific DynaPatch directions, and relate cross-setting direction
+  heterogeneity to the input-specific RR gain.
+research_decision: >-
+  Decide which parts of the proposed fixed-patch failure mechanism are
+  supported strongly enough for RQ1.
+date: 2026-09-04
+data:
+  population: base-wrong repair_holdout_unseen
+  seeds: [101, 202, 303]
+  fixed_arm_source: outputs/sample_frame.csv.gz
+  input_specific_source: outputs/effect_dump_ep40ns_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions
+  fixed_source: outputs/patch_ablation/{dataset}_{backbone}/{selected_arm}_s{seed}_kfull
+analysis:
+  grouping: ordered_pair_true_label_to_base_prediction
+  direction_normalization: l2_per_patch
+  centroid_normalization: l2_after_mean
+  association: within_cell_spearman
+  support_thresholds: [2, 3, 5]
+  primary_support_threshold: 3
+  cross_setting_association: spearman_with_leave_one_setting_out_sensitivity
+visualization:
+  pca_setting: gtsrb/convnext_tiny
+  pca_seed: 101
+  selection_reason: sample size and legibility; not selected by effect size
+  pca_fit_population: normalized_input_specific_directions_only
+  top_failure_types: 5
+output_dir: outputs/fixed_patch_alignment
+entrypoint: scripts/analyze_fixed_patch_alignment.py
+decision_rule: >-
+  KEEP the fixed-to-type alignment explanation only if within-cell effects are
+  directionally consistent across support thresholds. KEEP the cross-setting
+  heterogeneity claim only if its Spearman association remains positive in
+  every leave-one-setting-out analysis. Otherwise narrow the RQ1 claim.

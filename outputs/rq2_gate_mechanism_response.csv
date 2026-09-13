@@ -1,0 +1,4 @@
+outcome,confidence_change,entropy_change
+ineffective change,-0.04709166666666667,0.03995
+regression,-0.10843333333333333,0.04139166666666667
+successful repair,0.11555,-0.082125

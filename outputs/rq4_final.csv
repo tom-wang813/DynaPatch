@@ -1,0 +1,205 @@
+method,setting,seed,variant,RR_repair,RR_held,Reg,CReg,n_seen,n_held,n_clean,n_crit
+"Weighted Retraining (40ep, matched)",gtsrb/resnet50,101,,0.958333,0.645833,0.004887,0.0,48,48,10027,1967
+"Weighted Retraining (40ep, matched)",gtsrb/resnet50,202,,0.9375,0.75,0.002194,0.0,48,48,10027,1976
+"Weighted Retraining (40ep, matched)",gtsrb/resnet50,303,,0.958333,0.666667,0.004388,0.0,48,48,10027,1928
+"Weighted Retraining (40ep, matched)",gtsrb/convnext_tiny,101,,0.990783,0.940092,0.005432,0.0,217,217,9757,1961
+"Weighted Retraining (40ep, matched)",gtsrb/convnext_tiny,202,,0.990783,0.949309,0.005227,0.0,217,217,9757,1938
+"Weighted Retraining (40ep, matched)",gtsrb/convnext_tiny,303,,0.990783,0.935484,0.006662,0.0,217,217,9757,1945
+"Weighted Retraining (40ep, matched)",gtsrb/densenet121,101,,0.95122,0.855422,0.003309,0.0,82,83,9972,1972
+"Weighted Retraining (40ep, matched)",gtsrb/densenet121,202,,0.97561,0.783133,0.00341,0.001525,82,83,9972,1967
+"Weighted Retraining (40ep, matched)",gtsrb/densenet121,303,,0.987805,0.891566,0.004011,0.000506,82,83,9972,1978
+"Weighted Retraining (40ep, matched)",gtsrb/vgg16,101,,0.968254,0.863158,0.004999,0.00206,189,190,9801,1942
+"Weighted Retraining (40ep, matched)",gtsrb/vgg16,202,,0.968254,0.868421,0.009183,0.002612,189,190,9801,1914
+"Weighted Retraining (40ep, matched)",gtsrb/vgg16,303,,0.978836,0.889474,0.007244,0.000521,189,190,9801,1918
+"Weighted Retraining (40ep, matched)",tt100k_signs/resnet50,101,,0.902724,0.562016,0.029136,0.022888,257,258,7242,4107
+"Weighted Retraining (40ep, matched)",tt100k_signs/resnet50,202,,0.891051,0.562016,0.024993,0.014731,257,258,7242,4073
+"Weighted Retraining (40ep, matched)",tt100k_signs/resnet50,303,,0.902724,0.465116,0.022784,0.019522,257,258,7242,4098
+"Weighted Retraining (40ep, matched)",tt100k_signs/convnext_tiny,101,,0.912844,0.577982,0.02888,0.021597,218,218,7306,4121
+"Weighted Retraining (40ep, matched)",tt100k_signs/convnext_tiny,202,,0.912844,0.651376,0.023953,0.014067,218,218,7306,4123
+"Weighted Retraining (40ep, matched)",tt100k_signs/convnext_tiny,303,,0.949541,0.651376,0.040241,0.037117,218,218,7306,4149
+"Weighted Retraining (40ep, matched)",tt100k_signs/densenet121,101,,0.942308,0.682692,0.02963,0.014191,312,312,7155,4087
+"Weighted Retraining (40ep, matched)",tt100k_signs/densenet121,202,,0.929487,0.682692,0.039413,0.025451,312,312,7155,4047
+"Weighted Retraining (40ep, matched)",tt100k_signs/densenet121,303,,0.926282,0.663462,0.033543,0.025422,312,312,7155,4091
+"Weighted Retraining (40ep, matched)",tt100k_signs/vgg16,101,,0.914634,0.481707,0.028331,0.026456,328,328,7130,4120
+"Weighted Retraining (40ep, matched)",tt100k_signs/vgg16,202,,0.893293,0.542683,0.039551,0.031566,328,328,7130,4055
+"Weighted Retraining (40ep, matched)",tt100k_signs/vgg16,303,,0.902439,0.496951,0.037728,0.035627,328,328,7130,4070
+"Weighted Retraining (40ep, matched)",lisa_signs/resnet50,101,,0.941176,0.794118,0.008574,0.012802,34,34,1866,703
+"Weighted Retraining (40ep, matched)",lisa_signs/resnet50,202,,0.941176,0.705882,0.028403,0.009831,34,34,1866,712
+"Weighted Retraining (40ep, matched)",lisa_signs/resnet50,303,,0.911765,0.676471,0.005895,0.008439,34,34,1866,711
+"Weighted Retraining (40ep, matched)",lisa_signs/convnext_tiny,101,,0.923077,0.571429,0.055819,0.029216,13,14,1899,753
+"Weighted Retraining (40ep, matched)",lisa_signs/convnext_tiny,202,,0.846154,0.571429,0.06793,0.051587,13,14,1899,756
+"Weighted Retraining (40ep, matched)",lisa_signs/convnext_tiny,303,,0.846154,0.571429,0.037388,0.051771,13,14,1899,734
+"Weighted Retraining (40ep, matched)",lisa_signs/densenet121,101,,0.875,0.529412,0.008448,0.014706,16,17,1894,748
+"Weighted Retraining (40ep, matched)",lisa_signs/densenet121,202,,0.875,0.529412,0.008976,0.016575,16,17,1894,724
+"Weighted Retraining (40ep, matched)",lisa_signs/densenet121,303,,0.875,0.470588,0.006336,0.008163,16,17,1894,735
+"Weighted Retraining (40ep, matched)",lisa_signs/vgg16,101,,0.914286,0.694444,0.021459,0.024896,35,36,1864,723
+"Weighted Retraining (40ep, matched)",lisa_signs/vgg16,202,,0.885714,0.638889,0.01824,0.032832,35,36,1864,731
+"Weighted Retraining (40ep, matched)",lisa_signs/vgg16,303,,0.914286,0.583333,0.023605,0.033012,35,36,1864,727
+Full fine-tuning (40ep),gtsrb/resnet50,101,,0.958333,0.645833,0.004787,0.0,48,48,10027,1967
+Full fine-tuning (40ep),gtsrb/resnet50,202,,0.9375,0.729167,0.002394,0.0,48,48,10027,1976
+Full fine-tuning (40ep),gtsrb/resnet50,303,,0.958333,0.666667,0.004288,0.0,48,48,10027,1928
+Full fine-tuning (40ep),gtsrb/convnext_tiny,101,,0.990783,0.949309,0.004202,0.0,217,217,9757,1961
+Full fine-tuning (40ep),gtsrb/convnext_tiny,202,,0.990783,0.949309,0.003382,0.0,217,217,9757,1938
+Full fine-tuning (40ep),gtsrb/convnext_tiny,303,,0.990783,0.9447,0.003382,0.0,217,217,9757,1945
+Full fine-tuning (40ep),gtsrb/densenet121,101,,0.95122,0.855422,0.003109,0.0,82,83,9972,1972
+Full fine-tuning (40ep),gtsrb/densenet121,202,,0.97561,0.783133,0.00341,0.001525,82,83,9972,1967
+Full fine-tuning (40ep),gtsrb/densenet121,303,,0.987805,0.891566,0.003911,0.000506,82,83,9972,1978
+Full fine-tuning (40ep),gtsrb/vgg16,101,,0.978836,0.878947,0.003163,0.00103,189,190,9801,1942
+Full fine-tuning (40ep),gtsrb/vgg16,202,,0.973545,0.868421,0.004285,0.001045,189,190,9801,1914
+Full fine-tuning (40ep),gtsrb/vgg16,303,,0.978836,0.910526,0.003775,0.000521,189,190,9801,1918
+Full fine-tuning (40ep),tt100k_signs/resnet50,101,,0.910506,0.55814,0.016432,0.012661,257,258,7242,4107
+Full fine-tuning (40ep),tt100k_signs/resnet50,202,,0.883268,0.550388,0.013118,0.005892,257,258,7242,4073
+Full fine-tuning (40ep),tt100k_signs/resnet50,303,,0.910506,0.5,0.014637,0.010737,257,258,7242,4098
+Full fine-tuning (40ep),tt100k_signs/convnext_tiny,101,,0.908257,0.59633,0.012592,0.00728,218,218,7306,4121
+Full fine-tuning (40ep),tt100k_signs/convnext_tiny,202,,0.917431,0.669725,0.013277,0.007276,218,218,7306,4123
+Full fine-tuning (40ep),tt100k_signs/convnext_tiny,303,,0.954128,0.62844,0.014098,0.006026,218,218,7306,4149
+Full fine-tuning (40ep),tt100k_signs/densenet121,101,,0.929487,0.666667,0.020685,0.011011,312,312,7155,4087
+Full fine-tuning (40ep),tt100k_signs/densenet121,202,,0.916667,0.673077,0.018169,0.00939,312,312,7155,4047
+Full fine-tuning (40ep),tt100k_signs/densenet121,303,,0.926282,0.641026,0.015793,0.008555,312,312,7155,4091
+Full fine-tuning (40ep),tt100k_signs/vgg16,101,,0.902439,0.5,0.018794,0.015049,328,328,7130,4120
+Full fine-tuning (40ep),tt100k_signs/vgg16,202,,0.902439,0.515244,0.021459,0.015536,328,328,7130,4055
+Full fine-tuning (40ep),tt100k_signs/vgg16,303,,0.911585,0.503049,0.018654,0.012776,328,328,7130,4070
+Full fine-tuning (40ep),lisa_signs/resnet50,101,,0.941176,0.823529,0.005895,0.007112,34,34,1866,703
+Full fine-tuning (40ep),lisa_signs/resnet50,202,,0.941176,0.794118,0.00268,0.002809,34,34,1866,712
+Full fine-tuning (40ep),lisa_signs/resnet50,303,,0.941176,0.735294,0.003215,0.004219,34,34,1866,711
+Full fine-tuning (40ep),lisa_signs/convnext_tiny,101,,0.923077,0.571429,0.012638,0.007968,13,14,1899,753
+Full fine-tuning (40ep),lisa_signs/convnext_tiny,202,,0.846154,0.642857,0.02633,0.015873,13,14,1899,756
+Full fine-tuning (40ep),lisa_signs/convnext_tiny,303,,0.846154,0.571429,0.00316,0.002725,13,14,1899,734
+Full fine-tuning (40ep),lisa_signs/densenet121,101,,0.875,0.529412,0.006336,0.012032,16,17,1894,748
+Full fine-tuning (40ep),lisa_signs/densenet121,202,,0.875,0.705882,0.005808,0.012431,16,17,1894,724
+Full fine-tuning (40ep),lisa_signs/densenet121,303,,0.9375,0.647059,0.003696,0.005442,16,17,1894,735
+Full fine-tuning (40ep),lisa_signs/vgg16,101,,0.914286,0.75,0.004828,0.009682,35,36,1864,723
+Full fine-tuning (40ep),lisa_signs/vgg16,202,,0.914286,0.75,0.005365,0.00684,35,36,1864,731
+Full fine-tuning (40ep),lisa_signs/vgg16,303,,0.971429,0.805556,0.008047,0.016506,35,36,1864,727
+Head-Only Fine-Tuning (40ep),gtsrb/resnet50,101,,0.5625,0.5,0.00359,0.0,48,48,10027,1967
+Head-Only Fine-Tuning (40ep),gtsrb/resnet50,202,,0.645833,0.479167,0.002294,0.0,48,48,10027,1976
+Head-Only Fine-Tuning (40ep),gtsrb/resnet50,303,,0.666667,0.416667,0.004189,0.0,48,48,10027,1928
+Head-Only Fine-Tuning (40ep),gtsrb/convnext_tiny,101,,0.9447,0.861751,0.001332,0.0,217,217,9757,1961
+Head-Only Fine-Tuning (40ep),gtsrb/convnext_tiny,202,,0.935484,0.870968,0.002152,0.000516,217,217,9757,1938
+Head-Only Fine-Tuning (40ep),gtsrb/convnext_tiny,303,,0.940092,0.880184,0.00164,0.0,217,217,9757,1945
+Head-Only Fine-Tuning (40ep),gtsrb/densenet121,101,,0.573171,0.554217,0.001705,0.0,82,83,9972,1972
+Head-Only Fine-Tuning (40ep),gtsrb/densenet121,202,,0.536585,0.493976,0.001304,0.000508,82,83,9972,1967
+Head-Only Fine-Tuning (40ep),gtsrb/densenet121,303,,0.585366,0.554217,0.00371,0.000506,82,83,9972,1978
+Head-Only Fine-Tuning (40ep),gtsrb/vgg16,101,,0.47619,0.436842,0.006224,0.006179,189,190,9801,1942
+Head-Only Fine-Tuning (40ep),gtsrb/vgg16,202,,0.507937,0.468421,0.008571,0.00418,189,190,9801,1914
+Head-Only Fine-Tuning (40ep),gtsrb/vgg16,303,,0.52381,0.442105,0.00551,0.002607,189,190,9801,1918
+Head-Only Fine-Tuning (40ep),tt100k_signs/resnet50,101,,0.55642,0.368217,0.023612,0.016314,257,258,7242,4107
+Head-Only Fine-Tuning (40ep),tt100k_signs/resnet50,202,,0.568093,0.387597,0.019884,0.008348,257,258,7242,4073
+Head-Only Fine-Tuning (40ep),tt100k_signs/resnet50,303,,0.544747,0.329457,0.017122,0.010737,257,258,7242,4098
+Head-Only Fine-Tuning (40ep),tt100k_signs/convnext_tiny,101,,0.697248,0.37156,0.020257,0.010434,218,218,7306,4121
+Head-Only Fine-Tuning (40ep),tt100k_signs/convnext_tiny,202,,0.674312,0.481651,0.017657,0.008974,218,218,7306,4123
+Head-Only Fine-Tuning (40ep),tt100k_signs/convnext_tiny,303,,0.674312,0.522936,0.01752,0.006026,218,218,7306,4149
+Head-Only Fine-Tuning (40ep),tt100k_signs/densenet121,101,,0.583333,0.477564,0.019147,0.006117,312,312,7155,4087
+Head-Only Fine-Tuning (40ep),tt100k_signs/densenet121,202,,0.551282,0.480769,0.01775,0.006672,312,312,7155,4047
+Head-Only Fine-Tuning (40ep),tt100k_signs/densenet121,303,,0.570513,0.49359,0.017331,0.007578,312,312,7155,4091
+Head-Only Fine-Tuning (40ep),tt100k_signs/vgg16,101,,0.408537,0.25,0.014727,0.008252,328,328,7130,4120
+Head-Only Fine-Tuning (40ep),tt100k_signs/vgg16,202,,0.405488,0.307927,0.019495,0.011097,328,328,7130,4055
+Head-Only Fine-Tuning (40ep),tt100k_signs/vgg16,303,,0.466463,0.265244,0.017812,0.009582,328,328,7130,4070
+Head-Only Fine-Tuning (40ep),lisa_signs/resnet50,101,,0.617647,0.735294,0.004287,0.00569,34,34,1866,703
+Head-Only Fine-Tuning (40ep),lisa_signs/resnet50,202,,0.647059,0.588235,0.00268,0.001404,34,34,1866,712
+Head-Only Fine-Tuning (40ep),lisa_signs/resnet50,303,,0.764706,0.5,0.002144,0.002813,34,34,1866,711
+Head-Only Fine-Tuning (40ep),lisa_signs/convnext_tiny,101,,0.461538,0.142857,0.001053,0.001328,13,14,1899,753
+Head-Only Fine-Tuning (40ep),lisa_signs/convnext_tiny,202,,0.307692,0.214286,0.001053,0.001323,13,14,1899,756
+Head-Only Fine-Tuning (40ep),lisa_signs/convnext_tiny,303,,0.307692,0.285714,0.000527,0.0,13,14,1899,734
+Head-Only Fine-Tuning (40ep),lisa_signs/densenet121,101,,0.4375,0.235294,0.001584,0.001337,16,17,1894,748
+Head-Only Fine-Tuning (40ep),lisa_signs/densenet121,202,,0.4375,0.352941,0.000528,0.0,16,17,1894,724
+Head-Only Fine-Tuning (40ep),lisa_signs/densenet121,303,,0.6875,0.411765,0.003696,0.006803,16,17,1894,735
+Head-Only Fine-Tuning (40ep),lisa_signs/vgg16,101,,0.742857,0.527778,0.008584,0.013831,35,36,1864,723
+Head-Only Fine-Tuning (40ep),lisa_signs/vgg16,202,,0.828571,0.444444,0.008047,0.015048,35,36,1864,731
+Head-Only Fine-Tuning (40ep),lisa_signs/vgg16,303,,0.685714,0.361111,0.007511,0.005502,35,36,1864,727
+LastDelta (40ep),gtsrb/resnet50,101,,0.5625,0.520833,0.003391,0.0,48,48,10027,1967
+LastDelta (40ep),gtsrb/resnet50,202,,0.6875,0.479167,0.002593,0.0,48,48,10027,1976
+LastDelta (40ep),gtsrb/resnet50,303,,0.645833,0.416667,0.004189,0.0,48,48,10027,1928
+LastDelta (40ep),gtsrb/convnext_tiny,101,,0.949309,0.870968,0.001332,0.0,217,217,9757,1961
+LastDelta (40ep),gtsrb/convnext_tiny,202,,0.935484,0.875576,0.00205,0.000516,217,217,9757,1938
+LastDelta (40ep),gtsrb/convnext_tiny,303,,0.9447,0.884793,0.001742,0.0,217,217,9757,1945
+LastDelta (40ep),gtsrb/densenet121,101,,0.597561,0.53012,0.001705,0.0,82,83,9972,1972
+LastDelta (40ep),gtsrb/densenet121,202,,0.585366,0.481928,0.001504,0.0,82,83,9972,1967
+LastDelta (40ep),gtsrb/densenet121,303,,0.609756,0.590361,0.003109,0.0,82,83,9972,1978
+LastDelta (40ep),gtsrb/vgg16,101,,0.470899,0.457895,0.00602,0.006179,189,190,9801,1942
+LastDelta (40ep),gtsrb/vgg16,202,,0.507937,0.463158,0.008366,0.00418,189,190,9801,1914
+LastDelta (40ep),gtsrb/vgg16,303,,0.513228,0.447368,0.004693,0.002607,189,190,9801,1918
+LastDelta (40ep),tt100k_signs/resnet50,101,,0.548638,0.352713,0.023336,0.016801,257,258,7242,4107
+LastDelta (40ep),tt100k_signs/resnet50,202,,0.540856,0.403101,0.02016,0.011048,257,258,7242,4073
+LastDelta (40ep),tt100k_signs/resnet50,303,,0.536965,0.344961,0.01657,0.010981,257,258,7242,4098
+LastDelta (40ep),tt100k_signs/convnext_tiny,101,,0.674312,0.362385,0.019984,0.010192,218,218,7306,4121
+LastDelta (40ep),tt100k_signs/convnext_tiny,202,,0.669725,0.477064,0.017109,0.008489,218,218,7306,4123
+LastDelta (40ep),tt100k_signs/convnext_tiny,303,,0.683486,0.522936,0.017246,0.006508,218,218,7306,4149
+LastDelta (40ep),tt100k_signs/densenet121,101,,0.583333,0.464744,0.018309,0.005138,312,312,7155,4087
+LastDelta (40ep),tt100k_signs/densenet121,202,,0.538462,0.461538,0.017331,0.00766,312,312,7155,4047
+LastDelta (40ep),tt100k_signs/densenet121,303,,0.554487,0.487179,0.018029,0.008311,312,312,7155,4091
+LastDelta (40ep),tt100k_signs/vgg16,101,,0.417683,0.262195,0.015147,0.009223,328,328,7130,4120
+LastDelta (40ep),tt100k_signs/vgg16,202,,0.405488,0.295732,0.017391,0.009618,328,328,7130,4055
+LastDelta (40ep),tt100k_signs/vgg16,303,,0.448171,0.25,0.017672,0.008845,328,328,7130,4070
+LastDelta (40ep),lisa_signs/resnet50,101,,0.617647,0.705882,0.003215,0.00569,34,34,1866,703
+LastDelta (40ep),lisa_signs/resnet50,202,,0.617647,0.588235,0.003215,0.002809,34,34,1866,712
+LastDelta (40ep),lisa_signs/resnet50,303,,0.735294,0.5,0.00268,0.004219,34,34,1866,711
+LastDelta (40ep),lisa_signs/convnext_tiny,101,,0.461538,0.142857,0.001053,0.001328,13,14,1899,753
+LastDelta (40ep),lisa_signs/convnext_tiny,202,,0.307692,0.285714,0.001053,0.001323,13,14,1899,756
+LastDelta (40ep),lisa_signs/convnext_tiny,303,,0.307692,0.285714,0.000527,0.0,13,14,1899,734
+LastDelta (40ep),lisa_signs/densenet121,101,,0.625,0.235294,0.00264,0.002674,16,17,1894,748
+LastDelta (40ep),lisa_signs/densenet121,202,,0.5,0.352941,0.000528,0.0,16,17,1894,724
+LastDelta (40ep),lisa_signs/densenet121,303,,0.6875,0.411765,0.00264,0.004082,16,17,1894,735
+LastDelta (40ep),lisa_signs/vgg16,101,,0.742857,0.555556,0.010193,0.013831,35,36,1864,723
+LastDelta (40ep),lisa_signs/vgg16,202,,0.828571,0.388889,0.007511,0.01368,35,36,1864,731
+LastDelta (40ep),lisa_signs/vgg16,303,,0.714286,0.361111,0.00912,0.006878,35,36,1864,727
+"DistRep(PSO) real, FULL budget (1 seed)",gtsrb/resnet50,101,,0.447368,0.458333,0.009973,0.006101,38,48,10027,1967
+"DistRep(PSO) real, FULL budget (1 seed)",gtsrb/convnext_tiny,101,,0.683908,0.635945,0.019781,0.011219,174,217,9757,1961
+"DistRep(PSO) real, FULL budget (1 seed)",gtsrb/densenet121,101,,0.636364,0.46988,0.01073,0.004564,66,83,9972,1972
+"DistRep(PSO) real, FULL budget (1 seed)",gtsrb/vgg16,101,,0.437086,0.263158,0.012856,0.016993,151,190,9801,1942
+"DistRep(PSO) real, FULL budget (1 seed)",tt100k_signs/resnet50,101,,0.184466,0.112403,0.005938,0.003409,206,258,7242,4107
+"DistRep(PSO) real, FULL budget (1 seed)",tt100k_signs/convnext_tiny,101,,0.224138,0.146789,0.021489,0.012133,174,218,7306,4121
+"DistRep(PSO) real, FULL budget (1 seed)",tt100k_signs/densenet121,101,,0.244,0.208333,0.015094,0.006362,250,312,7155,4087
+"DistRep(PSO) real, FULL budget (1 seed)",tt100k_signs/vgg16,101,,0.167939,0.112805,0.0223,0.015049,262,328,7130,4120
+"DistRep(PSO) real, FULL budget (1 seed)",lisa_signs/resnet50,101,,0.481481,0.117647,0.008039,0.014225,27,34,1866,703
+"DistRep(PSO) real, FULL budget (1 seed)",lisa_signs/convnext_tiny,101,,0.7,0.571429,0.033702,0.033201,10,14,1899,753
+"DistRep(PSO) real, FULL budget (1 seed)",lisa_signs/densenet121,101,,0.384615,0.117647,0.001056,0.001337,13,17,1894,748
+"DistRep(PSO) real, FULL budget (1 seed)",lisa_signs/vgg16,101,,0.642857,0.333333,0.004828,0.005533,28,36,1864,723
+Arachne(DE) (swept bound_scale),gtsrb/vgg16,101,bound=32.0,0.145695,0.105263,0.004693,0.017508,151,190,9801,1942
+Arachne(DE) (swept bound_scale),gtsrb/vgg16,202,bound=32.0,0.145695,0.121053,0.00551,0.019331,151,190,9801,1914
+Arachne(DE) (swept bound_scale),gtsrb/vgg16,303,bound=32.0,0.172185,0.147368,0.00704,0.019812,151,190,9801,1918
+Arachne(DE) (swept bound_scale),tt100k_signs/resnet50,101,bound=32.0,0.082524,0.046512,0.005523,0.004626,206,258,7242,4107
+Arachne(DE) (swept bound_scale),tt100k_signs/resnet50,202,bound=32.0,0.058252,0.042636,0.003728,0.003192,206,258,7242,4073
+Arachne(DE) (swept bound_scale),tt100k_signs/resnet50,303,bound=32.0,0.101942,0.073643,0.004971,0.002196,206,258,7242,4098
+Arachne(DE) (swept bound_scale),lisa_signs/vgg16,101,bound=64.0,0.285714,0.194444,0.009657,0.012448,28,36,1864,723
+Arachne(DE) (swept bound_scale),lisa_signs/vgg16,202,bound=64.0,0.178571,0.083333,0.003755,0.005472,28,36,1864,731
+Arachne(DE) (swept bound_scale),lisa_signs/vgg16,303,bound=64.0,0.392857,0.111111,0.049356,0.10729,28,36,1864,727
+Arachne(DE) (swept bound_scale),lisa_signs/resnet50,101,bound=64.0,0.259259,0.264706,0.003215,0.008535,27,34,1866,703
+Arachne(DE) (swept bound_scale),lisa_signs/resnet50,202,bound=64.0,0.333333,0.352941,0.010182,0.023876,27,34,1866,712
+Arachne(DE) (swept bound_scale),lisa_signs/resnet50,303,bound=64.0,0.407407,0.147059,0.002144,0.001406,27,34,1866,711
+Arachne(DE) (swept bound_scale),lisa_signs/convnext_tiny,101,bound=16.0,0.5,0.428571,0.002106,0.002656,10,14,1899,753
+Arachne(DE) (swept bound_scale),lisa_signs/convnext_tiny,202,bound=16.0,0.4,0.357143,0.00158,0.003968,10,14,1899,756
+Arachne(DE) (swept bound_scale),lisa_signs/convnext_tiny,303,bound=16.0,0.4,0.285714,0.00158,0.001362,10,14,1899,734
+Arachne(DE) (swept bound_scale),tt100k_signs/densenet121,101,bound=16.0,0.104,0.134615,0.007128,0.0,250,312,7155,4087
+Arachne(DE) (swept bound_scale),tt100k_signs/densenet121,202,bound=16.0,0.104,0.067308,0.008805,0.000247,250,312,7155,4047
+Arachne(DE) (swept bound_scale),tt100k_signs/densenet121,303,bound=16.0,0.132,0.105769,0.007966,0.001222,250,312,7155,4091
+Arachne(DE) (swept bound_scale),gtsrb/resnet50,101,bound=128.0,0.5,0.333333,0.019148,0.0,38,48,10027,1967
+Arachne(DE) (swept bound_scale),gtsrb/resnet50,202,bound=128.0,0.289474,0.104167,0.019148,0.0,38,48,10027,1976
+Arachne(DE) (swept bound_scale),gtsrb/resnet50,303,bound=128.0,0.368421,0.291667,0.022739,0.0,38,48,10027,1928
+Arachne(DE) (swept bound_scale),lisa_signs/densenet121,101,bound=8.0,0.153846,0.058824,0.001584,0.004011,13,17,1894,748
+Arachne(DE) (swept bound_scale),lisa_signs/densenet121,202,bound=8.0,0.307692,0.352941,0.000528,0.001381,13,17,1894,724
+Arachne(DE) (swept bound_scale),lisa_signs/densenet121,303,bound=8.0,0.307692,0.058824,0.0,0.0,13,17,1894,735
+Arachne(DE) (swept bound_scale),gtsrb/densenet121,101,bound=64.0,0.439394,0.325301,0.009426,0.002535,66,83,9972,1972
+Arachne(DE) (swept bound_scale),gtsrb/densenet121,202,bound=64.0,0.363636,0.39759,0.01083,0.00305,66,83,9972,1967
+Arachne(DE) (swept bound_scale),gtsrb/densenet121,303,bound=64.0,0.393939,0.385542,0.001304,0.002022,66,83,9972,1978
+Arachne(DE) (swept bound_scale),gtsrb/convnext_tiny,101,bound=64.0,0.247126,0.179724,0.005739,0.0,174,217,9757,1961
+Arachne(DE) (swept bound_scale),gtsrb/convnext_tiny,202,bound=64.0,0.235632,0.193548,0.005637,0.0,174,217,9757,1938
+Arachne(DE) (swept bound_scale),gtsrb/convnext_tiny,303,bound=64.0,0.212644,0.21659,0.006457,0.0,174,217,9757,1945
+Arachne(DE) (swept bound_scale),tt100k_signs/convnext_tiny,101,bound=16.0,0.068966,0.045872,0.005064,0.0,174,218,7306,4121
+Arachne(DE) (swept bound_scale),tt100k_signs/convnext_tiny,202,bound=16.0,0.051724,0.050459,0.003969,0.0,174,218,7306,4123
+Arachne(DE) (swept bound_scale),tt100k_signs/convnext_tiny,303,bound=16.0,0.057471,0.055046,0.001369,0.0,174,218,7306,4149
+Arachne(DE) (swept bound_scale),tt100k_signs/vgg16,101,bound=32.0,0.087786,0.070122,0.009257,0.003155,262,328,7130,4120
+Arachne(DE) (swept bound_scale),tt100k_signs/vgg16,202,bound=32.0,0.103053,0.094512,0.009537,0.002713,262,328,7130,4055
+Arachne(DE) (swept bound_scale),tt100k_signs/vgg16,303,bound=32.0,0.122137,0.109756,0.009116,0.002457,262,328,7130,4070
+DynaPatch (gated),gtsrb/convnext_tiny,pooled,,nan,0.840246,0.000581,0.000172,0,217,9757,1948
+DynaPatch (gated),gtsrb/densenet121,pooled,,nan,0.807229,0.000134,0.0,0,83,9972,1972
+DynaPatch (gated),gtsrb/resnet50,pooled,,nan,0.666667,0.000399,0.0,0,48,10027,1957
+DynaPatch (gated),gtsrb/vgg16,pooled,,nan,0.596491,0.00068,0.000345,0,190,9801,1924
+DynaPatch (gated),lisa_signs/convnext_tiny,pooled,,nan,0.357143,0.001053,0.001362,0,14,1899,743
+DynaPatch (gated),lisa_signs/densenet121,pooled,,nan,0.352941,0.00176,0.003149,0,17,1894,735
+DynaPatch (gated),lisa_signs/resnet50,pooled,,nan,0.490196,0.002322,0.003297,0,34,1866,708
+DynaPatch (gated),lisa_signs/vgg16,pooled,,nan,0.305556,0.000536,0.001368,0,36,1864,731
+DynaPatch (gated),tt100k_signs/convnext_tiny,pooled,,nan,0.308869,0.000593,0.000808,0,218,7306,4131
+DynaPatch (gated),tt100k_signs/densenet121,pooled,,nan,0.521368,0.001072,0.00098,0,312,7155,4075
+DynaPatch (gated),tt100k_signs/resnet50,pooled,,nan,0.377261,0.000276,8.1e-05,0,258,7242,4092
+DynaPatch (gated),tt100k_signs/vgg16,pooled,,nan,0.299797,0.001169,0.000901,0,328,7130,4081

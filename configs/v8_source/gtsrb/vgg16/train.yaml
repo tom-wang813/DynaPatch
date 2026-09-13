@@ -1,0 +1,182 @@
+model:
+  name: VGG16
+  type: VGG
+  architecture: vgg16
+  feature_dim: 25088
+  shallow_dim: 512
+  out_dim: 25088
+  split_idx: 5
+  hypernet_hidden_dim: 64
+  hypernet_num_hidden_layers: 1
+  hypernet_style: residual_ln
+  checkpoint_path: outputs/exp_gtsrb_vgg16_backbone_public_v2/checkpoints/backbone_last.pt
+  pretrained_weights: null
+dataset:
+  name: gtsrb
+  data_root: data
+  download: true
+  num_classes: 43
+  input_channels: 3
+  input_resolution: 224
+  train_split: train
+  clean_split: test
+  bug_split: bug_candidates
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+method:
+  name: hypernet_only
+  async_mode: none
+  router: bypassed
+  route_mode: always_on
+  patch_operator: residual
+task:
+  name: repair_misclassification
+  target: classification
+  label_space: closed_set
+fault:
+  name: pgd_bug
+  source: adversarial
+  attack: pgd
+  epsilon: 0.031
+  steps: 20
+train:
+  stage: stage3_repair
+  epochs: 50
+  batch_size: 4
+  optimizer: adamw
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  early_stop_metric: heldout_repaired
+  early_stop_patience: 10
+  early_stop_min_epochs: 1
+eval:
+  name: rq1_safety
+  metrics:
+  - rsr
+  - rr
+  - clean_acc
+  - bug_acc
+  run_formal_check: true
+  profile_latency: false
+runtime:
+  device: cuda:0
+  num_workers: 4
+  precision: fp32
+  fail_on_cpu_fallback: true
+seed: 42
+device: cpu
+num_trials: 1
+num_iterations: 20
+batch_size: 1
+num_experts: 50
+models_to_test:
+- resnet50
+- vgg16
+- vit
+- convnext
+- densenet121
+num_experts_list:
+- 10
+- 50
+- 100
+- 200
+- 500
+- 1000
+experiment:
+  id: exp_gtsrb_vgg16_repair_b0_residualln_bugval_smooth_cleanreplay_patchl2
+  name: gtsrb_vgg16_repair_b0_residualln_bugval_smooth_cleanreplay_patchl2
+  stage: stage3_repair
+  rq: rq18
+  track: formal
+  tags:
+  - cifar10
+  - formal
+  - train
+  - rq18
+  - layer4
+  - ce
+  - robust
+  - fast
+  - h512
+  - l2
+  - eps040
+  notes: 'RQ18 repair/protect ablation: CE plus bug-side robust repair on layer4 with
+    a faster schedule.'
+artifacts:
+  root: outputs/repairbench_v7/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train
+  save_checkpoints: true
+  save_bug_bank: true
+  save_predictions: true
+data:
+  bug_split: verified_support
+  clean_split: test
+  bug_budget: null
+  bug_indices_path: outputs/repairbench_v7/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/bug_bank/gtsrb_bug_indices.json
+  bug_eval_indices_path: outputs/repairbench_v7/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/bug_bank/gtsrb_bug_eval_indices.json
+  clean_eval_indices_path: null
+  bug_manifest_namespace: vgg16_gtsrb_repairbench_v7
+  bug_train_indices_path: outputs/repairbench_v7/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/bug_bank/gtsrb_bug_train_indices.json
+  bug_val_indices_path: outputs/repairbench_v7/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/bug_bank/gtsrb_bug_val_indices.json
+repair:
+  insertion_point: cross_layer
+  split_layer: block5
+  split_depth: null
+  support_set_k: 1
+  tau_conf: 0.8
+  tau_dist: 0.5
+  epsilon_max: 0.4
+  fallback: zero
+loss:
+  objective: robust_cert
+  repair_loss: ce
+  cert_variant: dynamic_ibp
+  cert_scope: clean
+  lambda_repair: 1.0
+  lambda_cont: 0.0
+  lambda_robust: 0.1
+  lambda_cert: 0.0
+  lambda_field: 0.1
+  lambda_decision_ball: 0.0
+  cert_margin: 0.1
+  normalization: none
+  schedule:
+    repair_only_epochs: 0
+    robust_start_epoch: 0
+    robust_ramp_epochs: 5
+    cert_start_epoch: 0
+    cert_ramp_epochs: 0
+  field_epsilon: 0.02
+  field_steps: 5
+  field_compare: gated_patch
+  lambda_patch_l2: 0.001
+  lambda_clean_replay: 0.1
+  clean_replay_subset_size: 2048
+  clean_replay_batch_size: 32
+  clean_replay_batch_limit: 32
+train_loop:
+  epochs: 12
+  warmup_epochs: 0
+  batch_size: 32
+  optimizer: adamw
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  early_stop_metric: safety_balanced
+  early_stop_patience: 4
+  early_stop_min_epochs: 4
+evaluation:
+  metrics:
+  - bug_acc
+  - clean_acc
+  - rr
+  batch_size: 64
+  clean_monitor_size: 1000
+  profile_latency: false
+  run_formal_check: false

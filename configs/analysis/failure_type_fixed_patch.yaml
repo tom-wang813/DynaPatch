@@ -1,0 +1,87 @@
+experiment_id: rq1_oracle_failure_type_fixed_patch
+engineering_stage: configurable_experiment
+date: 2026-09-04
+rq: RQ1
+description: Oracle failure-type-specific fixed patches with a capacity-matched random-group control.
+research_decision: Determine whether sharing one fixed patch across failure types explains part of the Global FixedPatch repair-rate gap.
+hypothesis: Failure-type-specific fixed patches improve held-out repair over one global fixed patch, beyond random multiple-patch capacity.
+
+data:
+  datasets: [gtsrb, tt100k_signs, lisa_signs]
+  backbones: [resnet50, convnext_tiny, densenet121, vgg16]
+  seeds: [101, 202, 303]
+  split_root_template: artifacts/bug_sets/v8_splits_seed{seed}/{dataset}_{backbone}
+  train_config_template: configs/v8_source/{dataset}/{backbone}/train.yaml
+  deploy_config_template: configs/v8_source/{dataset}/{backbone}/deploy.yaml
+  input_specific_root_template: outputs/patch_ablation/{dataset}_{backbone}/ep40ns_s{seed}_kfull
+  global_fixed_root_template: outputs/patch_ablation/{dataset}_{backbone}/{arm}_s{seed}_kfull
+  repair_population: repair_support_seen
+  evaluation_population: repair_holdout_unseen
+  unsupported_policy: count_as_unrepaired
+
+grouping:
+  failure_type_definition: [true_class, original_model_predicted_class]
+  support_thresholds: [1, 2, 3, 5]
+  # Threshold 3 has zero eligible types in six LISA seed-cells; threshold 1 is the only
+  # pre-run choice that keeps all 12 settings defined. Thresholds 2/3/5 remain sensitivities.
+  primary_min_support: 1
+  random_repeats: 5
+  random_assignment: exact_train_group_sizes_and_hash_routed_heldout
+
+training:
+  epochs: 60
+  batch_size: 16
+  learning_rates: [0.01, 0.1]
+  primary_lr_policy: inherit_preexisting_global_fixed_arm_per_setting
+  # Frozen before this diagnostic. The experiment must not re-select an arm from held-out RR.
+  preexisting_global_arm_by_setting:
+    gtsrb/resnet50: fixed60_lr1e1
+    gtsrb/convnext_tiny: fixed60_lr1e2
+    gtsrb/densenet121: fixed60_lr1e1
+    gtsrb/vgg16: fixed60_lr1e2
+    tt100k_signs/resnet50: fixed60_lr1e2
+    tt100k_signs/convnext_tiny: fixed60_lr1e2
+    tt100k_signs/densenet121: fixed60_lr1e2
+    tt100k_signs/vgg16: fixed60_lr1e2
+    lisa_signs/resnet50: fixed60_lr1e1
+    lisa_signs/convnext_tiny: fixed60_lr1e2
+    lisa_signs/densenet121: fixed60_lr1e2
+    lisa_signs/vgg16: fixed60_lr1e2
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  epsilon_max: 0.4
+  lambda_patch_l2: 0.001
+  lambda_clean_replay: 1.0
+  clean_replay_objective: kl
+  clean_replay_subset_size: 2048
+  clean_replay_batch_size: 16
+  clean_replay_batch_limit: 16
+  feature_cache: in_memory
+
+analysis:
+  practical_equivalence_tolerance: 0.02
+  source_prediction_max_mismatch_rate: 0.005
+  # For rare current-environment drift, require top-2 probabilities within 0.5 percentage points.
+  source_prediction_top2_probability_margin: 0.005
+  cached_global_retrain_rr_tolerance: 0.05
+  # Round the ratio tolerance up to an attainable held-out outcome count, with at least this floor.
+  cached_global_retrain_min_outcome_tolerance: 1
+  paired_test: wilcoxon_two_sided
+  alpha: 0.05
+  primary_unit: setting
+
+compute:
+  device: cuda:0
+  precision: fp32
+  num_workers: 4
+  expected_bottleneck: frozen_backbone_feature_extraction
+  monitoring: nvidia-smi plus per-cell wall time and peak CUDA memory in metrics.json
+  smoke_setting: gtsrb/resnet50
+  smoke_seed: 101
+
+output_dir: outputs/failure_type_fixed_patch
+entrypoint: scripts/failure_type_fixed_patch.py
+analysis_entrypoint: scripts/analyze_failure_type_fixed_patch.py
+stopping_rule: >-
+  DEBUG/RERUN if identity, original-prediction, source-artifact, denominator, or finite-loss guards fail;
+  run the formal 36 cells only after one smoke cell passes and its runtime/memory are reviewed.

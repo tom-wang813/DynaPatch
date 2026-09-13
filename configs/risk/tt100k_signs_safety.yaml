@@ -1,0 +1,49 @@
+dataset: tt100k_signs
+summary_path: data/tt100k_signs_clf/summary.json
+
+# TT100K class ids are derived from the sorted union of train/test class names
+# in `summary.json`. We therefore specify prefix-based taxonomies here and let
+# the builder expand them into index sets.
+
+groups:
+  warning:
+    prefixes: ["w", "wo"]
+  indication:
+    prefixes: ["i", "il", "io", "ip"]
+  speed_limit:
+    prefixes: ["pl", "pr"]
+  height_limit:
+    prefixes: ["ph"]
+  weight_limit:
+    prefixes: ["pm"]
+  width_limit:
+    prefixes: ["pw"]
+  axle_limit:
+    prefixes: ["pa"]
+  prohibition:
+    prefixes: ["p", "pn", "pne", "po", "pg", "pb", "pc", "ps"]
+
+# Safety-critical subsets used for CER/CRR.
+critical_signs:
+  no_entry:
+    exact: ["pne"]
+  active_speed_limit:
+    prefixes: ["pl", "pr"]
+  size_restriction:
+    prefixes: ["ph", "pm", "pw", "pa"]
+  core_prohibition:
+    exact: ["pn", "po"]
+
+weights:
+  default_error: 1
+  within_warning: 1
+  within_indication: 1
+  speed_limit_more_conservative: 2
+  speed_limit_less_conservative: 4
+  restriction_more_conservative: 2
+  restriction_less_conservative: 4
+  warning_to_nonwarning: 3
+  indication_to_nonindication: 2
+  prohibition_to_nonprohibition: 5
+  critical_sign_error: 6
+

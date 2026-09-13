@@ -1,0 +1,9 @@
+method,mean_reg,mean_worst-class_reg,fraction_of_clean_classes_hit
+FullFT,0.0092,0.4606,0.2089
+HeadFT,0.0085,0.4674,0.1934
+Arachne,0.0078,0.5146,0.1164
+DistrRep,0.0138,0.5567,0.3526
+NN-Patching,0.011,0.4244,0.271
+PatchNAS,0.0117,0.3836,0.3072
+DynaPatch-NoGate,0.0066,0.4416,0.1731
+"DynaPatch (gated, theta=0)",0.0009,0.1642,0.0489

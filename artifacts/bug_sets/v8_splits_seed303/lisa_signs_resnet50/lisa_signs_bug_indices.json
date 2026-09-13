@@ -1,0 +1,1 @@
+{"indices": [1718, 1444, 1719, 1443, 1715, 1689, 1332, 179, 1708, 2322, 1603, 2331, 2379, 984, 1532, 1378, 1601, 2337, 1703, 1606, 1379, 1711, 1428, 1441, 1687, 1427, 239, 1691, 1450, 1602, 654, 2047, 927, 1387], "count": 34, "metadata": {"split_policy": "shuffled_by_bug_split_seed_then_first_half_support_second_half_eval", "bug_split_seed": 303, "support_train_fraction": 0.8}}
