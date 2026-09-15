@@ -14,3 +14,5 @@ outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
 outputs/repro_grid/
 outputs/repro_run_real*/
 outputs/exp_*_backbone_public_*/
+artifacts/torch_cache/
+outputs/_arachne_feat_cache/
