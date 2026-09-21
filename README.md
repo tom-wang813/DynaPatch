@@ -12,16 +12,21 @@ patch, and **DPGate**, a runtime gate that applies it only when doing so doesn't
 create a new failure. Evaluated on 3 datasets x 4 backbones (12 settings) x 3 seeds, against 6
 baselines: HeadFT, FullFT, Arachne, DistrRep, NNPatch, PatchNAS.
 
-## Three ways to reproduce
+## Two ways to reproduce
 
 | Path | Needs | Gives you |
 |---|---|---|
 | **[Evaluation](#evaluation)** (`paper_tables.py`) | nothing extra — reads the shipped `outputs/` | Every RQ1–RQ4 table in the paper, in seconds |
 | **[Pretrained checkpoints](#pretrained-checkpoints)** | Checkpoints (obtained separately, not shipped) + GPU | Fresh RR/Reg/CReg for DynaPatch and all 6 baselines, per setting, **and** DPGate itself (`deploy_from_checkpoints.sh` now also runs the calib pass + gate fit `reproduce_all.sh` does — see below) |
-| **[Training](#training)** (`reproduce_all.sh`, TRAINING.md) | data + GPU (full retrain is compute-heavy — see TRAINING.md "Roughly how long this takes") | DynaPatch and all 6 baselines trained and deployed from scratch |
 
-These are independent, not a ladder — pick the one that matches what you have. The first needs
-nothing beyond this repo; the other two need something you obtain yourself.
+These are independent, not a ladder — pick the one that matches what you have; the first needs
+nothing beyond this repo, the second needs checkpoints you obtain yourself.
+
+Retraining everything from scratch (backbones, DynaPatch, and all 6 baselines) is also possible
+and is how the checkpoints above were originally produced, but it isn't offered here as a primary
+reproduction path — it's compute-heavy and the two paths above already cover both "does this
+number reproduce" and "does the trained artifact reproduce". See **[TRAINING.md](TRAINING.md)** if
+you want it anyway.
 
 ## Requirements
 
@@ -74,9 +79,14 @@ results depend on:
 - **All 6 baselines** (HeadFT, FullFT, Arachne, DistrRep, NNPatch, PatchNAS) — one checkpoint set
   per setting at seed 101, under `artifacts/checkpoints/baselines/<Method>/<dataset>_<backbone>_s101/`.
 
-Checkpoint binaries are not shipped as part of this artifact (backbone + repair checkpoints run
-several GB) — the manifest documents what each one is and where it goes. Check what's present on
-disk:
+Checkpoint binaries are not shipped as part of this artifact's git history (~8.9 GB total) — the
+manifest documents what each one is and where it goes. Download them from this anonymous Zenodo
+record: **`<ZENODO_ANONYMOUS_LINK>`** (three archives — `backbones.tar` (2.2 GB, needed for every
+path below), `dynapatch_and_gates.tar` (94 MB), `baselines.tar` (6.6 GB, only needed for the 6
+baseline comparisons) — download only what the reproduction path you want needs), then extract
+each at the repo root so the paths land under `artifacts/checkpoints/` exactly as `tar -xf
+<archive>.tar` leaves them (each archive's own top-level directory matches its name). Check what's
+present on disk:
 
 ```bash
 uv run python scripts/validate_assets.py

@@ -46,6 +46,7 @@ outputs/gate_persample*/
 artifacts/prior_feats/
 outputs/checkpoint_eval/
 outputs/from_checkpoints/
+outputs/gate_protocol_b.csv
 # Intermediate per-cell/per-setting stepping stones on the way to the shipped summary.csv --
 # never tracked in the original repo either; only the final summary a paper table reads ships.
 outputs/rq2/m1_correction_direction/
