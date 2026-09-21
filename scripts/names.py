@@ -179,6 +179,11 @@ GATES: dict[str, Gate] = {g.key: g for g in [
          "OURS. 12 features (pre-repair + post-repair), 3-class logistic over "
          "gain in {-1,0,+1}, score = P(+1) - P(-1). Fitted on the other three "
          "backbones, so no row it scores took part in its own fit."),
+    Gate("L0 pre-only (DPInput)", "Pre-repair evidence, paper-exact", "leave-one-backbone-out", True,
+         "the paper's own DPInput ablation: exactly phi_pre(x) = [p_ori_max, p_ori_margin, H_ori] "
+         "(pB_max, pB_margin, H_base) -- the first 3 of L4 pre+post's 9 features, no rank features, "
+         "not the same thing as L2 pre-strong below (which adds two rank features L4 doesn't have "
+         "and DPInput was never defined with)."),
     Gate("L2 pre-strong", "Pre-repair evidence", "leave-one-backbone-out", True,
          "base confidence, margin, entropy, margin rank, ||delta||. No patch output."),
     Gate("L3 post-only", "Post-repair evidence", "leave-one-backbone-out", True,

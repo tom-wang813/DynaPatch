@@ -239,6 +239,25 @@ def eval_at_theta(rc: dict, rh: dict, sc: np.ndarray, sh: np.ndarray, t: float) 
     }
 
 
+def save_gate_checkpoint(path: Path, mdl, feats: list[str]) -> None:
+    """Save a fitted gate (an sklearn Pipeline(StandardScaler, LogisticRegression) from
+    G.fit_gain) in the same {feature_names, mean, scale, coef, intercept, classes} format
+    artifacts/checkpoints/gates/*.json uses -- feature_names is `feats`, the list this
+    particular fit actually used, not src/models/dynapatch/gate.py's hardcoded 9-name constant
+    (FeatureGate.save() would silently mislabel a 5-feature pre-only fit as the 9-feature one)."""
+    scaler, logreg = mdl.named_steps["standardscaler"], mdl.named_steps["logisticregression"]
+    payload = {
+        "feature_names": list(feats),
+        "mean": scaler.mean_.tolist(),
+        "scale": scaler.scale_.tolist(),
+        "coef": logreg.coef_.tolist(),
+        "intercept": logreg.intercept_.tolist(),
+        "classes": [int(c) for c in logreg.classes_],
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2))
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--features", default=N.SHIPPED_GATE)
@@ -267,6 +286,12 @@ def main() -> None:
                     help="clean_calib alone, or plus the clean_train dump (more negatives)")
     ap.add_argument("--min-pos", type=int, default=MIN_POS,
                     help="refuse a cell with fewer than this many of either class")
+    ap.add_argument("--save-gate", default=None,
+                    help="directory to save each fitted per-(dataset,backbone,seed) gate as "
+                         "<dir>/<dataset>_<backbone>_s<seed>.json, in the same {feature_names, "
+                         "mean, scale, coef, intercept, classes} format artifacts/checkpoints/"
+                         "gates/*.json uses -- with feature_names set to whatever --features "
+                         "this run actually used (never hardcoded), unlike FeatureGate.save().")
     a = ap.parse_args()
     key = N.assert_gate_admissible(a.features)
     feats = Z.LEARNED[key]
@@ -301,6 +326,8 @@ def main() -> None:
         mdl = G.fit_gain(X, g)
         if mdl is None:
             refused.append(k); continue
+        if a.save_gate:
+            save_gate_checkpoint(Path(a.save_gate) / f"{ds}_{bb}_s{seed}.json", mdl, feats)
         rc, rh = report[k]["clean"], report[k]["held"]
         sc, sh = G.score(mdl, G.mat(rc["f"], feats)), G.score(mdl, G.mat(rh["f"], feats))
         op = Z.operating_points(rc, rh, sc, sh)

@@ -8,6 +8,7 @@ __pycache__/
 # git corruption on this NFS-backed filesystem. The files remain on disk for local use; see
 # README.md / ENVIRONMENT.md for how to (re)obtain each dataset.
 /data/
+/outputs
 note/tables/
 note/ANALYSIS_RAW.md
 note/figures/

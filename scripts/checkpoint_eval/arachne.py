@@ -75,6 +75,15 @@ def main() -> None:
     ap.add_argument("--max-iter", type=int, default=100)
     ap.add_argument("--patch-aggr", type=float, default=10.0)
     ap.add_argument("--bound-scale", type=float, default=2.0)
+    ap.add_argument("--save-checkpoint", default=None,
+                     help="directory to save the trained patch as <dir>/<dataset>_<backbone>_s<seed>/"
+                          "arachne_patched_classifier.pt (only for --mode train; --mode checkpoint "
+                          "already has one on disk).")
+    ap.add_argument("--de-seed", type=int, default=0,
+                     help="ArachneConfig.seed for the DE search's own RNG (src/baselines/"
+                          "arachne_de.py defaults this to 0 -- NOT passing it means every "
+                          "invocation of --mode train is fully deterministic, not an independent "
+                          "draw; vary this explicitly to actually test run-to-run variance.")
     a = ap.parse_args()
     device = torch.device(a.device)
 
@@ -104,11 +113,22 @@ def main() -> None:
         feats_ok, labels_ok = cache_layer_inputs(patched_model, target, clean_loader, device)
         preserve_cap = 2048
         acfg = ArachneConfig(num_places=a.num_places, pop_size=a.pop_size, max_iter=a.max_iter,
-                              patch_aggr=a.patch_aggr, bound_scale=a.bound_scale)
+                              patch_aggr=a.patch_aggr, bound_scale=a.bound_scale, seed=a.de_seed)
         w_new, info = repair(target, feats_fail.to(device), labels_fail.to(device),
                               feats_ok[:preserve_cap].to(device), labels_ok[:preserve_cap].to(device), acfg)
         print(f"[{METHOD}] search info: {info}")
         target.weight.data.copy_(w_new)
+
+        if a.save_checkpoint:
+            save_dir = Path(a.save_checkpoint) / f"{a.dataset}_{a.backbone}_s{a.seed}"
+            save_dir.mkdir(parents=True, exist_ok=True)
+            save_path = save_dir / "arachne_patched_classifier.pt"
+            torch.save({"weight": target.weight.detach().cpu(),
+                        "bias": target.bias.detach().cpu(),
+                        "target_layer_shape": list(target.weight.shape),
+                        "bound_scale": a.bound_scale, "de_seed": a.de_seed, "search_info": info},
+                       save_path)
+            print(f"[{METHOD}] saved checkpoint -> {save_path}")
 
     loaders = common.build_eval_loaders(cfg, a.dataset, a.backbone, a.seed)
     out_dir = Path(a.output_root) / METHOD / a.dataset / a.backbone / f"s{a.seed}" / "predictions"

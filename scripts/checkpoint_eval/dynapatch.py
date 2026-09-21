@@ -37,9 +37,14 @@ from src.experiment.deploy_eval import run_deploy_eval  # noqa: E402
 METHOD = "DynaPatch"
 
 
+def gate_checkpoint_path(dataset: str, backbone: str, seed: int) -> Path:
+    return common.ROOT / f"artifacts/checkpoints/gates/{dataset}_{backbone}_s{seed}.json"
+
+
 def resolved_cfg(dataset: str, backbone: str, seed: int, output_root: Path,
                   checkpoint_path: Path, device: str, *, held_suffix: str,
-                  save_route_features: bool) -> OmegaConf:
+                  save_route_features: bool, gate_path: Path | None = None,
+                  gate_lambda: float = 1.0) -> OmegaConf:
     """One deploy.yaml, pointed at this cell's checkpoint/splits/device -- the same dot-path
     overrides deploy_from_checkpoints.sh applied via scripts/run_resolved_experiment.py."""
     cfg = OmegaConf.load(common.ROOT / f"configs/shuffled_split_source/{dataset}/{backbone}/deploy.yaml")
@@ -57,6 +62,9 @@ def resolved_cfg(dataset: str, backbone: str, seed: int, output_root: Path,
     OmegaConf.update(cfg, "runtime.device", device, merge=True)
     if save_route_features:
         OmegaConf.update(cfg, "deployment.save_route_features", True, merge=True)
+    if gate_path is not None:
+        OmegaConf.update(cfg, "deployment.feature_gate_path", str(gate_path), merge=True)
+        OmegaConf.update(cfg, "deployment.feature_gate_lambda", gate_lambda, merge=True)
     return cfg
 
 
@@ -69,6 +77,12 @@ def main() -> None:
     ap.add_argument("--dump-tag", default="",
                      help="suffix for the gate-evidence dump tree, outputs/effect_dump<tag>_v8_s<seed>/ "
                           "(matches DUMP_TAG in the old deploy_from_checkpoints.sh).")
+    ap.add_argument("--gate", action="store_true",
+                     help="also run a 4th deploy-eval pass with artifacts/checkpoints/gates/"
+                          "<dataset>_<backbone>_s<seed>.json applied (deployment.feature_gate_path), "
+                          "for gated RR_held/Reg/CReg -- the paper's actual DynaPatch numbers, not "
+                          "the ungated DPNoGate ones the main pass alone gives you.")
+    ap.add_argument("--gate-lambda", type=float, default=1.0)
     a = ap.parse_args()
     if a.mode != "checkpoint":
         raise SystemExit(f"[{METHOD}] --mode train doesn't apply here -- DynaPatch's repair "
@@ -78,22 +92,47 @@ def main() -> None:
     if not ckpt.exists():
         raise SystemExit(f"[{METHOD}] no repair checkpoint at {ckpt} -- see artifacts/checkpoints/MANIFEST.md.")
 
+    def done(pred_dir: Path) -> bool:
+        return (pred_dir / "clean_eval_predictions.csv").exists()
+
     out_root = Path(a.output_root) / a.dataset / a.backbone / f"s{a.seed}" / "deploy"
-    print(f"[{METHOD}] deploy-eval (ungated RR/Reg/CReg) -> {out_root}")
-    run_deploy_eval(resolved_cfg(a.dataset, a.backbone, a.seed, out_root, ckpt, a.device,
-                                  held_suffix="bug_eval_indices", save_route_features=False))
+    if done(out_root / "predictions"):
+        print(f"[{METHOD}] skip done (ungated) -> {out_root}")
+    else:
+        print(f"[{METHOD}] deploy-eval (ungated RR/Reg/CReg) -> {out_root}")
+        run_deploy_eval(resolved_cfg(a.dataset, a.backbone, a.seed, out_root, ckpt, a.device,
+                                      held_suffix="bug_eval_indices", save_route_features=False))
 
     gate_root = common.ROOT / f"outputs/effect_dump{a.dump_tag}_v8_s{a.seed}/{a.dataset}/{a.backbone}"
     for tag, held_suffix in (("deploy_direct", "bug_eval_indices"), ("deploy_direct_calib", "bug_val_indices")):
         out = gate_root / tag
+        if done(out / "predictions"):
+            print(f"[{METHOD}] skip done ({tag}) -> {out}")
+            continue
         print(f"[{METHOD}] gate-evidence dump ({tag}) -> {out}")
         run_deploy_eval(resolved_cfg(a.dataset, a.backbone, a.seed, out, ckpt, a.device,
                                       held_suffix=held_suffix, save_route_features=True))
 
     summary = common.summarize(out_root / "predictions", a.dataset)
     print(f"[{METHOD}] {a.dataset}/{a.backbone} s{a.seed} (ungated): {summary}")
-    print(f"[{METHOD}] gated (DPGate) numbers need scripts/gate_protocol_b.py run once over every "
-          f"cell's dump -- not per-cell; see its own --help.")
+
+    if a.gate:
+        gpath = gate_checkpoint_path(a.dataset, a.backbone, a.seed)
+        if not gpath.exists():
+            raise SystemExit(f"[{METHOD}] no gate checkpoint at {gpath}.")
+        gated_root = Path(a.output_root) / a.dataset / a.backbone / f"s{a.seed}" / "deploy_gated"
+        if done(gated_root / "predictions"):
+            print(f"[{METHOD}] skip done (gated) -> {gated_root}")
+        else:
+            print(f"[{METHOD}] deploy-eval (gated, {gpath.name} @ lambda={a.gate_lambda}) -> {gated_root}")
+            run_deploy_eval(resolved_cfg(a.dataset, a.backbone, a.seed, gated_root, ckpt, a.device,
+                                          held_suffix="bug_eval_indices", save_route_features=False,
+                                          gate_path=gpath, gate_lambda=a.gate_lambda))
+        gated_summary = common.summarize(gated_root / "predictions", a.dataset)
+        print(f"[{METHOD}] {a.dataset}/{a.backbone} s{a.seed} (gated): {gated_summary}")
+    else:
+        print(f"[{METHOD}] pass --gate for gated RR_held/Reg/CReg (the paper's actual DynaPatch "
+              f"numbers) using the shipped gate checkpoint.")
 
 
 if __name__ == "__main__":

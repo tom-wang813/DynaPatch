@@ -96,6 +96,7 @@ DSS, BBS, SEEDS = L.DSS, L.BBS, L.SEEDS
 # scope for the 2026-09-07 fix, but a rerun of either should not be trusted as deployable without
 # the same treatment.
 LEARNED = {
+    "L0 pre-only (DPInput)": ["pB_max", "pB_margin", "H_base"],
     "L1 magnitude":        ["dnorm_r"],
     "L2 pre-strong":       ["pB_max", "pB_margin", "H_base", "m_base_r", "dnorm_r"],
     "L3 post-only":        ["pP_max", "kl", "dH", "dp_c", "rho", "rho_worst", "dm_r"],
