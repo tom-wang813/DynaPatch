@@ -88,26 +88,16 @@ METHODS: dict[str, Method] = {m.key: m for m in [
            "input-conditioned patch, applied unconditionally"),
     Method("DP", "DynaPatch", r"\DP", True,
            "the full framework: DPGen proposes, DPGate authorises"),
-
-    # --- NOT in the paper. Kept for internal comparison only. -------------------------
-    Method("WeightedRetrain", "WeightedRetrain [internal]", "", False,
-           "risk-weighted retraining; no paper macro exists for it"),
-    Method("LastDelta", "LastDelta [internal]", "", False,
-           "zero-initialised residual on the last layer; no paper macro exists for it"),
-    Method("GreedyTopK", "GreedyTopK [internal]", "", False,
-           "OUR greedy top-k coordinate search over the last layer. This is NOT Arachne "
-           "and NOT any published method -- it shipped under the names 'arachne_style' "
-           "and 'LSR'. It must never be listed as prior work."),
 ]}
 
 # The paper's \\begin{itemize} order in "Compared Methods".
 PAPER_ORDER = ["HeadFT", "FullFT", "Arachne", "DistrRep", "NNPatch", "PatchNAS",
                "FP", "DPNoGate", "DP"]
-INTERNAL_ORDER = ["WeightedRetrain", "LastDelta", "GreedyTopK"]
+INTERNAL_ORDER: list[str] = []
 
 # --------------------------------------------------------------------------- row -> key
 
-# The `method` column of outputs/rq4_final.csv -> the canonical key, for the ONE configuration
+# The `method` column of outputs/rq1/comparison_baselines.csv -> the canonical key, for the ONE configuration
 # each method is reported at. Configurations that exist on disk but are not the reported one
 # (shorter epoch budgets, reduced search budgets, single sweep points) are deliberately absent:
 # leaving them out here is what stops a stale variant from reaching a table.
@@ -116,17 +106,12 @@ RQ4_METHOD_TO_KEY: dict[str, str] = {
     "Full fine-tuning (40ep)":                 "FullFT",
     "Arachne(DE) (swept bound_scale)":         "Arachne",
     "DistRep(PSO) real, FULL budget (1 seed)": "DistrRep",
-    "Weighted Retraining (40ep, matched)":     "WeightedRetrain",
-    "LastDelta (40ep)":                        "LastDelta",
-    "TopKSearch (swept step_scale)":           "GreedyTopK",
 }
 
 # Rows that must NEVER be read as a method: they are earlier, misnamed or lower-budget builds.
 RQ4_METHOD_REJECT: dict[str, str] = {
     "Full fine-tuning [shipped as 'DistrRep'] (12ep)":
         "misnamed AND under-trained; use 'Full fine-tuning (40ep)' as FullFT",
-    "TopKSearch [shipped as 'LSR'] step=0.5":
-        "single unswept operating point of GreedyTopK; use the swept row",
     "DistRep(PSO) real, reduced budget":
         "3x15x15 / clean-cap 512, a lower bound; use the FULL budget row",
     "Head-Only Fine-Tuning (12ep, shipped)": "under-trained; use the 40ep row",
@@ -134,7 +119,7 @@ RQ4_METHOD_REJECT: dict[str, str] = {
     "Always Patch (ungated)":
         "the 12-epoch SHIPPED patch. The gated rows and DPNoGate are both 40-epoch "
         "no-early-stop (ep40ns); mixing the two puts two training budgets in one column. "
-        "DPNoGate is sourced from ALL_RQ_DATA.csv's 'DynaPatch-NoGate (40ep, no early stop)'.",
+        "DPNoGate is sourced from ungated_fixedpatch_dynapatch.csv's 'DynaPatch-NoGate (40ep, no early stop)'.",
     "DynaPatch [2nd round] @ CReg=0":        "an operating point, not a method; use gate_label()",
     # r=0.60/0.80/0.90 rows dropped entirely 2026-09-04 (not just renamed) -- both the CReg=0
     # and r-indexed operating points defined a reported number by searching or targeting
@@ -169,7 +154,7 @@ def latex(key: str) -> str:
 
 
 def key_for_rq4_row(method_str: str) -> str | None:
-    """Canonical key for an outputs/rq4_final.csv row, or None if the row is not a method."""
+    """Canonical key for an outputs/rq1/comparison_baselines.csv row, or None if the row is not a method."""
     if method_str in RQ4_METHOD_REJECT:
         return None
     return RQ4_METHOD_TO_KEY.get(method_str)
@@ -238,7 +223,7 @@ SHIPPED_GATE = "L4 pre+post"      # the FEATURE SET key inside gate_zoo.LEARNED
 # on S_held+S_clean^test crosses r, then take the highest RR_held among those" -- selects that
 # operating point using the SAME population RR_held/Reg/CReg are then reported on
 # (scripts/gate_zoo.py:operating_points() computes and evaluates on the same (c, h) argument).
-# `outputs/gate_curves_protocolC_ep40ns.csv` was confirmed byte-identical to
+# `outputs/rq4/gate_curves_protocolC_ep40ns.csv` was confirmed byte-identical to
 # `outputs/gate_ablation_raw/curves_pre_post.csv` (2026-09-04), and this is exactly the pattern
 # that file's consumers (`scripts/table_rq4_final.py:dynapatch_rows()`,
 # `scripts/best_data.py`'s gated-DynaPatch block) used to pick every reported r=0.60/0.80/0.90
@@ -261,7 +246,7 @@ SHIPPED_GATE = "L4 pre+post"      # the FEATURE SET key inside gate_zoo.LEARNED
 # harmful (P(gain=+1) > P(gain=-1)). No target r, no threshold search of any kind, no
 # calibration split, nothing that could be in-sample OR eval-set-selected -- the model's raw
 # class decision, evaluated once on S_held + S_clean^test. One row per (setting, seed).
-GATE_NATURAL_POINT = "outputs/gate_natural_point_protocolC_ep40ns.csv"
+GATE_NATURAL_POINT = "outputs/rq4/gate_natural_point_protocolC_ep40ns.csv"
 GATE_CURVE_NAME = "DPGate"          # the `gate` column inside GATE_NATURAL_POINT / GATE_CURVES
 GATE_PROTOCOL = ("fitted within setting on bug_train + bug_val + clean_calib; theta=0 (no "
                  "target r, no calibration split); reported on S_held + S_clean^test")
@@ -272,12 +257,7 @@ GATED_RR_SEEN_REPORTABLE = False
 
 # Kept for full-frontier PLOTS ONLY (e.g. a Reg-vs-RR_held curve figure showing every q) --
 # never for picking the row a table reports as "DynaPatch @ r=X". See the removal note above.
-GATE_CURVES = "outputs/gate_curves_protocolC_ep40ns.csv"
-
-# The LOBO curve file is kept for the protocol comparison ONLY. Nothing in a paper table may
-# read it.
-GATE_CURVES_LOBO = "outputs/gate_zoo_curves_ep40ns.csv"
-
+GATE_CURVES = "outputs/rq4/gate_curves_protocolC_ep40ns.csv"
 
 def gate_display(key: str) -> str:
     return GATES[key].display

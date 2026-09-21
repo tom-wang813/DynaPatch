@@ -8,22 +8,6 @@ import torch
 import torch.nn as nn
 
 
-class ResidualLinear(nn.Module):
-    """Frozen base linear layer plus a zero-initialized trainable residual."""
-
-    def __init__(self, base_linear: nn.Linear) -> None:
-        super().__init__()
-        self.base = base_linear
-        self.delta = nn.Linear(base_linear.in_features, base_linear.out_features, bias=True)
-        nn.init.zeros_(self.delta.weight)
-        nn.init.zeros_(self.delta.bias)
-        for param in self.base.parameters():
-            param.requires_grad = False
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.base(x) + self.delta(x)
-
-
 @dataclass
 class BaselineModelBundle:
     model: nn.Module
@@ -106,7 +90,7 @@ def set_classifier_module(model: nn.Module, architecture: str, classifier: nn.Mo
 
 def configure_baseline_model(model: nn.Module, architecture: str, mode: str) -> BaselineModelBundle:
     """Freeze the backbone and expose the requested last-layer baseline variant."""
-    if mode in {"full_finetune", "full_finetune_safety", "full_finetune_distr"}:
+    if mode in {"full_finetune", "full_finetune_safety"}:
         for param in model.parameters():
             param.requires_grad = True
         return BaselineModelBundle(model=model, trainable_parameters=list(model.parameters()))
@@ -119,13 +103,6 @@ def configure_baseline_model(model: nn.Module, architecture: str, mode: str) -> 
         for param in classifier.parameters():
             param.requires_grad = True
         return BaselineModelBundle(model=model, trainable_parameters=list(classifier.parameters()))
-
-    if mode == "last_layer_delta":
-        if not isinstance(classifier, nn.Linear):
-            raise TypeError(f"Expected a linear classifier for {architecture}, got: {type(classifier)!r}")
-        residual_classifier = ResidualLinear(classifier)
-        set_classifier(model, residual_classifier)
-        return BaselineModelBundle(model=model, trainable_parameters=list(residual_classifier.delta.parameters()))
 
     raise ValueError(f"Unsupported head-repair baseline mode: {mode}")
 
@@ -143,17 +120,6 @@ class HeadOnlyFineTuneBaseline(nn.Module):
 
 class HeadOnlySafetyBaseline(nn.Module):
     """Semantic alias for the safety-aware head-only fine-tuning baseline."""
-
-    def __init__(self, model: nn.Module) -> None:
-        super().__init__()
-        self.model = model
-
-    def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-        return self.model(inputs)
-
-
-class LastLayerDeltaBaseline(nn.Module):
-    """Semantic alias for a frozen backbone with residual last-layer delta."""
 
     def __init__(self, model: nn.Module) -> None:
         super().__init__()

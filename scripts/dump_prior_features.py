@@ -112,7 +112,7 @@ def main() -> None:
 
     eval_ds = build_dataset(cfg, train=False)
     train_ds = build_dataset(cfg, train=True)
-    sp = ROOT / f"artifacts/bug_sets/v8_splits_seed{a.seed}/{ds}_{bb}"
+    sp = ROOT / f"artifacts/bug_sets/shuffled_split_seed{a.seed}/{ds}_{bb}"
     idx_of = lambda n: json.loads((sp / f"{ds}_{n}_indices.json").read_text())["indices"]
     pops = {"bug_train": (eval_ds, idx_of("bug_train")),
             "bug_eval": (eval_ds, idx_of("bug_eval")),

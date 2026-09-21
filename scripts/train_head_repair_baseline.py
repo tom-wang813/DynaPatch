@@ -254,10 +254,8 @@ def main() -> None:
         choices=(
             "head_only",
             "head_only_safety",
-            "last_layer_delta",
             "full_finetune",
             "full_finetune_safety",
-            "full_finetune_distr",
         ),
         required=True,
     )

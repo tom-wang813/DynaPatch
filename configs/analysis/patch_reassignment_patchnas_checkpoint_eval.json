@@ -1,0 +1,47 @@
+{
+  "experiment_id": "patch_reassignment_patchnas_checkpoint_eval",
+  "engineering_stage": "configurable_experiment",
+  "description": "Same direction/magnitude reassignment test as patch_reassignment_patchnas_v1.json, run against scripts/checkpoint_eval/patchnas.py's checkpoint-mode reconstruction (live features from the canonical backbone checkpoint) instead of the from-scratch training path.",
+  "rq": "Mechanism: is PatchNAS's repair-vs-regression behaviour, used as the RQ2 mechanism contrast against DynaPatch, still direction-dominated once scored from checkpoints rather than freshly trained?",
+  "hypothesis": "Same as patch_reassignment_patchnas_v1: repair depends on the direction of the patch's logit change more than its magnitude.",
+  "falsifier": "The median RR_held advantage of the original assignment over global reassignment is at most 0.02, or fewer than 24 of 36 cells exceed the null 97.5th percentile.",
+  "support_rule": "Support if the median advantage is greater than 0.05 and at least 30 of 36 cells exceed the null 97.5th percentile.",
+  "date": "2026-09-21",
+  "data": {
+    "dump_pattern": "outputs/checkpoint_eval_persample/{dataset}_{backbone}_s{seed}/PatchNAS/tau",
+    "split": "held",
+    "split_file": "bug_eval",
+    "patched_pred_col": "patch_pred_raw",
+    "datasets": ["gtsrb", "tt100k_signs", "lisa_signs"],
+    "backbones": ["resnet50", "convnext_tiny", "densenet121", "vgg16"],
+    "seeds": [101],
+    "population": "Rows where the frozen base prediction is wrong. patched_logits/patch_pred_raw are PatchNAS's own raw patch-head output, UNCONDITIONAL on its own router. Seed 101 only -- PatchNAS checkpoints only exist at seed 101 (artifacts/checkpoints/baselines/PatchNAS/)."
+  },
+  "interventions": [
+    "original",
+    "global_effect_shuffle",
+    "global_direction_shuffle",
+    "global_magnitude_shuffle",
+    "within_true_class_shuffle",
+    "within_failure_type_shuffle"
+  ],
+  "metrics": [
+    "RR_held",
+    "macro_RR",
+    "coverage_at_0.5",
+    "target_margin_gain",
+    "flip_rate"
+  ],
+  "permutations": 200,
+  "random_seed": 7401,
+  "minimum_class_n": 5,
+  "compute": {
+    "device": "CPU analysis from saved logits; invocation pins CUDA_VISIBLE_DEVICES=0",
+    "num_gpus": 0,
+    "expected_bottleneck": "CPU and small-array I/O",
+    "expected_runtime": "under 10 minutes"
+  },
+  "output_dir": "outputs/checkpoint_eval/patch_reassignment_patchnas",
+  "entrypoint": "scripts/analysis_patch_reassignment.py",
+  "stopping_rule": "Sanity check only -- compare against patch_reassignment_patchnas_v1's from-scratch numbers, do not treat as a replacement for it. Requires scripts/checkpoint_eval/patchnas.py --per-sample outputs/checkpoint_eval_persample to have been run first for every (dataset, backbone)."
+}

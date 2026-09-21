@@ -2,101 +2,150 @@
 
 **Deployment-Time Gating for Critical-Class Safety in Neural Repair**
 
-Anonymized reproduction repository for DynaPatch (double-blind review artifact). DynaPatch is
-a patch-based DNN repair method with two components on top of a **frozen** base classifier:
+Anonymized reproduction repository for DynaPatch (double-blind review artifact).
 
-1. **DPGen** — an input-conditioned hypernetwork that generates a feature-space correction
-   ("patch") without modifying the frozen backbone's weights.
-2. **DPGate** — a runtime gate (multinomial logistic regression over pre- and post-patch
-   prediction evidence) that decides whether to admit a candidate patch, to avoid trading
-   repaired failures for new regressions.
+A deployed classifier's known bugs can be patched, but a patch that fixes one input can silently
+break others that used to work — a *regression*. If a regressed input belongs to a
+safety-critical class (a stop sign, say), that's worse than the bug it fixed. DynaPatch repairs a
+**frozen** classifier with two parts: **DPGen**, a hypernetwork that proposes an input-conditioned
+patch, and **DPGate**, a runtime gate that applies it only when doing so doesn't look like it will
+create a new failure. Evaluated on 3 datasets x 4 backbones (12 settings) x 3 seeds, against 6
+baselines: HeadFT, FullFT, Arachne, DistrRep, NNPatch, PatchNAS.
 
-It is evaluated on 3 datasets (GTSRB, TT100K-Signs, LISA-Signs) x 4 backbones (ResNet50,
-ConvNeXt-tiny, VGG16, DenseNet121) = 12 settings, x 3 seeds, against 6 baselines: HeadFT,
-FullFT, Arachne, DistrRep, NNPatch (NN-Patching), PatchNAS.
+## Three ways to reproduce
 
-**This README covers reproducing the paper's reported tables from the shipped
-checkpoints/results — no GPU required.** If you want to retrain everything from scratch
-(backbones, DynaPatch, and all 6 baselines), see **[TRAINING.md](TRAINING.md)** instead.
+| Path | Needs | Gives you |
+|---|---|---|
+| **[Evaluation](#evaluation)** (`paper_tables.py`) | nothing extra — reads the shipped `outputs/` | Every RQ1–RQ4 table in the paper, in seconds |
+| **[Pretrained checkpoints](#pretrained-checkpoints)** | Checkpoints (obtained separately, not shipped) + GPU | Fresh RR/Reg/CReg for DynaPatch and all 6 baselines, per setting, **and** DPGate itself (`deploy_from_checkpoints.sh` now also runs the calib pass + gate fit `reproduce_all.sh` does — see below) |
+| **[Training](#training)** (`reproduce_all.sh`, TRAINING.md) | data + GPU (full retrain is compute-heavy — see TRAINING.md "Roughly how long this takes") | DynaPatch and all 6 baselines trained and deployed from scratch |
 
-## Setup
+These are independent, not a ladder — pick the one that matches what you have. The first needs
+nothing beyond this repo; the other two need something you obtain yourself.
+
+## Requirements
 
 ```bash
 uv sync
 ```
 
-### GPU setup (only needed if you also use checkpoints for inference, e.g. deploy-eval)
+GPU only needed for checkpoint inference (see [Pretrained checkpoints](#pretrained-checkpoints)).
+`torch`/`torchvision` are pinned to CUDA 12.4 builds — pin a physical GPU with
+`export CUDA_VISIBLE_DEVICES=0`.
 
-`torch`/`torchvision` are pinned to CUDA 12.4 builds (works with any NVIDIA driver reporting
-CUDA Version >= 12.4 in `nvidia-smi`) rather than the newest available wheel, specifically
-because an unpinned install silently falls back to CPU (`torch.cuda.is_available() == False`,
-no error) on machines with an older driver — this was caught on this artifact's own test
-machine. To pin a specific physical GPU: `export CUDA_VISIBLE_DEVICES=0`.
+## Evaluation
 
-## Reproduce the paper's tables (GPU-free)
-
-`outputs/` ships the small, already-aggregated per-cell/per-setting CSV and JSON files (a few
-MB total) that `scripts/paper_latex_tables.py` reads directly — no feature tensors, no
-checkpoints, no GPU. This regenerates every RQ1-RQ4 LaTeX table in the paper's own house style:
+Reproduce every RQ1–RQ4 table, directly from the shipped, already-aggregated CSV/JSON files
+under `outputs/` (a few MB total — no feature tensors, no checkpoints, no GPU):
 
 ```bash
-uv sync
-uv run python scripts/paper_latex_tables.py --outdir note/tables
+uv run python scripts/paper_tables.py                 # prints Markdown to the terminal, quick read
+uv run python scripts/paper_tables.py --rq 4           # just one RQ
+uv run python scripts/paper_tables.py --outdir note/tables   # the paper's exact LaTeX, also writes .tex
 ```
 
-**What this does NOT do**: it does not re-derive those CSVs from raw per-sample predictions.
-The raw per-sample prediction dumps behind them (per-input logits/labels across 12 settings x
-3 seeds x up to ~17 methods) are tens to ~150 GB in the original working repository and are
-**not shipped here**. `scripts/analysis_*.py` / `scripts/gate_*.py` are included for
-methodological transparency (they show exactly how each shipped CSV was computed) but will not
-run standalone without those larger dumps.
+Markdown (the default) is for a quick "does this number still look right" read; the LaTeX form
+(`--format latex`, or `--outdir` which implies it) is the paper's exact house style and what
+actually gets pasted in.
 
-## Using checkpoints directly
+`scripts/analysis_*.py` / `scripts/gate_*.py` show how each of those CSVs was computed.
 
-Frozen backbone checkpoints (~2.2 GB) are **not shipped as binaries** in this repository —
-`artifacts/checkpoints/manifest.json` / `MANIFEST.md` document what each checkpoint is, and
-`scripts/validate_assets.py` reports what is present vs missing:
+## Results
+
+RQ4, 12-setting mean (regenerated by the command above):
+
+| | DynaPatch (ungated) | DynaPatch (gated) |
+|---|---:|---:|
+| RR_held (repair rate, held-out) ↑ | 0.523 | 0.451 |
+| Reg (regression on clean test) ↓ | 0.0066 | 0.0041 |
+| CReg (regression on critical classes) ↓ | 0.0043 | 0.0028 |
+
+The gate trades a modest amount of repair rate for roughly a 1.6x drop in both regression and
+critical-class regression. Full per-setting breakdown, baselines, and RQ1–RQ3: `note/tables/` /
+[STRUCTURE.md](STRUCTURE.md).
+
+## Pretrained checkpoints
+
+`artifacts/checkpoints/manifest.json` / `MANIFEST.md` inventory every checkpoint this repo's
+results depend on:
+
+- **12 frozen backbones** — one per (dataset, backbone).
+- **DynaPatch's own repair checkpoints** — 12 settings x 3 seeds.
+- **All 6 baselines** (HeadFT, FullFT, Arachne, DistrRep, NNPatch, PatchNAS) — one checkpoint set
+  per setting at seed 101, under `artifacts/checkpoints/baselines/<Method>/<dataset>_<backbone>_s101/`.
+
+Checkpoint binaries are not shipped as part of this artifact (backbone + repair checkpoints run
+several GB) — the manifest documents what each one is and where it goes. Check what's present on
+disk:
 
 ```bash
 uv run python scripts/validate_assets.py
 ```
 
-If you have obtained the checkpoints separately (e.g. alongside this repository) and placed
-them at the paths `artifacts/checkpoints/manifest.json` names, you can re-run deploy-time
-evaluation directly against a trained DynaPatch checkpoint without retraining anything:
+With the checkpoints placed at the paths the manifest names, reproduce DynaPatch's RR/Reg/CReg
+table across all 12 settings x 3 seeds with two commands, no retraining needed:
+
+```bash
+bash scripts/deploy_from_checkpoints.sh
+uv run python scripts/table_from_checkpoints.py
+```
+
+The first runs deploy-eval for every (dataset, backbone, seed) whose checkpoint is present
+(skips a cell if its checkpoint is missing or already done, so a partial set still works); the
+second reads the resulting predictions and prints/writes `outputs/from_checkpoints/summary.csv`
+with RR_seen, RR_held, Reg, CReg per setting, mean over seeds — same metric definitions as
+`scripts/table_rq1_ablation.py`.
+
+It also runs a second, "calib" deploy-eval pass per cell and fits DPGate on everything dumped so
+far (`scripts/gate_protocol_b.py`), writing `outputs/gate_protocol_b.csv` — same mechanism
+`reproduce_all.sh` uses for the from-scratch path (see [Training](#training)), so you get the
+RQ3/RQ4 gate numbers here too, not just RQ1/RQ2's ungated ones.
+
+For a single DynaPatch setting instead of all 12:
 
 ```bash
 uv run python scripts/run_resolved_experiment.py \
-  --config configs/v8_source/<dataset>/<backbone>/deploy.yaml \
+  --config configs/shuffled_split_source/<dataset>/<backbone>/deploy.yaml \
   --output-root <outdir> \
   --deployment-checkpoint-path <path-to-repair_best.pt> \
-  --overrides runtime.device=cuda:0
+  --overrides \
+    "data.bug_indices_path=artifacts/bug_sets/shuffled_split_seed<seed>/<dataset>_<backbone>/<dataset>_bug_indices.json" \
+    "data.bug_train_indices_path=artifacts/bug_sets/shuffled_split_seed<seed>/<dataset>_<backbone>/<dataset>_bug_train_indices.json" \
+    "data.bug_eval_indices_path=artifacts/bug_sets/shuffled_split_seed<seed>/<dataset>_<backbone>/<dataset>_bug_eval_indices.json" \
+    "data.clean_eval_indices_path=artifacts/bug_sets/shuffled_split_seed<seed>/<dataset>_<backbone>/<dataset>_clean_eval_indices.json" \
+    "runtime.device=cuda:0"
 ```
 
-This writes fresh `repair_holdout_unseen_predictions.csv` / `clean_eval_predictions.csv` files
-you can recompute RR/Reg/CReg from directly. If you don't have checkpoints and want to produce
-them yourself, see **[TRAINING.md](TRAINING.md)**.
+The split overrides are still required even though `configs/shuffled_split_source/*/deploy.yaml`'s own
+default paths now point at the checked-in seed-101 tree (`outputs/repairbench_shuffled_split_s101/`) —
+those defaults are only ever correct for seed 101; any other seed (202, 303) needs its own manifest dir
+under `artifacts/bug_sets/shuffled_split_seed<seed>/`, which is exactly what the override supplies.
 
-## Method code
+For the 6 baselines, each checkpoint under `artifacts/checkpoints/baselines/<Method>/` is the
+same artifact its own driver script produces mid-run (Arachne: patched classifier weight+bias;
+DistrRep: repaired backbone state_dict; HeadFT/FullFT: baseline state_dict; NNPatch/PatchNAS:
+patch head + error estimator) — load it with that driver script's own model-construction code
+(`scripts/run_arachne_de.py`, `scripts/run_distrep_pso.py`, `scripts/train_head_repair_baseline.py`,
+`scripts/baseline_prior_patches.py`) and score it the same way that script's `write_predictions`
+step does, rather than retraining.
 
-`src/models/dynapatch/` (hypernetwork, patch operator, router, deployment gate, prototype/repair
-banks), `src/experiment/{train_stage3.py,deploy_eval.py,stage3.py,runner.py}` (training/eval
-loops), `src/baselines/{arachne_de.py,distrep_pso.py,head_repair.py,arachne.py}` (baseline
-implementations), `src/data/`, `src/training/`, `src/evaluation/`.
+## Training
+
+Retraining everything from scratch — backbones, DynaPatch, and all 6 baselines — instead of
+using shipped checkpoints/results: see **[TRAINING.md](TRAINING.md)**.
+
+## Repository structure
+
+See [STRUCTURE.md](STRUCTURE.md).
 
 ## Data
 
 `data/{gtsrb,tt100k_signs_clf,lisa_signs_clf}` — GTSRB (torchvision standard layout) and two
-ImageFolder-format traffic-sign classification crops. `artifacts/bug_sets/v8_splits_seed{101,202,303}/`
+ImageFolder-format traffic-sign classification crops, ~680 MB across ~75k image files, not
+tracked by git. See TRAINING.md for how to obtain it. `artifacts/bug_sets/shuffled_split_seed{101,202,303}/`
 carries the per-setting, per-seed JSON index manifests defining which images are
-bug_train/bug_eval/clean_calib/clean_eval (required to reproduce exactly which images are
-"bugs", independent of the raw image data). `artifacts/risk/*_safety_risk_matrix.json` defines
+bug_train/bug_eval/clean_calib/clean_eval. `artifacts/risk/*_safety_risk_matrix.json` defines
 per-dataset critical-class sets used by the analysis scripts.
-
-**`data/` is not tracked by git in this repository** (`.gitignore`) — ~680 MB across ~75k image
-files, which is impractical to commit and is redistribution of third-party-licensed data (see
-"License" below) rather than this project's own artifact. See TRAINING.md for how to obtain it
-if it is not already present alongside this checkout.
 
 ## License
 

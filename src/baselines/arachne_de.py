@@ -3,8 +3,7 @@
 The official artefact (https://github.com/coinse/arachne) is TensorFlow/Keras and is written
 around its own Keras models and preprocessed index files, so it cannot load this project's
 PyTorch checkpoints. This module re-implements the algorithm as specified in
-`arachne/run_localise.py` and `arachne/search/de_vk.py`, keeping both of its defining parts --
-the ones the previously-shipped `arachne_style` baseline dropped:
+`arachne/run_localise.py` and `arachne/search/de_vk.py`, keeping both of its defining parts:
 
   bidirectional localisation  cost per weight is 2-D: forward impact (how much the weight
                               contributes to the output) and gradient loss (|dL/dw|). Each is

@@ -8,12 +8,8 @@ import torch
 import torch.nn as nn
 
 from src.models.dynapatch.decomposition import BackboneDecomposition
-from src.models.dynapatch.confusion_pair_bank import ConfusionPairBank
-from src.models.dynapatch.fallback import FallbackPolicy
 from src.models.dynapatch.hypernet import HyperNetworkPatchGenerator
 from src.models.dynapatch.patch_operator import ResidualPatchOperator
-from src.models.dynapatch.prototype_bank import PrototypeBank
-from src.models.dynapatch.router import DistanceRouter
 
 
 class DynaPatchModel(nn.Module):
@@ -22,23 +18,15 @@ class DynaPatchModel(nn.Module):
     def __init__(
         self,
         decomposition: BackboneDecomposition,
-        router: DistanceRouter,
         hypernet: HyperNetworkPatchGenerator,
         patch_operator: ResidualPatchOperator,
-        prototype_bank: PrototypeBank | ConfusionPairBank | None = None,
-        fallback_policy: FallbackPolicy | None = None,
         async_mode: str = "parallel",
-        route_mode: str = "distance",
     ) -> None:
         super().__init__()
         self.decomposition = decomposition
-        self.router = router
         self.hypernet = hypernet
         self.patch_operator = patch_operator
-        self.prototype_bank = prototype_bank
-        self.fallback_policy = fallback_policy or FallbackPolicy("zero")
         self.async_mode = async_mode
-        self.route_mode = route_mode
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.stream_patch: torch.cuda.Stream | None = None
         self.stream_deep: torch.cuda.Stream | None = None
@@ -112,18 +100,9 @@ class DynaPatchModel(nn.Module):
         route_weight = self._route(route_feat, patch)
         return patch, route_weight, prototype_ids
 
-    def seed_support(self, x: torch.Tensor) -> None:
-        """Seed the router support set from an input batch."""
-        with torch.no_grad():
-            shallow_feat = self.decomposition.extract_shallow(x)
-            route_feat = self.decomposition.router_features(shallow_feat)
-            self.router.seed_support(route_feat)
-            if isinstance(self.prototype_bank, PrototypeBank):
-                self.prototype_bank.seed_from_features(route_feat)
-
     def trainable_parameters(self):
         """Return only repair-module parameters."""
-        for module in (self.router, self.hypernet, self.patch_operator, self.fallback_policy):
+        for module in (self.hypernet, self.patch_operator):
             yield from module.parameters()
 
     def patch_from_shallow(
@@ -157,10 +136,7 @@ class DynaPatchModel(nn.Module):
         context, prototype_ids = self._prototype_context(route_feat)
         deep_feat = self.decomposition.extract_deep(shallow_feat)  # [batch, patch_dim]
         patch = self.hypernet(deep_feat, context)
-        if self.training:
-            route_weight = self._route(route_feat, patch)
-        else:
-            route_weight = torch.ones(patch.size(0), 1, device=patch.device, dtype=patch.dtype)
+        route_weight = self._route(route_feat, patch)
         return patch, route_weight, deep_feat, prototype_ids
 
     def _forward_cpu(
@@ -250,19 +226,22 @@ class DynaPatchModel(nn.Module):
             return patch, route_weight, prototype_ids
 
     def _route(self, route_feat: torch.Tensor, patch: torch.Tensor) -> torch.Tensor:
-        """Return routing weights under the configured route mode."""
-        if self.route_mode == "always_on" or self.async_mode == "none":
-            return torch.ones(patch.size(0), 1, device=patch.device)
-        if self.route_mode == "soft_distance":
-            route_weight, _ = self.router.soft_forward(route_feat)
-            return route_weight
-        route_weight, _ = self.router(route_feat)
-        return route_weight
+        """Routing weight, always 1.0.
+
+        Used to dispatch to a real `DistanceRouter` under `route_mode in {"distance",
+        "soft_distance"}` -- removed after confirming every shipped setting runs
+        `route_mode: always_on` (or `async_mode: none`, which short-circuited to the same
+        result), so the router's `forward()`/`soft_forward()` were never actually called. See
+        the `dynapatch-deploy-policy-promotion-quirk` memory note.
+        """
+        return torch.ones(patch.size(0), 1, device=patch.device)
 
     def _prototype_context(self, route_feat: torch.Tensor) -> tuple[torch.Tensor | None, torch.Tensor]:
-        """Return conditioning context and prototype ids for the shared hypernet."""
-        if self.prototype_bank is None:
-            prototype_ids = torch.full((route_feat.size(0),), -1, device=route_feat.device, dtype=torch.long)
-            return None, prototype_ids
-        context, prototype_ids = self.prototype_bank.lookup(route_feat)
-        return context, prototype_ids
+        """Conditioning context and prototype ids for the shared hypernet, always empty.
+
+        Used to look up a `PrototypeBank`/`ConfusionPairBank` under `conditioning.enabled: true`
+        -- removed after confirming no shipped config ever sets that key, so this always
+        returned `(None, -1)` in practice.
+        """
+        prototype_ids = torch.full((route_feat.size(0),), -1, device=route_feat.device, dtype=torch.long)
+        return None, prototype_ids

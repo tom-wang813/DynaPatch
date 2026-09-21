@@ -76,13 +76,42 @@ import probe_gonogo_pre_vs_prepost as G  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT_CSV = ROOT / "outputs" / "gate_protocol_b.csv"
+
+# vgg16/convnext_tiny need the last_affine patch-site dump, not the shipped deep_feat
+# (_ep40ns) tree -- see scripts/gate_lambda_sweep.py's own header comment and
+# note/PITFALLS.md's patch_site entry. Duplicated here (not imported) rather than
+# `from gate_lambda_sweep import _load_split`, since gate_lambda_sweep.py itself imports
+# `train_cells` FROM this module -- importing back would be circular.
+LAST_AFFINE_BACKBONES = {"vgg16", "convnext_tiny"}
+SHIPPED_TAG = "_ep40ns"
+
+
+def _load_split(pipeline):
+    """Run PIPELINE once per patch-site tag and merge by backbone (see gate_lambda_sweep.py's
+    identical helper for the full rationale)."""
+    saved = (L.DUMP_TAG, L.CACHE, dict(L._MEM))
+    merged: dict = {}
+    try:
+        for tag, keep in ((SHIPPED_TAG, lambda bb: bb not in LAST_AFFINE_BACKBONES),
+                          ("_lastaffine", lambda bb: bb in LAST_AFFINE_BACKBONES)):
+            L.DUMP_TAG = tag
+            L.CACHE = ROOT / "outputs" / f"_response_gate_cache{tag}"
+            L._MEM.clear()
+            for k, v in pipeline().items():
+                if keep(k[2]):
+                    merged[k] = v
+    finally:
+        L.DUMP_TAG, L.CACHE = saved[0], saved[1]
+        L._MEM.clear()
+        L._MEM.update(saved[2])
+    return merged
 CALIB_PASS = "deploy_direct_calib"
 CT_TAG = "_ct_ep40ns"      # the tree holding the clean_train dump
 MIN_POS = 1      # with --train-on both the failure side is never empty
 
 
 def calib_idx(seed: int, ds: str, bb: str) -> set[int] | None:
-    f = ROOT / f"artifacts/bug_sets/v8_splits_seed{seed}/{ds}_{bb}/{ds}_clean_calib_indices.json"
+    f = ROOT / f"artifacts/bug_sets/shuffled_split_seed{seed}/{ds}_{bb}/{ds}_clean_calib_indices.json"
     return set(json.loads(f.read_text())["indices"]) if f.exists() else None
 
 
@@ -100,7 +129,7 @@ def _side(entry: dict, keep: set[int] | None, gain_pos: int) -> dict | None:
 
 
 def bugtrain_idx(seed: int, ds: str, bb: str) -> set[int] | None:
-    f = ROOT / f"artifacts/bug_sets/v8_splits_seed{seed}/{ds}_{bb}/{ds}_bug_train_indices.json"
+    f = ROOT / f"artifacts/bug_sets/shuffled_split_seed{seed}/{ds}_{bb}/{ds}_bug_train_indices.json"
     return set(json.loads(f.read_text())["indices"]) if f.exists() else None
 
 
@@ -242,8 +271,8 @@ def main() -> None:
     key = N.assert_gate_admissible(a.features)
     feats = Z.LEARNED[key]
 
-    report = Z.attach_criticality(Z.attach_idx(Z.add_derived(G.build_cells())))
-    train = train_cells(a.train_on, a.clean_source)
+    report = _load_split(lambda: Z.attach_criticality(Z.attach_idx(Z.add_derived(G.build_cells()))))
+    train = _load_split(lambda: train_cells(a.train_on, a.clean_source))
 
     print(f"gate: {N.gate_display(key)}   {len(feats)} features, 3-class, "
           f"train-on={a.train_on} + clean={a.clean_source}, same setting, same seed")

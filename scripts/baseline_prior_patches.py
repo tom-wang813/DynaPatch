@@ -159,6 +159,10 @@ def estimator(f_bug: np.ndarray, f_clean: np.ndarray, applies: list[np.ndarray])
         lossf(net(xb), yb).backward()
         opt.step()
     net.eval()
+    if CKPT_ROOT[0] is not None:
+        CKPT_ROOT[0].mkdir(parents=True, exist_ok=True)
+        torch.save({"state_dict": net.state_dict(), "arch": EST_ARCH[0]},
+                   CKPT_ROOT[0] / "estimator_head.pt")
     return [prob1(net, a) for a in apps]
 
 
@@ -214,6 +218,10 @@ def nn_patching(d: dict) -> dict:
     net = fit(head(Xs.shape[1], NCLS[0], 0, 0, "relu"), Xs[tr], y[tr],
               val=(Xs[va], y[va]) if len(va) >= 3 else None) if EARLY[0] \
         else fit(head(Xs.shape[1], NCLS[0], 0, 0, "relu"), Xs, y)
+    if CKPT_ROOT[0] is not None:
+        CKPT_ROOT[0].mkdir(parents=True, exist_ok=True)
+        torch.save({"state_dict": net.state_dict(), "arch": (0, 0, "relu"),
+                   "din": Xs.shape[1], "dout": NCLS[0]}, CKPT_ROOT[0] / "patch_head.pt")
     patch = {p: predict(net, a) for p, a in zip(pops, apps)}
     patch_logits = {p: predict_logits(net, a) for p, a in zip(pops, apps)}
     sc = estimator(f["bug_train"], ftr, [f[p] for p in pops])
@@ -248,6 +256,10 @@ def patchnas(d: dict) -> dict:
         net = fit(head(Xs.shape[1], NCLS[0], *best[1]), Xs[tr], y[tr], val=(Xs[va], y[va]))
     else:
         net = fit(head(Xs.shape[1], NCLS[0], *best[1]), Xs, y)
+    if CKPT_ROOT[0] is not None:
+        CKPT_ROOT[0].mkdir(parents=True, exist_ok=True)
+        torch.save({"state_dict": net.state_dict(), "arch": best[1],
+                   "din": Xs.shape[1], "dout": NCLS[0]}, CKPT_ROOT[0] / "patch_head.pt")
     patch = {p: predict(net, a) for p, a in zip(pops, apps)}
     patch_logits = {p: predict_logits(net, a) for p, a in zip(pops, apps)}
     sc = estimator(f["bug_train"], ftr, [f[p] for p in pops])
@@ -257,6 +269,7 @@ def patchnas(d: dict) -> dict:
 
 NCLS = [0]
 EARLY = [False]
+CKPT_ROOT: list[Path | None] = [None]   # set per (setting, seed, method) in main() before fn(d)
 
 
 def holdout(n: int, frac: float = 0.3):
@@ -352,6 +365,10 @@ def main() -> None:
                          "threshold at our own Reg). Costs nothing -- the vectors already exist.")
     ap.add_argument("--early-stop", action="store_true",
                     help="hold out 30%% of the reported failures and keep the best patch head")
+    ap.add_argument("--checkpoint-dir", default=None,
+                    help="directory to save the fitted patch head + error estimator to, as "
+                         "<dir>/<ds>_<bb>_s<seed>/<method>[/<rep>]/{patch_head,estimator_head}.pt. "
+                         "Costs nothing extra -- net is already in memory when metrics are read.")
     a = ap.parse_args()
     EST_ARCH[0] = a.estimator
     EARLY[0] = a.early_stop
@@ -371,6 +388,9 @@ def main() -> None:
                 if a.torch_seed is not None:
                     torch.manual_seed(a.torch_seed + rep)
                     torch.cuda.manual_seed_all(a.torch_seed + rep)
+                if a.checkpoint_dir:
+                    sub = f"{ds}_{bb}_s{seed}/{name}" + (f"/rep{rep}" if a.repeats > 1 else "")
+                    CKPT_ROOT[0] = Path(a.checkpoint_dir) / sub
                 r = fn(d)
                 m = metrics(d, r["patch"], r["score"], a.tau)
                 m["n_classes"] = NCLS[0]

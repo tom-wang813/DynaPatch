@@ -184,7 +184,7 @@ One row per (method, setting, seed, split).
         [("by_cell", cell_df.sort_values(["split", "method", "setting", "seed"]))],
     )
 
-    out = ROOT / "outputs" / "m1_correction_direction"
+    out = ROOT / "outputs" / "rq2" / "m1_correction_direction"
     out.mkdir(parents=True, exist_ok=True)
     cell_df.to_csv(out / "routed_aim_breakdown_per_cell.csv", index=False)
     print(f"[written] {out.relative_to(ROOT)}/routed_aim_breakdown_per_cell.csv  ({len(cell_df)} rows)")

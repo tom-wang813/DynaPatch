@@ -117,7 +117,7 @@ def score(model, X: np.ndarray) -> np.ndarray:
 
 
 def clean_test_idx(seed: int, ds: str, bb: str) -> set[int] | None:
-    f = ROOT / f"artifacts/bug_sets/v8_splits_seed{seed}/{ds}_{bb}/{ds}_clean_test_indices.json"
+    f = ROOT / f"artifacts/bug_sets/shuffled_split_seed{seed}/{ds}_{bb}/{ds}_clean_test_indices.json"
     return set(json.loads(f.read_text())["indices"]) if f.exists() else None
 
 

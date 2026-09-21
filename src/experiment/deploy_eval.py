@@ -16,7 +16,7 @@ from omegaconf import DictConfig, OmegaConf
 from src.experiment.runner import ExperimentRunner
 from src.experiment.stage3 import build_stage3_bundle, resolve_runtime_device
 from src.models.dynapatch.deployment_policy import build_deployment_policy
-from src.models.dynapatch.factory import seed_memory_bank
+from src.models.dynapatch.gate import FeatureGate, compute_gate_features
 from src.models.dynapatch.repair_bank import load_repair_bank, save_repair_bank
 
 
@@ -91,32 +91,6 @@ def _load_checkpoint_flexibly(model, checkpoint_path: str | Path) -> dict[str, A
 
 
 @torch.no_grad()
-def _seed_router_support(model, backbone, loader: DataLoader, device: torch.device) -> None:
-    """Seed router keys and optional conditioning state from the seen repair set."""
-    support_inputs_batches: list[torch.Tensor] = []
-    support_label_batches: list[torch.Tensor] = []
-    for inputs, labels in loader:
-        support_inputs_batches.append(inputs.to(device))
-        support_label_batches.append(labels.to(device))
-
-    if not support_inputs_batches:
-        return
-
-    support_inputs = torch.cat(support_inputs_batches, dim=0)
-    support_labels = torch.cat(support_label_batches, dim=0)
-    shallow_feat = model.decomposition.extract_shallow(support_inputs)
-    route_feat = model.decomposition.router_features(shallow_feat)
-    model.router.seed_support(route_feat)
-
-    predictions = backbone(support_inputs).argmax(dim=1)
-    seed_memory_bank(
-        model.prototype_bank,
-        route_feat=route_feat,
-        labels=support_labels,
-        predictions=predictions,
-    )
-
-
 @torch.no_grad()
 def _build_support_patch_bank(
     model,
@@ -222,25 +196,6 @@ def _normalize_repair_bank_selection(selection: str) -> str:
     return normalized
 
 
-def _seed_memory_bank_from_saved_payload(model, payload: dict[str, Any], device: torch.device) -> None:
-    """Restore router / memory-bank state from a saved repair bank payload."""
-    route_feat = payload["route_feat"].to(device)
-    model.router.seed_support(route_feat)
-    labels = payload.get("labels")
-    predictions = payload.get("predictions")
-    if labels is not None:
-        labels = labels.to(device)
-    if predictions is not None:
-        predictions = predictions.to(device)
-    if getattr(model, "prototype_bank", None) is not None:
-        seed_memory_bank(
-            model.prototype_bank,
-            route_feat=route_feat,
-            labels=labels,
-            predictions=predictions,
-        )
-
-
 def _load_or_build_repair_bank(
     *,
     model,
@@ -264,7 +219,6 @@ def _load_or_build_repair_bank(
             raise ValueError(
                 "Loaded repair bank is missing `gate_features`, but deployment.gate_source is not `route_feat`."
             )
-        _seed_memory_bank_from_saved_payload(model, payload, device)
         info = {
             "source": "loaded",
             "path": str(Path(load_path)),
@@ -274,8 +228,6 @@ def _load_or_build_repair_bank(
         }
         return support_route_feat, support_patches, gate_support_feat, info
 
-    if gate_source == "route_feat":
-        _seed_router_support(model, backbone, seen_loader, device)
     support_route_feat, support_patches, support_labels, support_predictions = _build_support_patch_bank(
         model,
         backbone,
@@ -547,7 +499,13 @@ def _deployed_forward(
             chunk_size=gate_chunk_size,
         )
     else:
-        route_accept, min_dist = model.router(route_feat)
+        # Every shipped config sets deployment.gate_threshold, so this branch is never taken in
+        # practice; it used to fall back to the in-model DistanceRouter, which was removed after
+        # confirming that (see the `dynapatch-deploy-policy-promotion-quirk` memory note).
+        raise ValueError(
+            "deployment.gate_source/gate_threshold must be set (external gate) -- the in-model "
+            "router fallback was removed as unreachable dead code."
+        )
     route_accept_flat = route_accept.view(-1)
     accept_mask = route_accept_flat > 0.0
     fallback_mask = ~accept_mask
@@ -715,10 +673,7 @@ def _build_inference_checks(
             "compatibility_note": policy_info["compatibility_note"],
             "policy_semantics": {
                 "direct_generalization": "Legacy alias. Under official semantics this is promoted to `gated_direct` so reject bypasses patching.",
-                "distance_weighted": "Apply the direct patch on router accept; otherwise use a distance-weighted support patch mixture.",
                 "gated_direct": "Apply the direct patch only when the router accepts; otherwise bypass patching with a zero fallback.",
-                "gated_weighted": "Apply the direct patch on router accept; otherwise use a heuristic weighted support-patch allocation, closer to PatchPro-style heuristic allocation outside repaired properties.",
-                "backbone_only": "Disable patching entirely and return the frozen backbone prediction under the same deployment-time evaluation protocol.",
             }[effective_policy],
             "clean_behavior_note": "Official deployment semantics expose clean false accepts and seen false rejects under reject-bypass evaluation.",
         },
@@ -906,8 +861,18 @@ def _evaluate_split(
     repair_bank_selection: str | None = None,
     repair_bank_bucket: dict[str, Any] | None = None,
     feature_dir: Path | None = None,
+    feature_gate: FeatureGate | None = None,
+    feature_gate_lambda: float = 1.0,
 ) -> tuple[dict[str, float | int], list[dict[str, object]]]:
-    """Evaluate one split under the configured deployment fallback policy."""
+    """Evaluate one split under the configured deployment fallback policy.
+
+    `feature_gate`, when given, is the paper's actual 9-feature commit/rollback gate
+    (`src/models/dynapatch/gate.py`) and takes over the accept/reject decision entirely --
+    overriding whatever `policy`/`gate_threshold` already decided, since those are confirmed
+    permanently-open no-ops for every shipped setting (see the
+    `dynapatch-deploy-policy-promotion-quirk` memory note). `route_accept`/`fallback_mask` are
+    reassigned to the feature-gate's decision so predictions.csv reflects what actually happened.
+    """
     rows: list[dict[str, object]] = []
     indices = _dataset_indices(loader)
     cursor = 0
@@ -950,6 +915,13 @@ def _evaluate_split(
         direct_patch = deployed["direct_patch"]
         gate_query_feat = deployed["gate_query_feat"]
         base_logits = backbone(inputs)
+
+        if feature_gate is not None:
+            gate_feats = compute_gate_features(base_logits, patched_logits)
+            accept = feature_gate.decide(gate_feats, lam=feature_gate_lambda)
+            patched_logits = torch.where(accept.view(-1, 1), patched_logits, base_logits)
+            route_accept_flat = accept.float()
+            fallback_mask = ~accept
 
         if feature_dir is not None:
             route_feat_list.append(route_feat.detach().cpu())
@@ -1272,6 +1244,12 @@ def run_deploy_eval(cfg: DictConfig) -> str:
     save_features = bool(cfg.deployment.get("save_route_features", False))
     feature_dir = prediction_dir if save_features else None
 
+    feature_gate_path = cfg.deployment.get("feature_gate_path")
+    feature_gate = FeatureGate.load(str(feature_gate_path)) if feature_gate_path is not None else None
+    feature_gate_lambda = float(cfg.deployment.get("feature_gate_lambda", 1.0))
+    if feature_gate is not None:
+        print(f"[Start] feature_gate loaded from {feature_gate_path} (lambda={feature_gate_lambda})", flush=True)
+
     for split_name, loader in split_specs.items():
         summary, rows = _evaluate_split(
             model=model,
@@ -1293,6 +1271,8 @@ def run_deploy_eval(cfg: DictConfig) -> str:
             repair_bank_selection=repair_bank_selection,
             repair_bank_bucket=repair_bank_bucket,
             feature_dir=feature_dir,
+            feature_gate=feature_gate,
+            feature_gate_lambda=feature_gate_lambda,
         )
         if bool(cfg.artifacts.get("save_predictions", True)):
             _write_prediction_csv(prediction_dir / f"{split_name}_predictions.csv", rows)

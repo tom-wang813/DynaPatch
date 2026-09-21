@@ -103,7 +103,7 @@ def main() -> None:
                         "median_cos_to_ideal": float(np.median(cos)), "n": cell["n"]})
 
     df = pd.DataFrame(rows)
-    out = ROOT / "outputs" / "rq1_alignment"
+    out = ROOT / "outputs" / "rq2" / "alignment"
     out.mkdir(parents=True, exist_ok=True)
     df.to_csv(out / "per_cell.csv", index=False)
 

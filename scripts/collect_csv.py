@@ -19,10 +19,10 @@ FILES = [
      "per seed, with base and patched predictions side by side"),
     ("audit_coverage.csv", "outputs/analysis_audit.csv",
      "sample counts and event counts for every (method, setting, seed, split)"),
-    ("per_class_repair_and_regression.csv", "outputs/p1_regression/per_cell.csv",
+    ("per_class_repair_and_regression.csv", "outputs/rq2/p1_regression/per_cell.csv",
      "per-class repair rate, class coverage, count-matched concentration null, and per-class "
      "regression, one row per (method, setting, seed)"),
-    ("per_class_repair_and_regression__by_setting.csv", "outputs/p1_regression/per_setting.csv",
+    ("per_class_repair_and_regression__by_setting.csv", "outputs/rq2/p1_regression/per_setting.csv",
      "the same, seeds collapsed"),
     ("inputspecific_per_cell.csv", "outputs/p2_inputspecific/per_cell.csv",
      "FixedPatch vs DynaPatch-NoGate, one row per (method, setting, seed, split)"),
@@ -37,33 +37,33 @@ FILES = [
     ("patchvec_geometry.csv", "outputs/p4_patchvec/per_cell.csv",
      "within-class and between-class distance of the generated patch vectors, with a permutation "
      "null"),
-    ("m1_direction_per_cell.csv", "outputs/m1_correction_direction/direction_per_cell.csv",
+    ("m1_direction_per_cell.csv", "outputs/rq2/m1_correction_direction/direction_per_cell.csv",
      "within/between-failure-type cosine and L2 distance of Delta z(x) = patched_logits - "
      "base_logits, with a permutation null, for NN-Patching / PatchNAS / DynaPatch-NoGate side "
      "by side"),
     ("m1_magnitude_margin_per_cell.csv",
-     "outputs/m1_correction_direction/magnitude_margin_per_cell.csv",
+     "outputs/rq2/m1_correction_direction/magnitude_margin_per_cell.csv",
      "correction magnitude ||Delta z(x)|| and true-vs-wrong margin improvement Delta m(x), same "
      "three methods; NOT comparable in absolute units across methods, see note/ANALYSIS_RAW.md M1"),
     ("m1_cluster_alignment_per_cell.csv",
-     "outputs/m1_correction_direction/cluster_alignment_per_cell.csv",
+     "outputs/rq2/m1_correction_direction/cluster_alignment_per_cell.csv",
      "spherical k-means on unit Delta z(x), k = number of observed failure types, scored against "
      "the true failure-type labels by purity/ARI/NMI"),
     ("m1_aim_vs_magnitude_per_cell.csv",
-     "outputs/m1_correction_direction/aim_vs_magnitude_per_cell.csv",
+     "outputs/rq2/m1_correction_direction/aim_vs_magnitude_per_cell.csv",
      "each method's own failures split into repaired / aimed-but-not-repaired / misaimed; "
      "repaired here uses each method's RAW un-routed patch output, not the routed RR_held in "
      "note/RQ2_BASELINE_BEHAVIOR.md -- see note/ANALYSIS_RAW.md M1c"),
     ("m1_routed_aim_breakdown_per_cell.csv",
-     "outputs/m1_correction_direction/routed_aim_breakdown_per_cell.csv",
+     "outputs/rq2/m1_correction_direction/routed_aim_breakdown_per_cell.csv",
      "NN-Patching/PatchNAS held-out failures split by routing and aim at the tau operating "
      "point (matches note/RQ2_DATA.md RQ2.10) -- see note/ANALYSIS_RAW.md M1d"),
     ("gate_transplant_pre_post_per_cell.csv",
-     "outputs/gate_transplant/per_cell_4_pre+post.csv",
+     "outputs/rq3/gate_transplant/per_cell_4_pre+post.csv",
      "NN-Patching/PatchNAS's raw patch output routed by DynaPatch's own gate (full pre+post "
      "feature set) instead of their own estimator -- see note/ANALYSIS_RAW.md GateTransplant_4_pre+post"),
     ("gate_transplant_pre_only_per_cell.csv",
-     "outputs/gate_transplant/per_cell_2_prestrong.csv",
+     "outputs/rq3/gate_transplant/per_cell_2_prestrong.csv",
      "the same gate transplant, pre-information features only -- RQ3 robustness check: does "
      "post-info help NN-Patching/PatchNAS's gate too? -- see note/ANALYSIS_RAW.md GateTransplant_2_prestrong"),
     ("m3_distrep_expert_merge_per_failure.csv",
@@ -195,11 +195,11 @@ FILES = [
      "seed 101 only"),
     ("params_changed.csv", "outputs/p6_capacity/per_cell.csv",
      "how many parameters each method actually changes, plus BatchNorm buffer drift"),
-    ("all_metrics_per_seed.csv", "outputs/ALL_RQ_DATA.csv",
+    ("all_metrics_per_seed.csv", "outputs/rq2/ungated_fixedpatch_dynapatch.csv",
      "every method's four headline metrics, one row per (method, setting, seed, metric)"),
     ("all_metrics_best_config.csv", "outputs/BEST_DATA.csv",
      "the same, each method at its best configuration"),
-    ("rq4_final.csv", "outputs/rq4_final.csv",
+    ("rq4_final.csv", "outputs/rq1/comparison_baselines.csv",
      "the table-4 source: RR_repair, RR_held, Reg, CReg per (method, setting, seed)"),
     ("gate_curves.csv", "outputs/gate_zoo_curves.csv",
      "the gate's full risk-coverage curve (protocol C), per gate, per setting"),

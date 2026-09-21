@@ -8,11 +8,8 @@ import torch
 import torch.nn as nn
 from omegaconf import DictConfig
 
-from src.models.dynapatch.confusion_pair_bank import ConfusionPairBank
 from src.models.dynapatch.decomposition import build_decomposition
 from src.models.dynapatch.patch_operator import ResidualPatchOperator
-from src.models.dynapatch.prototype_bank import PrototypeBank
-from src.models.dynapatch.router import DistanceRouter
 
 
 def build_dynapatch_decomposition(base_model: nn.Module, cfg: DictConfig) -> Any:
@@ -31,41 +28,21 @@ def build_dynapatch_decomposition(base_model: nn.Module, cfg: DictConfig) -> Any
     )
 
 
-def build_router(cfg: DictConfig, device: torch.device) -> nn.Module:
-    """Build the configured routing module."""
-    router_name = str(cfg.method.get("router", "distance"))
-    if router_name not in {"distance", "bypassed"}:
-        raise ValueError(f"Unsupported router type: {router_name}")
-    return DistanceRouter(
-        num_experts=int(cfg.repair.support_set_k),
-        shallow_dim=int(cfg.model.shallow_dim),
-        threshold=float(cfg.repair.tau_dist),
-        temperature=float(cfg.repair.get("route_temperature", 0.25)),
-    ).to(device)
-
-
 def build_memory_bank(cfg: DictConfig, device: torch.device) -> nn.Module | None:
-    """Build the configured conditioning / repair memory bank."""
+    """Build the configured conditioning / repair memory bank.
+
+    Always `None` for every shipped config: `conditioning.enabled` is never set. The
+    `prototype_bank`/`confusion_pair_bank` backends this used to dispatch to were removed after
+    confirming that (see the `dynapatch-deploy-policy-promotion-quirk` memory note) -- this still
+    raises loudly rather than silently no-op-ing if `conditioning.enabled: true` is ever set again.
+    """
     conditioning_cfg = cfg.get("conditioning")
     if conditioning_cfg is None or not bool(conditioning_cfg.get("enabled", False)):
         return None
-
-    conditioning_type = str(conditioning_cfg.get("type", "prototype_bank"))
-    if conditioning_type == "prototype_bank":
-        return PrototypeBank(
-            feature_dim=int(cfg.model.shallow_dim),
-            num_prototypes=int(conditioning_cfg.get("num_prototypes", 8)),
-            num_iters=int(conditioning_cfg.get("num_iters", 25)),
-            random_seed=int(conditioning_cfg.get("random_seed", cfg.seed)),
-        ).to(device)
-    if conditioning_type == "confusion_pair_bank":
-        return ConfusionPairBank(
-            feature_dim=int(cfg.model.shallow_dim),
-            num_groups=int(conditioning_cfg.get("num_groups", 4)),
-            num_classes=int(cfg.dataset.num_classes),
-            random_seed=int(conditioning_cfg.get("random_seed", cfg.seed)),
-        ).to(device)
-    raise ValueError(f"Unsupported conditioning type: {conditioning_type}")
+    raise ValueError(
+        "conditioning.enabled=true is no longer supported -- the prototype_bank/"
+        "confusion_pair_bank backends were removed as unreachable dead code."
+    )
 
 
 def context_dim_from_memory_bank(cfg: DictConfig, memory_bank: nn.Module | None) -> int:

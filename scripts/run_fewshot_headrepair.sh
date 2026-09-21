@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# run_fewshot_headrepair.sh -- the SAME-SCENARIO rivals we never ran.
+# run_fewshot_headrepair.sh -- the SAME-SCENARIO rival we never ran.
 #
-# DistRep (run_fewshot_distrep.sh) edits every weight, so it plays a different game: it is a
-# development-time upper bound, not a rival under frozen deployment. `head_only` and
-# `last_layer_delta` are the cheap repairs that ARE available when the backbone is frozen, and
-# they are the honest test of whether a conditioned hypernet patch earns its complexity.
+# DistRep(PSO) (run_distrep_pso.py) edits every weight, so it plays a different game: it is a
+# development-time upper bound, not a rival under frozen deployment. `head_only` is the cheap
+# repair that IS available when the backbone is frozen, and it is the honest test of whether a
+# conditioned hypernet patch earns its complexity.
 #
 # Runs entirely LOCALLY (no external checkout needed): every data path already lives in this
-# repo (artifacts/bug_sets/, configs/v8_source/). Hyperparameters mirror the DistRep column
-# (12 epochs, ce clean replay @1.0) so the three baselines differ only in WHICH weights they are
+# repo (artifacts/bug_sets/, configs/shuffled_split_source/). Hyperparameters mirror the DistRep column
+# (12 epochs, ce clean replay @1.0) so the two baselines differ only in WHICH weights they are
 # allowed to touch.
 #
-# Usage: bash scripts/run_fewshot_headrepair.sh <ds>/<bb> "<seeds>" "<ks>" <head_only|last_layer_delta>
+# Usage: bash scripts/run_fewshot_headrepair.sh <ds>/<bb> "<seeds>" "<ks>" head_only
 #
 # Env overrides (same convention as run_fewshot_safepatch.sh). Defaults reproduce the shipped
 # baseline exactly, so an unset environment leaves every existing result bit-identical:
@@ -23,7 +23,7 @@
 #              DistRep resolved-config file produced by an earlier training run in a
 #              (non-anonymized) sibling repository, which is not part of this artifact and whose
 #              exact value could not be recovered. Default here falls back to
-#              configs/v8_source/<ds>/<bb>/train.yaml's own train_loop.batch_size -- this is a
+#              configs/shuffled_split_source/<ds>/<bb>/train.yaml's own train_loop.batch_size -- this is a
 #              real, in-repo number, but is NOT verified to be bit-identical to the batch size
 #              used for the paper's shipped baseline numbers. Set BATCH explicitly if you know
 #              the original value.
@@ -34,22 +34,21 @@ SETTING="$1"; SEEDS="$2"; KS="$3"; MODE="${4:-head_only}"
 CR_WEIGHT="${CR_WEIGHT:-1.0}"; EPOCHS="${EPOCHS:-12}"; OUT_TAG="${OUT_TAG:-}"
 BATCH="${BATCH:-}"
 case "$MODE" in
-  head_only)        TAG="headonly" ;;
-  last_layer_delta) TAG="lastdelta" ;;
-  *) echo "unsupported mode: $MODE (use head_only | last_layer_delta)" >&2; exit 2 ;;
+  head_only) TAG="headonly" ;;
+  *) echo "unsupported mode: $MODE (use head_only)" >&2; exit 2 ;;
 esac
 ds="${SETTING%/*}"; bb="${SETTING#*/}"
 PY="${PY:-uv run python}"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}" PYTORCH_ALLOC_CONF=expandable_segments:True
-src="configs/v8_source/${ds}/${bb}/train.yaml"
+src="configs/shuffled_split_source/${ds}/${bb}/train.yaml"
 [ -f "$src" ] || { echo "no config for ${ds}/${bb}: $src" >&2; exit 1; }
 train_bs="${BATCH:-$($PY -c "from omegaconf import OmegaConf;print(int(OmegaConf.load('$src').train_loop.batch_size))")}"
 
 for seed in $SEEDS; do
-  d="$RV/artifacts/bug_sets/v8_splits_seed${seed}/${ds}_${bb}"
+  d="$RV/artifacts/bug_sets/shuffled_split_seed${seed}/${ds}_${bb}"
   for k in $KS; do
     if [ "$k" = "full" ]; then sub="${d}/${ds}_bug_train_indices.json"
-    else sub="$RV/outputs/fewshot_v8_splits/s${seed}/${ds}_${bb}_k${k}/${ds}_bug_train_indices.json"; fi
+    else sub="$RV/outputs/fewshot_shuffled_splits/s${seed}/${ds}_${bb}_k${k}/${ds}_bug_train_indices.json"; fi
     # A missing subsample file means the ours-side run never happened for this cell; skipping
     # silently is what hid the empty k=full column once already, so make it loud.
     [ -f "$sub" ] || { echo "[skip missing sub] s${seed} k${k} ${ds}/${bb}"; continue; }

@@ -13,29 +13,19 @@ from omegaconf import DictConfig, OmegaConf
 from src.experiment.runner import ExperimentRunner
 from src.experiment.stage3 import build_stage3_bundle, resolve_runtime_device
 from src.models.dynapatch.model import DynaPatchModel
-from src.models.dynapatch.factory import seed_memory_bank
 from src.training.losses import (
-    BugSideDynamicIBPCertificationLoss,
-    CertificationGuardLoss,
-    DynamicIBPCertificationLoss,
     FocalRepairClassificationLoss,
-    FunctionalRepairBallLoss,
-    PatchConsistencyFieldLoss,
-    PatchedDecisionBallLoss,
     RepairClassificationLoss,
-    RobustRepairLoss,
     SafetyAwareRepairClassificationLoss,
 )
 from src.training.loops import (
     collect_prediction_rows,
     evaluate_mt_consistency,
     evaluate_repair_model,
-    evaluate_repair_model_under_attack,
     MTConsistencyResult,
     RepairEpochResult,
     train_repair_with_anchor_cache_ce,
     train_repair_only,
-    train_repair_with_dual_objectives,
 )
 
 
@@ -371,46 +361,6 @@ def _two_stage_early_stop_state(cfg: DictConfig, epoch_index: int) -> tuple[bool
     return True, metric, patience, min_epochs
 
 
-@torch.no_grad()
-def _seed_router_support(model: DynaPatchModel, backbone, loader, device: torch.device) -> None:
-    """Seed router support keys and optional conditioning state from the bug support set."""
-    router_budget = int(model.router.expert_keys.size(0))
-    use_full_support = bool(getattr(model, "prototype_bank", None) is not None)
-    if router_budget <= 0 and not use_full_support:
-        return
-
-    support_batches: list[torch.Tensor] = []
-    label_batches: list[torch.Tensor] = []
-    for inputs, _labels in loader:
-        if not use_full_support and router_budget <= 0:
-            break
-        if use_full_support:
-            batch_inputs = inputs.to(device)
-            batch_labels = _labels.to(device)
-        else:
-            batch_inputs = inputs[:router_budget].to(device)
-            batch_labels = _labels[:router_budget].to(device)
-        support_batches.append(batch_inputs)
-        label_batches.append(batch_labels)
-        router_budget -= int(batch_inputs.size(0))
-
-    if not support_batches:
-        return
-
-    support_inputs = torch.cat(support_batches, dim=0)  # [support_k, c, h, w]
-    support_labels = torch.cat(label_batches, dim=0)  # [support_k]
-    shallow_feat = model.decomposition.extract_shallow(support_inputs)
-    route_feat = model.decomposition.router_features(shallow_feat)  # [support_k, shallow_dim]
-    model.router.seed_support(route_feat)
-    predictions = backbone(support_inputs).argmax(dim=1)  # [support_k]
-    seed_memory_bank(
-        model.prototype_bank,
-        route_feat=route_feat,
-        labels=support_labels,
-        predictions=predictions,
-    )
-
-
 def _install_random_basis(model: DynaPatchModel, seed: int) -> None:
     """Install a random orthonormal basis of the same rank -- the necessary control for the
     logit-gradient basis.
@@ -643,10 +593,6 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
     device = resolve_runtime_device(cfg)
     print(f"[Start] resolved_device={device}", flush=True)
     backbone, model, dataloaders, _unused_loss_fn = build_stage3_bundle(cfg, device)
-    fixed_adv_cfg = cfg.data.get("fixed_adv_cache")
-    fixed_adv_cache_enabled = fixed_adv_cfg is not None and bool(fixed_adv_cfg.get("enabled", False))
-    method_name = str(cfg.method.get("name", "hypernet_only"))
-    use_prototype_bank = bool(getattr(model, "prototype_bank", None) is not None)
     clean_monitor_size_cfg = cfg.evaluation.get("clean_monitor_size")
     clean_monitor_size = None if clean_monitor_size_cfg is None else int(clean_monitor_size_cfg)
     clean_monitor_loader = _build_clean_monitor_loader(
@@ -692,9 +638,6 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
         f"clean_replay={_loader_num_samples(clean_replay_loader)}",
         flush=True,
     )
-    if method_name != "property_patch" and (str(cfg.method.get("route_mode", "distance")) != "always_on" or use_prototype_bank):
-        _seed_router_support(model, backbone, dataloaders.get("bug_train_clean", dataloaders["bug_train"]), device)
-
     if str(cfg.model.get("hypernet_style", "plain")) == "bank_coef":
         # basis_mode=random_orthonormal is the control for the logit basis, not an alternative
         # method: it holds rank, parameter count and magnitude fixed and removes only the
@@ -763,70 +706,16 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
         repair_loss_fn = FocalRepairClassificationLoss(gamma=float(cfg.loss.get("focal_gamma", 2.0)))
     else:
         raise ValueError(f"Unsupported repair loss: {repair_loss_name}")
+    # robust/cert/field/decision-ball losses (formerly src/training/losses/{robust,cert}.py) are
+    # gone: every shipped setting trains with lambda_robust=lambda_cert=lambda_field=
+    # lambda_decision_ball=0.0 (see CR10 in scripts/reproduce_all.sh), which made the dispatch
+    # below always take the train_repair_only branch already -- confirmed mathematically
+    # equivalent to train_repair_with_dual_objectives at those weights before removal.
     robust_loss_fn = None
     cert_loss_fn = None
     cert_scope = str(cfg.loss.get("cert_scope", "clean"))
     field_loss_fn = None
     decision_ball_loss_fn = None
-    if objective_name not in {"repair_only", "anchor_cache_ce"}:
-        robust_loss_fn = RobustRepairLoss(
-            epsilon=float(cfg.fault.epsilon),
-            steps=int(cfg.fault.steps),
-            step_size=float(cfg.loss.get("pgd_step_size", cfg.fault.epsilon / max(cfg.fault.steps // 2, 1))),
-        )
-    if float(cfg.loss.get("lambda_field", 0.0)) > 0.0:
-        field_loss_fn = PatchConsistencyFieldLoss(
-            epsilon=float(cfg.loss.get("field_epsilon", cfg.fault.epsilon)),
-            steps=int(cfg.loss.get("field_steps", cfg.fault.steps)),
-            step_size=_optional_float(cfg.loss.get("field_step_size")),
-            compare=str(cfg.loss.get("field_compare", "gated_patch")),
-        )
-    if float(cfg.loss.get("lambda_decision_ball", 0.0)) > 0.0:
-        decision_ball_variant = str(cfg.loss.get("decision_ball_variant", "margin_kl"))
-        if decision_ball_variant == "functional_margin":
-            decision_ball_loss_fn = FunctionalRepairBallLoss(
-                epsilon=float(cfg.loss.get("decision_ball_epsilon", cfg.fault.epsilon)),
-                steps=int(cfg.loss.get("decision_ball_steps", cfg.fault.steps)),
-                step_size=_optional_float(cfg.loss.get("decision_ball_step_size")),
-                target_margin=float(cfg.loss.get("decision_ball_target_margin", 0.0)),
-                attack_objective=str(cfg.loss.get("decision_ball_attack_objective", "margin")),
-                num_random_samples=int(cfg.loss.get("decision_ball_random_samples", 4)),
-                clean_weight=float(cfg.loss.get("decision_ball_clean_weight", 1.0)),
-                worst_case_weight=float(cfg.loss.get("decision_ball_worst_case_weight", 1.0)),
-                random_weight=float(cfg.loss.get("decision_ball_random_weight", 1.0)),
-            )
-        else:
-            decision_ball_loss_fn = PatchedDecisionBallLoss(
-                epsilon=float(cfg.loss.get("decision_ball_epsilon", cfg.fault.epsilon)),
-                steps=int(cfg.loss.get("decision_ball_steps", cfg.fault.steps)),
-                step_size=_optional_float(cfg.loss.get("decision_ball_step_size")),
-                consistency_weight=float(cfg.loss.get("decision_ball_consistency_weight", 1.0)),
-                detach_target=bool(cfg.loss.get("decision_ball_detach_target", True)),
-                target_margin=float(cfg.loss.get("decision_ball_target_margin", 0.0)),
-                attack_objective=str(cfg.loss.get("decision_ball_attack_objective", "margin")),
-                variant=decision_ball_variant,
-            )
-    if float(cfg.loss.get("lambda_cert", 0.0)) > 0.0:
-        cert_variant = str(cfg.loss.get("cert_variant", "static_patch_guard"))
-        cert_margin = float(cfg.loss.get("cert_margin", 0.0))
-        if cert_variant == "static_patch_guard":
-            if cert_scope != "clean":
-                raise ValueError("`static_patch_guard` only supports `loss.cert_scope=clean`.")
-            if epsilon_max is None:
-                raise ValueError("Certification loss requires a finite `repair.epsilon_max` bound.")
-            cert_loss_fn = CertificationGuardLoss(
-                epsilon_max=epsilon_max,
-                margin=cert_margin,
-            )
-        elif cert_variant == "dynamic_ibp":
-            if cert_scope == "clean":
-                cert_loss_fn = DynamicIBPCertificationLoss(margin=cert_margin)
-            elif cert_scope == "bug":
-                cert_loss_fn = BugSideDynamicIBPCertificationLoss(margin=cert_margin)
-            else:
-                raise ValueError(f"Unsupported cert scope: {cert_scope}")
-        else:
-            raise ValueError(f"Unsupported cert variant: {cert_variant}")
 
     history: list[dict[str, float | int | None]] = []
     warmup_epochs = int(cfg.train_loop.get("warmup_epochs", 0))
@@ -914,11 +803,12 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
                 grad_clip_norm=float(cfg.train_loop.grad_clip_norm),
                 log_every_n_batches=log_every_n_batches,
             )
-        elif (
-            (robust_loss_fn is None and cert_loss_fn is None and field_loss_fn is None and decision_ball_loss_fn is None)
-            or in_warmup
-            or (active_lambda_robust <= 0.0 and active_lambda_cert <= 0.0 and active_lambda_field <= 0.0 and active_lambda_decision_ball <= 0.0)
-        ):
+        else:
+            # Always this branch in practice: robust_loss_fn/cert_loss_fn/field_loss_fn/
+            # decision_ball_loss_fn are permanently None (see above), which used to make this the
+            # only reachable side of the old robust/cert dispatch regardless of `in_warmup` or the
+            # active_lambda_* values -- the dispatch condition is gone, not just its dual-objective
+            # alternative, since it was never anything else.
             train_result = train_repair_only(
                 model=model,
                 base_model=backbone,
@@ -939,42 +829,6 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
                 log_every_n_batches=log_every_n_batches,
                 bug_augment_views=int(cfg.loss.get("bug_augment_views", 0)),
                 lambda_delta_consistency=float(cfg.loss.get("lambda_delta_consistency", 0.0)),
-            )
-        else:
-            train_result = train_repair_with_dual_objectives(
-                model=model,
-                base_model=backbone,
-                bug_loader=dataloaders["bug_train"],
-                clean_loader=clean_replay_loader,
-                optimizer=optimizer,
-                repair_loss_fn=repair_loss_fn,
-                robust_loss_fn=robust_loss_fn if active_lambda_robust > 0.0 else None,
-                cert_loss_fn=cert_loss_fn if active_lambda_cert > 0.0 else None,
-                field_loss_fn=field_loss_fn if active_lambda_field > 0.0 else None,
-                decision_ball_loss_fn=decision_ball_loss_fn if active_lambda_decision_ball > 0.0 else None,
-                lambda_repair=float(cfg.loss.get("lambda_repair", 1.0)),
-                lambda_robust=active_lambda_robust,
-                lambda_cert=active_lambda_cert,
-                lambda_field=active_lambda_field,
-                lambda_decision_ball=active_lambda_decision_ball,
-                lambda_patch_l2=active_lambda_patch_l2,
-                lambda_clean_replay=active_lambda_clean_replay,
-                cert_on_bug=(cert_scope == "bug" and active_lambda_cert > 0.0),
-                cert_every_n_steps=int(cfg.loss.get("cert_every_n_steps", 1)),
-                cert_clean_batch_limit=(
-                    None
-                    if cfg.loss.get("cert_clean_batch_limit") is None
-                    else int(cfg.loss.get("cert_clean_batch_limit"))
-                ),
-                clean_replay_batch_limit=(
-                    None
-                    if cfg.loss.get("clean_replay_batch_limit") is None
-                    else int(cfg.loss.get("clean_replay_batch_limit"))
-                ),
-                loss_normalization=loss_normalization,
-                device=device,
-                grad_clip_norm=float(cfg.train_loop.grad_clip_norm),
-                log_every_n_batches=log_every_n_batches,
             )
         print(f"[Epoch {epoch + 1}] train_done", flush=True)
         run_eval_this_epoch = _should_run_eval(epoch, eval_every_n_epochs)
@@ -1049,21 +903,10 @@ def run_stage3_experiment(cfg: DictConfig) -> str:
             }
             bug_eval = RepairEpochResult(loss=0.0, accuracy=0.0, num_samples=0, rr=None)
             clean_eval = RepairEpochResult(loss=0.0, accuracy=0.0, num_samples=0, rr=0.0)
-        if decision_ball_loss_fn is not None and not fixed_adv_cache_enabled:
-            adv_bug_eval = evaluate_repair_model_under_attack(
-                model=model,
-                base_model=backbone,
-                loader=eval_bug_loader,
-                device=device,
-                epsilon=float(cfg.loss.get("decision_ball_epsilon", cfg.fault.epsilon)),
-                steps=int(cfg.loss.get("decision_ball_steps", cfg.fault.steps)),
-                step_size=_optional_float(cfg.loss.get("decision_ball_step_size")),
-            )
-            epoch_prediction_summary["bug_eval_adv"] = {
-                "patched_accuracy": float(adv_bug_eval.accuracy),
-                "repaired": int(round(float(adv_bug_eval.accuracy) * float(adv_bug_eval.num_samples))),
-                "count": int(adv_bug_eval.num_samples),
-            }
+        # decision_ball_loss_fn is permanently None (robust/cert/field/decision-ball losses were
+        # removed), so the adversarial bug-eval pass that used to gate on it never ran in
+        # practice; epoch_prediction_summary simply never gets a "bug_eval_adv" key, and
+        # epoch_adv_bug_summary below already handles that via .get() + an is-None check.
         epoch_bug_summary = epoch_prediction_summary["bug_eval"]
         epoch_clean_summary = epoch_prediction_summary["clean_eval"]
         epoch_adv_bug_summary = epoch_prediction_summary.get("bug_eval_adv")

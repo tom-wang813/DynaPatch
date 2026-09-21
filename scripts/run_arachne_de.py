@@ -188,11 +188,11 @@ def main() -> None:
 
     ds, bb = args.setting.split("/")
     root = Path(__file__).resolve().parent.parent
-    splits = root / f"artifacts/bug_sets/v8_splits_seed{args.seed}/{ds}_{bb}"
+    splits = root / f"artifacts/bug_sets/shuffled_split_seed{args.seed}/{ds}_{bb}"
     sub = (splits / f"{ds}_bug_train_indices.json" if args.k == "full"
-           else root / f"outputs/fewshot_v8_splits/s{args.seed}/{ds}_{bb}_k{args.k}/{ds}_bug_train_indices.json")
+           else root / f"outputs/fewshot_shuffled_splits/s{args.seed}/{ds}_{bb}_k{args.k}/{ds}_bug_train_indices.json")
 
-    cfg = OmegaConf.load(root / f"configs/v8_source/{ds}/{bb}/train.yaml")
+    cfg = OmegaConf.load(root / f"configs/shuffled_split_source/{ds}/{bb}/train.yaml")
     for key, val in [
         ("data.bug_indices_path", str(splits / f"{ds}_bug_indices.json")),
         ("data.bug_eval_indices_path", str(splits / f"{ds}_bug_eval_indices.json")),
@@ -307,6 +307,12 @@ def main() -> None:
 
     b = target.bias.detach().cpu()
     W0, Wn = target.weight.detach().cpu(), W.cpu()
+
+    ckpt_dir = Path(args.output_root) / "checkpoints"
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    torch.save({"weight": Wn, "bias": b, "target_layer_shape": list(Wn.shape)},
+               ckpt_dir / "arachne_patched_classifier.pt")
+
     out = Path(args.output_root) / "predictions"
     for name, f_, y_, p_, i_ in [("repair_holdout_unseen", held_f, held_y, held_p, held_i),
                                  ("repair_support_seen", train_f, train_y, train_p,

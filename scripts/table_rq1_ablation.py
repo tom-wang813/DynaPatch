@@ -29,7 +29,7 @@ def cell(arm, ds, bb, s, cr):
     if not all(f.exists() for f in fs):
         return None
     sn, hd, cl = (list(csv.DictReader(f.open())) for f in fs)
-    f = ROOT / f"artifacts/bug_sets/v8_splits_seed{s}/{ds}_{bb}/{ds}_clean_test_indices.json"
+    f = ROOT / f"artifacts/bug_sets/shuffled_split_seed{s}/{ds}_{bb}/{ds}_clean_test_indices.json"
     idx = set(json.loads(f.read_text())["indices"])
     cl = [r for r in cl if int(r["dataset_index"]) in idx]
     cc = [r for r in cl if int(r["label"]) in cr]

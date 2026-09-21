@@ -289,7 +289,6 @@ DATASET_BUILDERS: dict[str, DatasetBuilder] = {
     "tt100k_signs": _build_imagefolder_dataset,
     "tsinghua_traffic_light": _build_imagefolder_dataset,
     "tabular_pt": _build_tabular_pt_dataset,
-    "acas_xu_tabular": _build_tabular_pt_dataset,
 }
 
 

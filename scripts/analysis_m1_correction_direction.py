@@ -384,7 +384,7 @@ directly (2-D PCA of the unit vectors, coloured by failure type) rather than sco
          ("cluster_alignment", cluster.sort_values(["split", "method", "setting", "seed"]))],
     )
 
-    out = ROOT / "outputs" / "m1_correction_direction"
+    out = ROOT / "outputs" / "rq2" / "m1_correction_direction"
     out.mkdir(parents=True, exist_ok=True)
     direction.to_csv(out / "direction_per_cell.csv", index=False)
     magnitude.to_csv(out / "magnitude_margin_per_cell.csv", index=False)

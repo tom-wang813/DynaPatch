@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "basis": "v8 (corrected shuffled split, multi-seed 101/202/303; supersedes retracted repairbench_v7)",
+  "basis": "corrected shuffled split, multi-seed 101/202/303 (supersedes retracted repairbench_v7)",
   "generated": "2026-07-19",
   "objective": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
   "seeds": [
@@ -10,79 +10,81 @@
   ],
   "counts": {
     "frozen_backbones": 12,
-    "repair_checkpoints": 36
+    "repair_checkpoints": 36,
+    "baseline_checkpoints": 72,
+    "gate_checkpoints": 36
   },
   "frozen_backbones": [
     {
       "dataset": "gtsrb",
       "backbone": "resnet50",
-      "checkpoint_path": "outputs/exp_gtsrb_resnet50_backbone_public_v2/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/gtsrb_resnet50/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "gtsrb",
       "backbone": "convnext_tiny",
-      "checkpoint_path": "outputs/exp_gtsrb_convnext_tiny_backbone_public_v2/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/gtsrb_convnext_tiny/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "gtsrb",
       "backbone": "densenet121",
-      "checkpoint_path": "outputs/exp_gtsrb_densenet121_backbone_public_v2/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/gtsrb_densenet121/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "gtsrb",
       "backbone": "vgg16",
-      "checkpoint_path": "outputs/exp_gtsrb_vgg16_backbone_public_v2/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/gtsrb_vgg16/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "tt100k_signs",
       "backbone": "resnet50",
-      "checkpoint_path": "outputs/exp_tt100k_signs_resnet50_backbone_public_v7/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/tt100k_signs_resnet50/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "tt100k_signs",
       "backbone": "convnext_tiny",
-      "checkpoint_path": "outputs/exp_tt100k_signs_convnext_tiny_backbone_public_v7/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/tt100k_signs_convnext_tiny/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "tt100k_signs",
       "backbone": "densenet121",
-      "checkpoint_path": "outputs/exp_tt100k_signs_densenet121_backbone_public_v7/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/tt100k_signs_densenet121/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "tt100k_signs",
       "backbone": "vgg16",
-      "checkpoint_path": "outputs/exp_tt100k_signs_vgg16_backbone_public_v7/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/tt100k_signs_vgg16/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "lisa_signs",
       "backbone": "resnet50",
-      "checkpoint_path": "outputs/exp_lisa_signs_resnet50_backbone_public_v7a/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/lisa_signs_resnet50/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "lisa_signs",
       "backbone": "convnext_tiny",
-      "checkpoint_path": "outputs/exp_lisa_signs_convnext_tiny_backbone_public_v7a/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/lisa_signs_convnext_tiny/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "lisa_signs",
       "backbone": "densenet121",
-      "checkpoint_path": "outputs/exp_lisa_signs_densenet121_backbone_public_v1/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/lisa_signs_densenet121/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     },
     {
       "dataset": "lisa_signs",
       "backbone": "vgg16",
-      "checkpoint_path": "outputs/exp_lisa_signs_vgg16_backbone_public_v1/checkpoints/backbone_last.pt",
+      "checkpoint_path": "artifacts/checkpoints/backbones/lisa_signs_vgg16/backbone_last.pt",
       "provenance": "dataset-finetuned frozen backbone"
     }
   ],
@@ -93,9 +95,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/gtsrb/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/gtsrb_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_resnet50_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/gtsrb_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "gtsrb",
@@ -103,9 +105,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/gtsrb/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/gtsrb_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_convnext_tiny_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/gtsrb_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "gtsrb",
@@ -113,9 +115,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/gtsrb/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/gtsrb_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_densenet121_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/gtsrb_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "gtsrb",
@@ -123,9 +125,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/gtsrb_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_vgg16_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/gtsrb_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "tt100k_signs",
@@ -133,9 +135,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/tt100k_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/tt100k_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_resnet50_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/tt100k_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "tt100k_signs",
@@ -143,9 +145,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/tt100k_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/tt100k_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_convnext_tiny_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/tt100k_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "tt100k_signs",
@@ -153,9 +155,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/tt100k_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/tt100k_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_densenet121_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/tt100k_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "tt100k_signs",
@@ -163,9 +165,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/tt100k_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/tt100k_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_vgg16_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/tt100k_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "lisa_signs",
@@ -173,9 +175,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/lisa_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/lisa_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_resnet50_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/lisa_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "lisa_signs",
@@ -183,9 +185,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/lisa_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/lisa_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_convnext_tiny_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/lisa_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "lisa_signs",
@@ -193,9 +195,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/lisa_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/lisa_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_densenet121_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/lisa_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint; repair.patch_site=deep_feat (the default -- provably identical to last_affine for this single-Linear head)"
     },
     {
       "dataset": "lisa_signs",
@@ -203,9 +205,9 @@
       "seed": 101,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s101/lisa_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed101/lisa_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_vgg16_s101/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed101/lisa_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint; trained with repair.patch_site=last_affine (required for convnext_tiny/vgg16 -- their classifier head is multi-layer, see src/models/dynapatch/decomposition.py's patch_site docstring)"
     },
     {
       "dataset": "gtsrb",
@@ -213,9 +215,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/gtsrb/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/gtsrb_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_resnet50_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/gtsrb_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -223,9 +225,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/gtsrb/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/gtsrb_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_convnext_tiny_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/gtsrb_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -233,9 +235,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/gtsrb/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/gtsrb_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_densenet121_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/gtsrb_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -243,9 +245,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/gtsrb_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_vgg16_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/gtsrb_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -253,9 +255,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/tt100k_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/tt100k_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_resnet50_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/tt100k_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -263,9 +265,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/tt100k_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/tt100k_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_convnext_tiny_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/tt100k_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -273,9 +275,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/tt100k_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/tt100k_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_densenet121_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/tt100k_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -283,9 +285,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/tt100k_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/tt100k_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_vgg16_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/tt100k_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -293,9 +295,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/lisa_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/lisa_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_resnet50_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/lisa_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -303,9 +305,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/lisa_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/lisa_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_convnext_tiny_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/lisa_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -313,9 +315,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/lisa_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/lisa_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_densenet121_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/lisa_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -323,9 +325,9 @@
       "seed": 202,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s202/lisa_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed202/lisa_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_vgg16_s202/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed202/lisa_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -333,9 +335,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/gtsrb/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/gtsrb_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_resnet50_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/gtsrb_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -343,9 +345,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/gtsrb/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/gtsrb_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_convnext_tiny_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/gtsrb_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -353,9 +355,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/gtsrb/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/gtsrb_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_densenet121_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/gtsrb_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "gtsrb",
@@ -363,9 +365,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/gtsrb/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/gtsrb_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/gtsrb_vgg16_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/gtsrb_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -373,9 +375,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/tt100k_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/tt100k_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_resnet50_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/tt100k_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -383,9 +385,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/tt100k_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/tt100k_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_convnext_tiny_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/tt100k_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -393,9 +395,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/tt100k_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/tt100k_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_densenet121_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/tt100k_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "tt100k_signs",
@@ -403,9 +405,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/tt100k_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/tt100k_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/tt100k_signs_vgg16_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/tt100k_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -413,9 +415,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/lisa_signs/resnet50/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/lisa_signs_resnet50",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_resnet50_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/lisa_signs_resnet50",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -423,9 +425,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/lisa_signs/convnext_tiny/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/lisa_signs_convnext_tiny",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_convnext_tiny_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/lisa_signs_convnext_tiny",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -433,9 +435,9 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/lisa_signs/densenet121/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/lisa_signs_densenet121",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_densenet121_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/lisa_signs_densenet121",
+      "notes": "corrected shuffled-split repair checkpoint"
     },
     {
       "dataset": "lisa_signs",
@@ -443,14 +445,1009 @@
       "seed": 303,
       "experiment_id": "b0_residualln_bugval_smooth_cleanreplay_patchl2",
       "stage": "stage3_repair",
-      "checkpoint_file": "outputs/repairbench_v8_s303/lisa_signs/vgg16/b0_residualln_bugval_smooth_cleanreplay_patchl2/train/checkpoints/repair_best.pt",
-      "split": "artifacts/bug_sets/v8_splits_seed303/lisa_signs_vgg16",
-      "notes": "corrected (v8) shuffled-split repair checkpoint"
+      "checkpoint_file": "artifacts/checkpoints/dynapatch/lisa_signs_vgg16_s303/repair_best.pt",
+      "split": "artifacts/bug_sets/shuffled_split_seed303/lisa_signs_vgg16",
+      "notes": "corrected shuffled-split repair checkpoint"
     }
   ],
-  "gate_sweep_csv_glob": "outputs/gate_sweep_v8_s{seed}/{dataset}_{backbone}.csv",
-  "baseline_prediction_roots": [
-    "outputs/baselines_rq4_v8_s{seed}",
-    "outputs/baselines_lsr_v8_s{seed}"
+  "baseline_checkpoints": [
+    {
+      "method": "Arachne",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "Arachne",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/Arachne/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "arachne_patched_classifier.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "DistrRep",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/DistrRep/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "distrep_repaired.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "HeadFT",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/HeadFT/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "FullFT",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/FullFT/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "baseline_last.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "NNPatch",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/NNPatch/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/gtsrb_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/gtsrb_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/gtsrb_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/gtsrb_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/tt100k_signs_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/tt100k_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/tt100k_signs_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/tt100k_signs_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/lisa_signs_resnet50_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/lisa_signs_convnext_tiny_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/lisa_signs_densenet121_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    },
+    {
+      "method": "PatchNAS",
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_dir": "artifacts/checkpoints/baselines/PatchNAS/lisa_signs_vgg16_s101",
+      "checkpoint_files": [
+        "patch_head.pt",
+        "estimator_head.pt"
+      ]
+    }
+  ],
+  "gate_checkpoints": [
+    {
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_resnet50_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_convnext_tiny_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_densenet121_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_vgg16_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_resnet50_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_convnext_tiny_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_densenet121_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_vgg16_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_resnet50_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_convnext_tiny_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_densenet121_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 101,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_vgg16_s101.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_resnet50_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_convnext_tiny_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_densenet121_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_vgg16_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_resnet50_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_convnext_tiny_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_densenet121_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_vgg16_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_resnet50_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_convnext_tiny_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_densenet121_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 202,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_vgg16_s202.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "resnet50",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_resnet50_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "convnext_tiny",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_convnext_tiny_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "densenet121",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_densenet121_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "gtsrb",
+      "backbone": "vgg16",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/gtsrb_vgg16_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "resnet50",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_resnet50_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "convnext_tiny",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_convnext_tiny_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "densenet121",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_densenet121_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "tt100k_signs",
+      "backbone": "vgg16",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/tt100k_signs_vgg16_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "resnet50",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_resnet50_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "convnext_tiny",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_convnext_tiny_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "densenet121",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_densenet121_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    },
+    {
+      "dataset": "lisa_signs",
+      "backbone": "vgg16",
+      "seed": 303,
+      "checkpoint_file": "artifacts/checkpoints/gates/lisa_signs_vgg16_s303.json",
+      "notes": "src/models/dynapatch/gate.py's FeatureGate: 9-feature (3 pre-info + 6 post-info) multinomial logistic regression, fit on bug_train+bug_val+clean_calib (the \"both\" protocol) from the ep40ns effect_dump; see the dynapatch-deploy-policy-promotion-quirk memory note for why this, not deployment_policy.py's GatedDirectPolicy, is the gate that actually decides."
+    }
   ]
 }

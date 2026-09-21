@@ -7,7 +7,6 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from src.models.backbones.mlp import MLPBackbone
 
 
 def _resolve_torchvision_weights(architecture: str, pretrained_weights: str | None):
@@ -51,18 +50,6 @@ def build_backbone(
     activation: str = "relu",
 ) -> nn.Module:
     """Instantiate a torchvision backbone by architecture name."""
-    if architecture == "mlp":
-        if num_classes is None:
-            raise ValueError("MLP backbone requires `num_classes`.")
-        if input_dim is None:
-            raise ValueError("MLP backbone requires `input_dim`.")
-        return MLPBackbone(
-            input_dim=int(input_dim),
-            num_classes=int(num_classes),
-            hidden_dims=(64, 64, 64) if hidden_dims is None else hidden_dims,
-            activation=activation,
-        )
-
     if pretrained_weights is not None:
         cache_root = Path(os.environ.get("TORCH_HOME", Path.cwd() / "artifacts" / "torch_cache"))
         cache_root.mkdir(parents=True, exist_ok=True)

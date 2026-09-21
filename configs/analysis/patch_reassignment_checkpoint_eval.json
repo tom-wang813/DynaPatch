@@ -1,0 +1,45 @@
+{
+  "experiment_id": "patch_reassignment_checkpoint_eval",
+  "engineering_stage": "configurable_experiment",
+  "description": "Same direction/magnitude reassignment test as patch_reassignment_v1.json, run against the checkpoint-eval reproduction path (scripts/checkpoint_eval/dynapatch.py + scripts/deploy_from_checkpoints.sh) instead of a from-scratch training run.",
+  "rq": "Mechanism: does input-specific matching, especially direction matching, explain held-out repair? -- sanity-checked against checkpoints rather than a fresh training run.",
+  "hypothesis": "DynaPatch works partly because different inputs receive different correction directions matched to their error modes.",
+  "falsifier": "The median RR_held advantage of the original assignment over global reassignment is at most 0.02, or fewer than 24 of 36 cells exceed the null 97.5th percentile.",
+  "support_rule": "Support if the median advantage is greater than 0.05 and at least 30 of 36 cells exceed the null 97.5th percentile.",
+  "date": "2026-09-21",
+  "data": {
+    "dump_pattern": "outputs/effect_dump_v8_s{seed}/{dataset}/{backbone}/deploy_direct/predictions",
+    "split": "repair_holdout_unseen",
+    "datasets": ["gtsrb", "tt100k_signs", "lisa_signs"],
+    "backbones": ["resnet50", "convnext_tiny", "densenet121", "vgg16"],
+    "seeds": [101],
+    "population": "Rows where the frozen base prediction is wrong. Seed 101 only -- checkpoint-eval baselines/DynaPatch repair checkpoints only exist at seed 101 for the 6 baselines; DynaPatch's own repair checkpoints exist for all 3 seeds (see artifacts/checkpoints/MANIFEST.md), but this config stays at seed 101 to match what the baseline comparison in outputs/checkpoint_eval/ covers."
+  },
+  "interventions": [
+    "original",
+    "global_effect_shuffle",
+    "global_direction_shuffle",
+    "global_magnitude_shuffle",
+    "within_true_class_shuffle",
+    "within_failure_type_shuffle"
+  ],
+  "metrics": [
+    "RR_held",
+    "macro_RR",
+    "coverage_at_0.5",
+    "target_margin_gain",
+    "flip_rate"
+  ],
+  "permutations": 200,
+  "random_seed": 7401,
+  "minimum_class_n": 5,
+  "compute": {
+    "device": "CPU analysis from saved logits; invocation pins CUDA_VISIBLE_DEVICES=0",
+    "num_gpus": 0,
+    "expected_bottleneck": "CPU and small-array I/O",
+    "expected_runtime": "under 10 minutes"
+  },
+  "output_dir": "outputs/checkpoint_eval/patch_reassignment",
+  "entrypoint": "scripts/analysis_patch_reassignment.py",
+  "stopping_rule": "Sanity check only -- compare against patch_reassignment_v1's from-scratch numbers, do not treat as a replacement for it."
+}

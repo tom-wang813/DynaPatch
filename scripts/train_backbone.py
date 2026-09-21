@@ -78,7 +78,7 @@ def main(cfg: DictConfig) -> None:
     # The `train=` Hydra group (configs/train/*.yaml) composes into cfg.train, but
     # build_classification_dataloaders and the optimizer setup below share code with the
     # DynaPatch/baseline pipelines, which read hyperparameters from a `train_loop` section
-    # (a distinct key in their resolved configs/v8_source/*.yaml files). Alias it here so both
+    # (a distinct key in their resolved configs/shuffled_split_source/*.yaml files). Alias it here so both
     # invocation styles resolve to the same hyperparameters without duplicating them.
     # Same reason: build_classification_dataloaders also expects an `evaluation` section
     # (present in the resolved DynaPatch/baseline configs); backbone training has no separate

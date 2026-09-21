@@ -26,14 +26,14 @@ CLEAN_DIR="${CLEAN_DIR:-}"
 [ -n "$EXTRA_OV" ] && CR10="$CR10 $EXTRA_OV"
 
 for seed in $SEEDS; do
-  d="artifacts/bug_sets/v8_splits_seed${seed}/${ds}_${bb}"
+  d="artifacts/bug_sets/shuffled_split_seed${seed}/${ds}_${bb}"
   extra=()
   [ "$ds" = tt100k_signs ] && [ "$bb" = vgg16 ] && \
     extra+=("model.checkpoint_path=outputs/exp_tt100k_signs_vgg16_backbone_public_v7/checkpoints/backbone_last.pt")
   for k in $KS; do
     if [ "$k" = "full" ]; then sub="${d}/${ds}_bug_train_indices.json"
     else
-      sub="outputs/fewshot_v8_splits/s${seed}/${ds}_${bb}_k${k}/${ds}_bug_train_indices.json"
+      sub="outputs/fewshot_shuffled_splits/s${seed}/${ds}_${bb}_k${k}/${ds}_bug_train_indices.json"
       if [ ! -f "$sub" ]; then mkdir -p "$(dirname "$sub")"
         $PY -c "import json,random;idx=json.load(open('${d}/${ds}_bug_train_indices.json'))['indices'];o=list(idx);random.Random(${seed}).shuffle(o);json.dump({'indices':sorted(o[:${k}])},open('${sub}','w'))"
       fi
@@ -58,13 +58,13 @@ for seed in $SEEDS; do
     if [ "$done_cell" = 1 ]; then
       echo "[skip done] s${seed} k${k}"; continue; fi
     echo "=== [safepatch TRAIN] s${seed} k${k} ${ds}/${bb} @ $(date -Is) ==="
-    $PY scripts/run_resolved_experiment.py --config "configs/v8_source/${ds}/${bb}/train.yaml" \
+    $PY scripts/run_resolved_experiment.py --config "configs/shuffled_split_source/${ds}/${bb}/train.yaml" \
       --output-root "${out}/train" --overrides \
       "data.bug_indices_path=${d}/${ds}_bug_indices.json" "data.bug_eval_indices_path=${d}/${ds}_bug_eval_indices.json" \
       "data.bug_train_indices_path=${sub}" "data.bug_val_indices_path=${sub}" \
       "data.clean_eval_indices_path=${cd_}/${ds}_clean_calib_indices.json" \
       "train_loop.early_stop_metric=heldout_repaired" "runtime.device=cuda:0" $CR10 "${extra[@]}" >/dev/null 2>&1
-    $PY scripts/run_resolved_experiment.py --config "configs/v8_source/${ds}/${bb}/deploy.yaml" \
+    $PY scripts/run_resolved_experiment.py --config "configs/shuffled_split_source/${ds}/${bb}/deploy.yaml" \
       --output-root "${out}/deploy" --deployment-checkpoint-path "${out}/train/checkpoints/repair_best.pt" --overrides \
       "data.bug_indices_path=${d}/${ds}_bug_indices.json" "data.bug_train_indices_path=${d}/${ds}_bug_train_indices.json" \
       "data.bug_eval_indices_path=${d}/${ds}_bug_eval_indices.json" "data.clean_eval_indices_path=${cd_}/${ds}_clean_eval_indices.json" \

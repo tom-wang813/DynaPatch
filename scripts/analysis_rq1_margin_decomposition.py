@@ -25,7 +25,7 @@ alignment so the reader sees which part of the product (scale vs direction) diff
 methods by raw ||Delta z|| in isolation.
 
 Reuses:
-  - outputs/m1_correction_direction/magnitude_margin_per_cell.csv (DynaPatch-NoGate, NN-Patching,
+  - outputs/rq2/m1_correction_direction/magnitude_margin_per_cell.csv (DynaPatch-NoGate, NN-Patching,
     PatchNAS: mean_dz_norm, mean_dm, already computed by analysis_m1_correction_direction.py)
   - scripts/analysis_rq1_alignment.py's load_fixedpatch_cell() for FixedPatch (no prior
     magnitude/margin table exists for FixedPatch since M1 never covered it)
@@ -68,13 +68,13 @@ def fixedpatch_rows() -> list[dict]:
 
 
 def main() -> None:
-    mm = pd.read_csv(ROOT / "outputs/m1_correction_direction/magnitude_margin_per_cell.csv")
+    mm = pd.read_csv(ROOT / "outputs/rq2/m1_correction_direction/magnitude_margin_per_cell.csv")
     mm = mm[mm.split == "held"][["method", "setting", "seed", "n", "mean_dz_norm",
                                  "median_dz_norm", "mean_dm", "median_dm"]]
     fp = pd.DataFrame(fixedpatch_rows())
     per_cell = pd.concat([mm, fp], ignore_index=True)
 
-    align = pd.read_csv(ROOT / "outputs/rq1_alignment/per_cell.csv")[
+    align = pd.read_csv(ROOT / "outputs/rq2/alignment/per_cell.csv")[
         ["method", "setting", "seed", "n", "mean_cos_to_ideal"]]
     per_cell = per_cell.merge(align, on=["method", "setting", "seed", "n"], how="inner")
 
@@ -83,7 +83,7 @@ def main() -> None:
     # so check it on a reconstructed per-cell product instead of asserting exact equality.
     per_cell["implied_dm_lower_bound_check"] = per_cell.mean_dz_norm * SQRT2 * per_cell.mean_cos_to_ideal
 
-    out = ROOT / "outputs" / "rq1_margin_decomposition"
+    out = ROOT / "outputs" / "rq2" / "margin_decomposition"
     out.mkdir(parents=True, exist_ok=True)
     per_cell.to_csv(out / "per_cell.csv", index=False)
 

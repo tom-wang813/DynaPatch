@@ -1,7 +1,0 @@
-method,feature,mean_coefficient,mean_abs_coefficient,n_settings
-DynaPatch,pP_max,0.7224,0.7224,12
-DynaPatch,dm_r,0.5492,0.5492,12
-DynaPatch,dH,-0.2882,0.4157,12
-DynaPatch,dnorm_r,-0.1266,0.2456,12
-DynaPatch,dp_c,-0.0425,0.2437,12
-DynaPatch,kl,0.0222,0.361,12

@@ -1,0 +1,289 @@
+method,variant,setting,label,dataset,backbone,seed,metric,value,note,source
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,RR_held,0.6875,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,Reg,0.008377,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,CReg,0.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,RR_held,0.75,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,Reg,0.004588,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,CReg,0.000506,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,RR_held,0.666667,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,Reg,0.00728,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,CReg,0.000519,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,RR_seen,0.736842,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,RR_held,0.541667,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,Reg,0.011868,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,101,CReg,0.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,RR_seen,0.684211,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,RR_held,0.4375,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,Reg,0.010073,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,202,CReg,0.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,RR_seen,0.789474,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,RR_held,0.583333,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,Reg,0.014261,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/resnet50,G-RN,gtsrb,resnet50,303,CReg,0.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,RR_seen,0.965517,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,RR_held,0.824885,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,Reg,0.000717,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,CReg,0.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,RR_seen,0.95977,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,RR_held,0.870968,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,Reg,0.00082,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,CReg,0.000516,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,RR_seen,0.954023,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,RR_held,0.834101,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,Reg,0.001332,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,CReg,0.0,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,RR_seen,0.672414,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,RR_held,0.686636,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,Reg,0.003485,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,101,CReg,0.00051,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,RR_seen,0.787356,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,RR_held,0.682028,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,Reg,0.00451,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,202,CReg,0.000516,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,RR_seen,0.741379,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,RR_held,0.709677,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,Reg,0.004305,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/convnext_tiny,G-CN,gtsrb,convnext_tiny,303,CReg,0.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,RR_held,0.831325,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,Reg,0.004212,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,CReg,0.000507,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,RR_held,0.771084,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,Reg,0.001705,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,CReg,0.001525,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,RR_held,0.855422,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,Reg,0.004212,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,CReg,0.001011,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,RR_seen,0.818182,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,RR_held,0.722892,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,Reg,0.004212,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,101,CReg,0.001521,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,RR_seen,0.727273,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,RR_held,0.674699,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,Reg,0.001905,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,202,CReg,0.002034,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,RR_seen,0.69697,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,RR_held,0.759036,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,Reg,0.00351,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,gtsrb/densenet121,G-DN,gtsrb,densenet121,303,CReg,0.003539,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,RR_seen,0.880795,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,RR_held,0.610526,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,Reg,0.003571,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,CReg,0.001545,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,RR_seen,0.84106,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,RR_held,0.610526,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,Reg,0.005102,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,CReg,0.000522,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,RR_seen,0.854305,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,RR_held,0.578947,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,Reg,0.003265,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,CReg,0.000521,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,RR_seen,0.748344,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,RR_held,0.610526,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,Reg,0.012244,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,101,CReg,0.005149,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,RR_seen,0.774834,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,RR_held,0.589474,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,Reg,0.018059,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,202,CReg,0.012539,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,RR_seen,0.695364,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,RR_held,0.626316,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,Reg,0.016325,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,gtsrb/vgg16,G-VG,gtsrb,vgg16,303,CReg,0.01877,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,RR_seen,0.771845,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,RR_held,0.422481,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,Reg,0.014085,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,CReg,0.003652,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,RR_seen,0.800971,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,RR_held,0.387597,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,Reg,0.011875,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,CReg,0.003437,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,RR_seen,0.825243,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,RR_held,0.348837,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,Reg,0.009666,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,CReg,0.005857,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,RR_seen,0.31068,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,RR_held,0.251938,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,Reg,0.008561,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,101,CReg,0.001217,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,RR_seen,0.320388,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,RR_held,0.267442,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,Reg,0.00718,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,202,CReg,0.000737,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,RR_seen,0.320388,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,RR_held,0.251938,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,Reg,0.008285,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/resnet50,T-RN,tt100k_signs,resnet50,303,CReg,0.00244,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,RR_seen,0.672414,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,RR_held,0.252294,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,Reg,0.010676,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,CReg,0.005824,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,RR_seen,0.678161,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,RR_held,0.353211,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,Reg,0.008212,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,CReg,0.004123,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,RR_seen,0.683908,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,RR_held,0.353211,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,Reg,0.00876,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,CReg,0.00241,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,RR_seen,0.465517,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,RR_held,0.288991,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,Reg,0.016425,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,101,CReg,0.004125,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,RR_seen,0.402299,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,RR_held,0.353211,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,Reg,0.014645,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,202,CReg,0.004608,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,RR_seen,0.316092,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,RR_held,0.316514,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,Reg,0.015056,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/convnext_tiny,T-CN,tt100k_signs,convnext_tiny,303,CReg,0.006267,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,RR_seen,0.8,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,RR_held,0.525641,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,Reg,0.012718,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,CReg,0.00367,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,RR_seen,0.844,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,RR_held,0.532051,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,Reg,0.011321,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,CReg,0.004448,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,RR_seen,0.78,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,RR_held,0.50641,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,Reg,0.014815,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,CReg,0.005622,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,RR_seen,0.24,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,RR_held,0.201923,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,Reg,0.004053,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,101,CReg,0.002691,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,RR_seen,0.252,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,RR_held,0.230769,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,Reg,0.004193,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,202,CReg,0.003212,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,RR_seen,0.204,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,RR_held,0.208333,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,Reg,0.004053,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/densenet121,T-DN,tt100k_signs,densenet121,303,CReg,0.002444,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,RR_seen,0.633588,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,RR_held,0.286585,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,Reg,0.015989,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,CReg,0.014563,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,RR_seen,0.587786,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,RR_held,0.329268,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,Reg,0.016129,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,CReg,0.011837,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,RR_seen,0.660305,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,RR_held,0.292683,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,Reg,0.018654,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,CReg,0.012285,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,RR_seen,0.450382,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,RR_held,0.243902,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,Reg,0.024684,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,101,CReg,0.018447,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,RR_seen,0.400763,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,RR_held,0.292683,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,Reg,0.023843,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,202,CReg,0.014797,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,RR_seen,0.496183,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,RR_held,0.27439,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,Reg,0.026367,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,tt100k_signs/vgg16,T-VG,tt100k_signs,vgg16,303,CReg,0.015233,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,RR_held,0.617647,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,Reg,0.006967,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,CReg,0.01138,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,RR_seen,0.962963,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,RR_held,0.617647,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,Reg,0.005359,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,CReg,0.007022,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,RR_held,0.382353,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,Reg,0.004823,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,CReg,0.008439,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,RR_seen,0.703704,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,RR_held,0.529412,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,Reg,0.009646,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,101,CReg,0.015647,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,RR_seen,0.518519,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,RR_held,0.558824,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,Reg,0.010718,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,202,CReg,0.004213,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,RR_seen,0.814815,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,RR_held,0.352941,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,Reg,0.010182,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e1,lisa_signs/resnet50,L-RN,lisa_signs,resnet50,303,CReg,0.015471,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,RR_seen,0.8,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,RR_held,0.428571,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,Reg,0.001053,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,CReg,0.001328,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,RR_seen,0.7,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,RR_held,0.571429,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,Reg,0.001053,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,CReg,0.001323,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,RR_seen,0.9,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,RR_held,0.5,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,Reg,0.00316,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,CReg,0.004087,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,RR_seen,0.7,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,RR_held,0.571429,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,Reg,0.010532,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,101,CReg,0.01328,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,RR_seen,0.6,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,RR_held,0.5,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,Reg,0.027909,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,202,CReg,0.021164,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,RR_seen,1.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,RR_held,0.5,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,Reg,0.007372,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/convnext_tiny,L-CN,lisa_signs,convnext_tiny,303,CReg,0.008174,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,RR_seen,0.923077,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,RR_held,0.411765,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,Reg,0.00528,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,CReg,0.009358,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,RR_held,0.470588,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,Reg,0.002112,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,CReg,0.005525,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,RR_seen,1.0,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,RR_held,0.352941,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,Reg,0.006864,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,CReg,0.014966,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,RR_seen,0.461538,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,RR_held,0.294118,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,Reg,0.003168,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,101,CReg,0.001337,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,RR_seen,0.461538,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,RR_held,0.352941,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,Reg,0.003696,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,202,CReg,0.005525,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,RR_seen,1.0,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,RR_held,0.352941,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,Reg,0.00528,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/densenet121,L-DN,lisa_signs,densenet121,303,CReg,0.009524,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,RR_seen,0.714286,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,RR_held,0.361111,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,Reg,0.001609,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,CReg,0.004149,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,RR_seen,0.785714,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,RR_held,0.305556,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,Reg,0.001609,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,CReg,0.002736,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,RR_seen,0.607143,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,RR_held,0.333333,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,Reg,0.000536,,outputs/patch_ablation
+"DynaPatch-NoGate (40ep, no early stop)",ep40ns_lastaffine,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,CReg,0.001376,,outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,RR_seen,0.857143,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,RR_held,0.5,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,Reg,0.010193,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,101,CReg,0.015214,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,RR_seen,0.821429,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,RR_held,0.416667,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,Reg,0.011266,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,202,CReg,0.017784,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,RR_seen,0.714286,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,RR_held,0.388889,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,Reg,0.011266,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation
+FixedPatch (best lr),fixed60_lr1e2,lisa_signs/vgg16,L-VG,lisa_signs,vgg16,303,CReg,0.011004,"best of lr {1e-2,1e-1} on RR_held",outputs/patch_ablation

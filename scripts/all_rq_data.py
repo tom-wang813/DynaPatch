@@ -32,7 +32,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-OUT_CSV, OUT_TXT = ROOT / "outputs/ALL_RQ_DATA.csv", ROOT / "outputs/ALL_RQ_DATA.txt"
+OUT_CSV = ROOT / "outputs/rq2/ungated_fixedpatch_dynapatch.csv"
+OUT_TXT = ROOT / "outputs/ALL_RQ_DATA.txt"
 DSS = ["gtsrb", "tt100k_signs", "lisa_signs"]
 BBS = ["resnet50", "convnext_tiny", "densenet121", "vgg16"]
 SEEDS = [101, 202, 303]
@@ -122,19 +123,19 @@ if GP.exists():
 SHIPPED_DEFAULT = ("TopKSearch [shipped as 'LSR'] step=0.5", "Weighted Retraining (12ep, shipped)",
                    "Full fine-tuning [shipped as 'DistrRep'] (12ep)",
                    "Head-Only Fine-Tuning (12ep, shipped)", "DistRep(PSO) real, reduced budget")
-F = ROOT / "outputs/rq4_final.csv"
+F = ROOT / "outputs/rq1/comparison_baselines.csv"
 for r in csv.DictReader(F.open()):
     ds, bb = r["setting"].split("/")
     rq = "RQ4"
     note = "shipped_default (audit row, not the best config)" if r["method"] in SHIPPED_DEFAULT else ""
     add(rq, r["method"], ds, bb, r["seed"],
         {k: r[k] for k in ("RR_repair", "RR_held", "Reg", "CReg") if r[k] not in ("", None)},
-        variant=r["variant"], note=note, source="outputs/rq4_final.csv")
+        variant=r["variant"], note=note, source="outputs/rq1/comparison_baselines.csv")
 
 # 5 draws (median, with __min/__max kept alongside). See scripts/baseline_prior_patches.py
 # --repeats: one draw of these methods is not reportable.
-PP = next(p for p in (ROOT / "outputs/baseline_prior_patches_mlp_r5.json",
-                      ROOT / "outputs/baseline_prior_patches_mlp.json") if p.is_file())
+PP = next(p for p in (ROOT / "outputs/rq3/baseline_prior_patches_mlp_r5.json",
+                      ROOT / "outputs/rq1/baseline_prior_patches_mlp.json") if p.is_file())
 if PP.exists():
     for name, d in json.load(PP.open()).items():
         for stg, per_seed in d.items():
@@ -146,12 +147,23 @@ if PP.exists():
                     note="error estimator swept, MLP", source=PP.name)
 
 # ---------------------------------------------------------------- write
-FIELDS = ["rq", "method", "variant", "setting", "label", "dataset", "backbone", "seed",
+# 2026-09-21: this script computes RQ1/RQ2/RQ4 sections (see module docstring), but
+# paper_tables.py's simplified 9-table Results section only reads the RQ1 rows (via
+# outputs/rq2/ungated_fixedpatch_dynapatch.csv, feeding _rq2_ungated_persetting/
+# _rq2_ungated_summary/_rq4_summary). Rather than delete the RQ2/RQ4 computation blocks above
+# (each pulls from its own artefact tree and may still be useful for a future RQ2/RQ4-shaped
+# question), only RQ1's rows are written to the shipped CSV, and the now-constant `rq` column
+# (always "RQ1" -- a leftover of this script's OWN internal RQ1/RQ2/RQ4 tagging, unrelated to
+# the paper's RQ2/RQ4 that this file's home folder and _rq4_summary() actually feed) is dropped
+# rather than shipped as a confusing "RQ1" value inside outputs/rq2/'s own file. The full
+# picture, RQ2/RQ4 included, still goes to the human-readable OUT_TXT dump.
+FIELDS = ["method", "variant", "setting", "label", "dataset", "backbone", "seed",
           "metric", "value", "note", "source"]
+shipped_rows = [r for r in rows if r["rq"] == "RQ1"]
 with OUT_CSV.open("w", newline="") as fh:
     w = csv.DictWriter(fh, fieldnames=FIELDS)
     w.writeheader()
-    for r in rows:
+    for r in shipped_rows:
         w.writerow({k: r[k] for k in FIELDS})
 
 # readable wide dump: seed-mean per (rq, method, setting, metric)
@@ -167,7 +179,7 @@ for rq in ("RQ1", "RQ2", "RQ3", "RQ4"):
         keys = [k for k in agg if k[0] == rq and k[2] == metric]
         if not keys:
             continue
-        lines += ["", f"### {rq}  {metric}   (seed mean; per-seed rows are in ALL_RQ_DATA.csv)"]
+        lines += ["", f"### {rq}  {metric}   (seed mean; per-seed rows are in ungated_fixedpatch_dynapatch.csv)"]
         hdr = f"{'method':52s}" + "".join(f"{SHORT[d]+'-'+BB[b]:>9s}" for d, b in PAPER) + f"{'MEAN':>9s}"
         lines += [hdr, "-" * len(hdr)]
         for k in sorted(keys, key=lambda x: x[1]):
@@ -190,5 +202,5 @@ for rq in ("RQ1", "RQ2", "RQ3", "RQ4"):
                 lines.append("    n/a = in-sample under protocol C (the gate is fitted on "
                              "bug_train, which the seen split feeds); not a missing run.")
 OUT_TXT.write_text("\n".join(lines) + "\n")
-print(f"wrote {OUT_CSV}  ({len(rows)} rows)")
-print(f"wrote {OUT_TXT}")
+print(f"wrote {OUT_CSV}  ({len(shipped_rows)} RQ1 rows, of {len(rows)} computed total)")
+print(f"wrote {OUT_TXT}  (all RQs, human-readable only)")

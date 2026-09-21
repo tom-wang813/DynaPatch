@@ -1,0 +1,143 @@
+model:
+  name: VGG16
+  type: VGG
+  architecture: vgg16
+  feature_dim: 25088
+  shallow_dim: 512
+  out_dim: 25088
+  split_idx: 5
+  hypernet_hidden_dim: 64
+  hypernet_num_hidden_layers: 1
+  hypernet_style: residual_ln
+  checkpoint_path: artifacts/checkpoints/backbones/gtsrb_vgg16/backbone_last.pt
+  pretrained_weights: null
+dataset:
+  name: gtsrb
+  data_root: data
+  download: true
+  num_classes: 43
+  input_channels: 3
+  input_resolution: 224
+  train_split: train
+  clean_split: test
+  bug_split: bug_candidates
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+method:
+  name: hypernet_only
+  async_mode: none
+  router: bypassed
+  route_mode: always_on
+  patch_operator: residual
+task:
+  name: repair_misclassification
+  target: classification
+  label_space: closed_set
+fault:
+  name: pgd_bug
+  source: adversarial
+  attack: pgd
+  epsilon: 0.031
+  steps: 20
+train:
+  stage: deploy_eval
+eval:
+  name: rq1_safety
+  metrics:
+  - rsr
+  - rr
+  - clean_acc
+  - bug_acc
+  run_formal_check: true
+  profile_latency: false
+runtime:
+  device: cuda:2
+  num_workers: 4
+  precision: fp32
+  fail_on_cpu_fallback: true
+seed: 42
+device: cpu
+num_trials: 1
+num_iterations: 20
+batch_size: 1
+num_experts: 50
+models_to_test:
+- resnet50
+- vgg16
+- vit
+- convnext
+- densenet121
+num_experts_list:
+- 10
+- 50
+- 100
+- 200
+- 500
+- 1000
+experiment:
+  id: routefeat_gtsrb_vgg16
+  name: routefeat_gtsrb_vgg16
+  stage: deploy_eval
+  rq: rq18
+  track: formal
+  tags:
+  - cifar10
+  - formal
+  - deploy
+  - direct
+  - input_gate
+  - layer4
+  - ce_robust
+  - fast
+  - h512
+  - l2
+  - eps040
+  notes: RQ18 repair/protect ablation deployment for ce robust under direct policy.
+artifacts:
+  root: outputs/routefeat_rerun/gtsrb/vgg16/deploy_direct
+  save_checkpoints: false
+  save_bug_bank: true
+  save_predictions: true
+data:
+  bug_split: verified_support
+  clean_split: test
+  bug_budget: null
+  bug_indices_path: outputs/routefeat_rerun/gtsrb/vgg16/deploy_direct/bug_bank/gtsrb_bug_indices.json
+  bug_eval_indices_path: outputs/routefeat_rerun/gtsrb/vgg16/deploy_direct/bug_bank/gtsrb_bug_eval_indices.json
+  clean_eval_indices_path: null
+repair:
+  patch_site: last_affine
+  insertion_point: cross_layer
+  split_layer: block5
+  split_depth: null
+  support_set_k: 1
+  tau_conf: 0.8
+  tau_dist: 0.5
+  epsilon_max: 0.4
+  fallback: zero
+deployment:
+  checkpoint_path: artifacts/checkpoints/dynapatch/gtsrb_vgg16_s101/repair_best.pt
+  policy: direct_generalization
+  gate_source: route_feat
+  gate_metric: l2
+  gate_threshold: 9999.0
+  weighted_temperature: 0.25
+  weighted_top_k: 16
+  gate_chunk_size: 16
+train_loop:
+  batch_size: 32
+evaluation:
+  metrics:
+  - bug_acc
+  - clean_acc
+  - rr
+  batch_size: 64
+  clean_monitor_size: null
+  profile_latency: false
+  run_formal_check: false

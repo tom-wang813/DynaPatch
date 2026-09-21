@@ -146,7 +146,7 @@ def main() -> None:
                     help="write each pre-integration expert on held and clean test only")
     ap.add_argument("--experiment-config", default=None,
                     help="audit config copied into the output directory")
-    # configs/v8_source/*/train.yaml ship runtime.num_workers=0 with batch_size=16. Measured on
+    # configs/shuffled_split_source/*/train.yaml ship runtime.num_workers=0 with batch_size=16. Measured on
     # the sibling Arachne runner, that made the feature/forward passes 1652 s instead of 22 s
     # (75x). Aggregate metrics are unaffected; only the row ORDER of the shuffled bug_train
     # loader changes, and this tree's dataset_index is a positional counter anyway.
@@ -164,11 +164,11 @@ def main() -> None:
         seed_everything(a.rng_seed)
 
     ds, bb = a.setting.split("/")
-    splits = ROOT / f"artifacts/bug_sets/v8_splits_seed{a.seed}/{ds}_{bb}"
+    splits = ROOT / f"artifacts/bug_sets/shuffled_split_seed{a.seed}/{ds}_{bb}"
     sub = (splits / f"{ds}_bug_train_indices.json" if a.k == "full"
-           else ROOT / f"outputs/fewshot_v8_splits/s{a.seed}/{ds}_{bb}_k{a.k}/{ds}_bug_train_indices.json")
+           else ROOT / f"outputs/fewshot_shuffled_splits/s{a.seed}/{ds}_{bb}_k{a.k}/{ds}_bug_train_indices.json")
 
-    cfg = OmegaConf.load(ROOT / f"configs/v8_source/{ds}/{bb}/train.yaml")
+    cfg = OmegaConf.load(ROOT / f"configs/shuffled_split_source/{ds}/{bb}/train.yaml")
     for key, val in [
         ("data.bug_indices_path", str(splits / f"{ds}_bug_indices.json")),
         ("data.bug_eval_indices_path", str(splits / f"{ds}_bug_eval_indices.json")),
@@ -319,6 +319,11 @@ def main() -> None:
               flush=True)
 
     repaired = repaired_cpu.to(device).eval()
+
+    ckpt_dir = output_root / "checkpoints"
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
+    torch.save(repaired_cpu.state_dict(), ckpt_dir / "distrep_repaired.pt")
+
     out = output_root / "predictions"
     for name, X, Y, I, BP, BC, BL in [
         ("repair_holdout_unseen", held_X, held_Y, held_I, held_bp, held_bc, held_bl),
