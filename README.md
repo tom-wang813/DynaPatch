@@ -82,8 +82,7 @@ uv run python scripts/repro/rq4_sweep_gate_lambda.py      # RQ4
 does all 12 dataset/backbone settings, or pass `--dataset gtsrb --backbone resnet50` (etc.) to
 train just one.
 
-Results are written to `outputs/repro/`. `repro_tables.tex` has all 9 tables filled from a real
-run of the above, next to the paper's own published numbers for side-by-side diffing.
+Results are written to `outputs/repro/`.
 
 ---
 
