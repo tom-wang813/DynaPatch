@@ -71,12 +71,16 @@ Same shape for the baselines: `headft.py --baseline {full_ft,head_ft}`, `arachne
 ### Reproduce the paper's tables
 
 ```bash
-uv run python scripts/repro/rq1_aggregate.py            # RQ1: all 12 settings x 7 methods
-uv run python scripts/repro/rq2_train_fixedpatch.py --all
-uv run python scripts/repro/rq2_norm_and_direction.py    # RQ2
-uv run python scripts/repro/rq3_fit_eval_gate.py         # RQ3
-uv run python scripts/repro/rq4_sweep_gate_lambda.py     # RQ4
+uv run python scripts/repro/rq1_aggregate.py             # RQ1: all 12 settings x 7 methods
+uv run python scripts/repro/rq2_train_fixedpatch.py --all # or --dataset X --backbone Y for one setting
+uv run python scripts/repro/rq2_norm_and_direction.py     # RQ2
+uv run python scripts/repro/rq3_fit_eval_gate.py          # RQ3
+uv run python scripts/repro/rq4_sweep_gate_lambda.py      # RQ4
 ```
+
+`rq2_train_fixedpatch.py` trains the FixedPatch ablation checkpoints needed for RQ2 -- `--all`
+does all 12 dataset/backbone settings, or pass `--dataset gtsrb --backbone resnet50` (etc.) to
+train just one.
 
 Results are written to `outputs/repro/`. `repro_tables.tex` has all 9 tables filled from a real
 run of the above, next to the paper's own published numbers for side-by-side diffing.
@@ -89,10 +93,21 @@ For reproducing DynaPatch end to end (using the shipped frozen backbones), not j
 shipped checkpoints — trains DPGen, fits DPGate, evaluates ungated vs. gated:
 
 ```bash
-uv run python scripts/repro/train_and_eval_dynapatch.py --dataset gtsrb --backbone resnet50
+uv run python scripts/repro/train_and_eval_dynapatch.py --dataset gtsrb --backbone resnet50 --seed 101
 ```
 
+- `--dataset`: `gtsrb`, `tt100k_signs`, `lisa_signs`
+- `--backbone`: `resnet50`, `convnext_tiny`, `densenet121`, `vgg16`
+- `--seed`: `101`, `202`, or `303` (the only seeds with full split manifests)
+
 Same command works for the other 11 dataset/backbone settings by swapping `--dataset`/`--backbone`.
+
+**Output:** the trained checkpoint is saved to
+`artifacts/checkpoints/dynapatch/<dataset>_<backbone>_s<seed>/repair_best.pt` (the same canonical
+path `checkpoint_eval/dynapatch.py` reads from), and a summary is written to
+`outputs/repro/dynapatch_fromscratch_<dataset>_<backbone>_s<seed>.json` with two parts: `ungated`
+(RR/Reg/CReg with the patch always applied) and `gate` (the fitted DPGate's own classification
+metrics plus gated RR/Reg/CReg), also printed to stdout.
 
 ---
 
