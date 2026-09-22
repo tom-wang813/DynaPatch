@@ -40,16 +40,16 @@ Download `data.tar.gz` and `artifacts.tar.gz` from:
 
 **[https://figshare.com/s/2cca5fdded3c08779f52](https://figshare.com/s/2cca5fdded3c08779f52)**
 
-Extract both into the repository root:
+`data/` and `artifacts/` must end up directly under the repository root (i.e. `DynaPatch/data/`,
+`DynaPatch/artifacts/`, not nested any deeper) -- extract both archives there:
 
 ```bash
-tar -xzf data.tar.gz -C .
-tar -xzf artifacts.tar.gz -C .
+cd /path/to/DynaPatch   # repository root
+tar -xzf data.tar.gz
+tar -xzf artifacts.tar.gz
 ```
 
 This produces `data/{tt100k_signs_clf,lisa_signs_clf}/` and `artifacts/{checkpoints,bug_sets,risk}/`.
-GTSRB isn't part of the download -- it's auto-fetched by `torchvision` the first time a GTSRB
-script runs.
 
 The repository is now ready for either checkpoint-based reproduction or training from scratch.
 
