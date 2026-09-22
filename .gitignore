@@ -6,11 +6,12 @@ paper.tex
 # Local staging area for the artifacts.tar.gz/data.tar.gz built for the Zenodo upload -- the
 # archives themselves are ~9 GB, never meant to be git-tracked.
 /.release_staging/
-# Raw dataset images (~680 MB, ~75k files) are deliberately NOT git-tracked: they are
-# redistributions of GTSRB / TT100K-Signs / LISA-Signs under those datasets' own licenses
-# (see README.md "License"), and committing tens of thousands of small files caused repeated
-# git corruption on this NFS-backed filesystem. The files remain on disk for local use; see
-# README.md / ENVIRONMENT.md for how to (re)obtain each dataset.
+# artifacts/ (checkpoints, split manifests, risk matrices, ~9 GB) and data/ (GTSRB / TT100K-Signs
+# / LISA-Signs images, ~940 MB) are not git-tracked at all -- both are hosted as a Zenodo record
+# instead (see README.md "Getting the data and checkpoints") and fetched with
+# scripts/fetch_release_data.py. Committing either caused repeated git corruption on this
+# NFS-backed filesystem back when data/ alone was ~75k small files.
+/artifacts/
 /data/
 /outputs
 note/tables/
@@ -21,20 +22,7 @@ outputs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
 # Scratch verification runs (this session's own reproduction smoke tests), not shipped artifacts
 outputs/repro_grid/
 outputs/repro_run_real*/
-artifacts/torch_cache/
 outputs/_arachne_feat_cache/
-# Checkpoint binaries (backbones, DynaPatch repair checkpoints, DPGate coefficients) are not
-# shipped as part of this artifact (~2.2 GB) -- see README.md "Known limitations". All of them
-# now live under artifacts/checkpoints/ (2026-09-21: moved off outputs/, which only ever held
-# them because that's where the Hydra training scripts happened to write; see MANIFEST.md).
-# artifacts/checkpoints/baselines/'s OWN manifest.json/MANIFEST.md are tracked (small, metadata
-# only); the binaries under backbones/, dynapatch/, gates/, AND baselines/ (72 files, ~6.6 GB --
-# discovered 2026-09-21 via a `git add -A` that hung for minutes hashing them) are all ignored --
-# none of this artifact's checkpoint binaries are shipped, see README.md "Known limitations".
-artifacts/checkpoints/backbones/
-artifacts/checkpoints/dynapatch/
-artifacts/checkpoints/gates/
-artifacts/checkpoints/baselines/*/*/*.pt
 # Raw per-sample prediction dumps (~24 GB total, not this artifact's to ship) -- needed
 # locally to actually refit/reproduce DPGate (scripts/gate_lambda_sweep.py, gate_protocol_b.py,
 # analyze_response_gate_lobo.py, analysis_gate_transplant.py, analysis_p1_regression.py); the
@@ -43,12 +31,6 @@ outputs/effect_dump*/
 outputs/_response_gate_cache*/
 outputs/prior_patch_persample/
 outputs/gate_persample*/
-# NN-Patching/PatchNAS's cached penultimate/stage features (scripts/dump_prior_features.py).
-# Deleted 2026-09-21: cached from a backbone_registry.py path that no longer exists on disk
-# (outputs/exp_..._public_v2), so it could silently be scoring against different backbone weights
-# than the rest of the pipeline. scripts/checkpoint_eval/{nnpatch,patchnas}.py now default to
-# extracting these features live from the canonical backbone checkpoint instead (--features live).
-artifacts/prior_feats/
 outputs/checkpoint_eval/
 outputs/from_checkpoints/
 outputs/gate_protocol_b.csv

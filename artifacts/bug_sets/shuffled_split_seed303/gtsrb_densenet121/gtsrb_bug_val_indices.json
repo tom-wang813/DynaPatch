@@ -1,1 +1,0 @@
-{"indices": [10015, 11132, 7225, 6177, 3564, 7122, 11366, 145, 2479, 3370, 7142, 7714, 9111, 1171, 48, 11238], "count": 16, "metadata": {"split_policy": "shuffled_by_bug_split_seed_then_first_half_support_second_half_eval", "bug_split_seed": 303, "support_train_fraction": 0.8}}
