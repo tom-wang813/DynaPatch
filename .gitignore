@@ -3,14 +3,14 @@ __pycache__/
 .venv/
 
 paper.tex
-# Local staging area for the artifacts.tar.gz/data.tar.gz built for the Zenodo upload -- the
+# Local staging area for the artifacts.tar.gz/data.tar.gz built for the release upload -- the
 # archives themselves are ~9 GB, never meant to be git-tracked.
 /.release_staging/
-# artifacts/ (checkpoints, split manifests, risk matrices, ~9 GB) and data/ (GTSRB / TT100K-Signs
-# / LISA-Signs images, ~940 MB) are not git-tracked at all -- both are hosted as a Zenodo record
-# instead (see README.md "Getting the data and checkpoints") and fetched with
-# scripts/fetch_release_data.py. Committing either caused repeated git corruption on this
-# NFS-backed filesystem back when data/ alone was ~75k small files.
+# artifacts/ (checkpoints, split manifests, risk matrices, ~9 GB) and data/ (TT100K-Signs /
+# LISA-Signs images, ~251 MB shipped -- GTSRB is not, torchvision downloads it itself) are not
+# git-tracked at all -- both are hosted externally instead, download+extract manually (see
+# README.md "Quick Start"). Committing either caused repeated git corruption on this NFS-backed
+# filesystem back when data/ alone was ~75k small files.
 /artifacts/
 /data/
 /outputs
