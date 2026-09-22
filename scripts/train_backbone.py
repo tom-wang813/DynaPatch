@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from src.data.datasets import build_classification_dataloaders
+from src.data.factory import build_classification_dataloaders
 from src.experiment.runner import ExperimentRunner
 from src.models.backbones.factory import build_backbone
 

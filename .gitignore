@@ -2,6 +2,10 @@ __pycache__/
 *.pyc
 .venv/
 
+paper.tex
+# Local staging area for the artifacts.tar.gz/data.tar.gz built for the Zenodo upload -- the
+# archives themselves are ~9 GB, never meant to be git-tracked.
+/.release_staging/
 # Raw dataset images (~680 MB, ~75k files) are deliberately NOT git-tracked: they are
 # redistributions of GTSRB / TT100K-Signs / LISA-Signs under those datasets' own licenses
 # (see README.md "License"), and committing tens of thousands of small files caused repeated

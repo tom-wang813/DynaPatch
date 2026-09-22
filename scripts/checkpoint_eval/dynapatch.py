@@ -1,25 +1,24 @@
 #!/usr/bin/env python3
 """DynaPatch itself, from a repair checkpoint -- the same unified CLI shape as the 6 baseline
 scripts in this folder (headft/fullft/arachne/distrep/nnpatch/patchnas.py), so all 7 methods are
-driven the same way. Python replacement for scripts/deploy_from_checkpoints.sh (no shell driver);
-calls src.experiment.deploy_eval.run_deploy_eval(cfg) directly instead of shelling out to
-scripts/run_resolved_experiment.py.
+driven the same way. Calls src.experiment.deploy_eval.run_deploy_eval(cfg) directly, the same
+underlying call scripts/run_resolved_experiment.py's deploy_eval stage makes.
 
 `--mode checkpoint` is the only mode: DynaPatch's repair checkpoints are always obtained by
-training (scripts/run_resolved_experiment.py's stage3_repair stage, or TRAINING.md's from-scratch
-path) -- there's no meaningful "train inline" for a single cell here, unlike the baselines.
+training (scripts/run_resolved_experiment.py's stage3_repair stage, or
+scripts/repro/train_and_eval_dynapatch.py for the from-scratch path -- see README.md) -- there's
+no meaningful "train inline" for a single cell here, unlike the baselines.
 
-For one (dataset, backbone, seed) cell, runs three deploy-eval passes with the SAME overrides
-deploy_from_checkpoints.sh used:
+For one (dataset, backbone, seed) cell, runs deploy-eval passes over these splits:
   main           bug_train/bug_eval/clean_eval splits -> RR_seen/RR_held/Reg/CReg (ungated)
   deploy_direct  + deployment.save_route_features=true, dumped under outputs/effect_dump*/
   deploy_direct_calib   same, but against bug_val instead of bug_eval (the gate's calibration pass)
-The gate itself is fit once over every cell's dump, not per-cell -- see this script's --fit-gate.
+The gate itself is fit once over every cell's dump, not per-cell -- see --gate below and
+scripts/repro/rq3_fit_eval_gate.py, which does the actual fitting.
 
 Usage:
   uv run python scripts/checkpoint_eval/dynapatch.py --dataset gtsrb --backbone resnet50 \
-      --mode checkpoint --output-root outputs/from_checkpoints
-  uv run python scripts/gate_protocol_b.py --min-pos 1   # gated numbers, once all cells are deployed
+      --mode checkpoint --output-root outputs/from_checkpoints --gate
 """
 from __future__ import annotations
 
@@ -45,8 +44,8 @@ def resolved_cfg(dataset: str, backbone: str, seed: int, output_root: Path,
                   checkpoint_path: Path, device: str, *, held_suffix: str,
                   save_route_features: bool, gate_path: Path | None = None,
                   gate_lambda: float = 1.0) -> OmegaConf:
-    """One deploy.yaml, pointed at this cell's checkpoint/splits/device -- the same dot-path
-    overrides deploy_from_checkpoints.sh applied via scripts/run_resolved_experiment.py."""
+    """One deploy.yaml, pointed at this cell's checkpoint/splits/device via the same dot-path
+    override convention scripts/run_resolved_experiment.py uses."""
     cfg = OmegaConf.load(common.ROOT / f"configs/shuffled_split_source/{dataset}/{backbone}/deploy.yaml")
     sdir = common.split_dir(dataset, backbone, seed)
     cfg.artifacts.root = str(output_root)
@@ -75,8 +74,7 @@ def repair_checkpoint_path(dataset: str, backbone: str, seed: int) -> Path:
 def main() -> None:
     ap = common.base_argparser(__doc__)
     ap.add_argument("--dump-tag", default="",
-                     help="suffix for the gate-evidence dump tree, outputs/effect_dump<tag>_v8_s<seed>/ "
-                          "(matches DUMP_TAG in the old deploy_from_checkpoints.sh).")
+                     help="suffix for the gate-evidence dump tree, outputs/effect_dump<tag>_v8_s<seed>/.")
     ap.add_argument("--gate", action="store_true",
                      help="also run a 4th deploy-eval pass with artifacts/checkpoints/gates/"
                           "<dataset>_<backbone>_s<seed>.json applied (deployment.feature_gate_path), "
@@ -86,7 +84,8 @@ def main() -> None:
     a = ap.parse_args()
     if a.mode != "checkpoint":
         raise SystemExit(f"[{METHOD}] --mode train doesn't apply here -- DynaPatch's repair "
-                          f"checkpoints only ever come from actual training (see TRAINING.md).")
+                          f"checkpoints only ever come from actual training (see README.md's "
+                          f"'Train from scratch' section).")
 
     ckpt = repair_checkpoint_path(a.dataset, a.backbone, a.seed)
     if not ckpt.exists():

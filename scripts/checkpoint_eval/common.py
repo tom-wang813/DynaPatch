@@ -57,9 +57,7 @@ def backbone_checkpoint_path(dataset: str, backbone: str) -> Path:
 
 
 def load_cfg(dataset: str, backbone: str):
-    """The setting's train.yaml, pointed at the manifest-listed frozen-backbone checkpoint
-    (deploy_from_checkpoints.sh's tt100k_signs/vgg16 override, generalised to every cell rather
-    than special-cased to just that one)."""
+    """The setting's train.yaml, pointed at the manifest-listed frozen-backbone checkpoint."""
     cfg = OmegaConf.load(ROOT / f"configs/shuffled_split_source/{dataset}/{backbone}/train.yaml")
     OmegaConf.update(cfg, "model.checkpoint_path", str(backbone_checkpoint_path(dataset, backbone)), merge=True)
     return cfg

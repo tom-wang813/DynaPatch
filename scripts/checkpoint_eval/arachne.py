@@ -74,7 +74,15 @@ def main() -> None:
     ap.add_argument("--pop-size", type=int, default=100)
     ap.add_argument("--max-iter", type=int, default=100)
     ap.add_argument("--patch-aggr", type=float, default=10.0)
-    ap.add_argument("--bound-scale", type=float, default=2.0)
+    ap.add_argument("--bound-scale", type=float, default=128.0,
+                     help="DE candidate range = init +/- bound_scale*|init|. 128 (not the "
+                          "ArachneConfig dataclass's own 2.0 default) is what the shipped "
+                          "artifacts/checkpoints/baselines/Arachne/ checkpoints were retrained "
+                          "at -- bound_scale=2.0 was an unswept default (see "
+                          "artifacts/checkpoints/baselines/Arachne_bound_scale2_backup/ for the "
+                          "old checkpoints), documented in this repo's own git history as giving "
+                          "RR_held 0.125 -> 0.375 on gtsrb/resnet50 at 128, verified across all "
+                          "12 settings 2026-09-22 (mean RR_held 0.036 -> 0.146).")
     ap.add_argument("--save-checkpoint", default=None,
                      help="directory to save the trained patch as <dir>/<dataset>_<backbone>_s<seed>/"
                           "arachne_patched_classifier.pt (only for --mode train; --mode checkpoint "
