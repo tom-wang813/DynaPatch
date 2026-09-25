@@ -11,16 +11,7 @@ DynaPatch repairs a frozen DNN using two components:
 
 DynaPatch is evaluated on three traffic-sign datasets and four DNN architectures, covering 12 dataset-architecture settings, against 6 baselines: HeadFT, FullFT, Arachne, DistrRep, NNPatch, PatchNAS.
 
-> **Reproduction artifacts:** `artifacts/` (checkpoints) and `data/` (datasets) are not in this repo — they're hosted externally (Figshare), see [Quick Start](#quick-start).
-
----
-
-## Contents
-
-* [Quick Start](#quick-start)
-* [Reproduce from Released Checkpoints](#reproduce-from-released-checkpoints)
-* [Train DynaPatch from Scratch](#train-dynapatch-from-scratch)
-* [Repository Structure](#repository-structure)
+> **Reproduction artifacts:** `artifacts/` (checkpoints) and `data/` (datasets) are not in this repo — they're hosted externally (Figshare), see the Quick Start section below.
 
 ---
 
