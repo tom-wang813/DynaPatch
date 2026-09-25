@@ -49,7 +49,9 @@ tar -xzf data.tar.gz
 tar -xzf artifacts.tar.gz
 ```
 
-This produces `data/{tt100k_signs_clf,lisa_signs_clf}/` and `artifacts/{checkpoints,bug_sets,risk}/`.
+This produces `data/{gtsrb,tt100k_signs_clf,lisa_signs_clf}/` and
+`artifacts/{checkpoints,bug_sets,risk}/`. All three datasets are included in `data.tar.gz`; nothing
+is downloaded at run time.
 
 The repository is now ready for either checkpoint-based reproduction or training from scratch.
 
@@ -57,32 +59,64 @@ The repository is now ready for either checkpoint-based reproduction or training
 
 ## Reproduce from Released Checkpoints
 
+All table reproduction uses seed `101` and the 12 dataset/backbone settings
+(`gtsrb`, `tt100k_signs`, `lisa_signs` x `resnet50`, `convnext_tiny`, `densenet121`, `vgg16`).
+
 ### Evaluate a single setting
 
 ```bash
 uv run python scripts/checkpoint_eval/dynapatch.py \
     --dataset gtsrb --backbone resnet50 \
-    --mode checkpoint --output-root outputs/ckpt_eval --gate
+    --mode checkpoint --output-root outputs/repro/ckpt_eval/DynaPatch --gate
 ```
 
+`--gate` additionally applies the released DPGate (`artifacts/checkpoints/gates/`) and writes the
+gated results next to the ungated ones; without it only the ungated patch is scored.
+
 Same shape for the baselines: `headft.py --baseline {full_ft,head_ft}`, `arachne.py`,
-`distrep.py`, `nnpatch.py`, `patchnas.py`, `fixedpatch.py` (needs training first, see below).
+`distrep.py`, `nnpatch.py`, `patchnas.py`. `--mode checkpoint` (default) scores the released
+baseline checkpoint; `--mode train` retrains the baseline instead. `fixedpatch.py` has no released
+checkpoint -- train it first (step 1 below).
 
 ### Reproduce the paper's tables
 
+Run the steps **in this order** -- later steps read the outputs of earlier ones, and a missing
+input is skipped silently rather than reported as an error.
+
 ```bash
-uv run python scripts/repro/rq1_aggregate.py             # RQ1: all 12 settings x 7 methods
-uv run python scripts/repro/rq2_train_fixedpatch.py --all # or --dataset X --backbone Y for one setting
-uv run python scripts/repro/rq2_norm_and_direction.py     # RQ2
-uv run python scripts/repro/rq3_fit_eval_gate.py          # RQ3
-uv run python scripts/repro/rq4_sweep_gate_lambda.py      # RQ4
+# 1. Train the FixedPatch ablation (no released checkpoint). Must precede step 3,
+#    otherwise RQ1 skips FixedPatch. Use --dataset X --backbone Y instead of --all for one setting.
+uv run python scripts/repro/rq2_train_fixedpatch.py --all
+
+# 2. Dump FixedPatch's patch logits for RQ2 (one run per setting).
+for ds in gtsrb tt100k_signs lisa_signs; do
+  for bb in resnet50 convnext_tiny densenet121 vgg16; do
+    uv run python scripts/checkpoint_eval/fixedpatch.py --dataset $ds --backbone $bb \
+        --mode checkpoint --output-root outputs/repro/ckpt_eval/FixedPatch_routefeat \
+        --dump-route-features
+  done
+done
+
+# 3. RQ1: all 12 settings x all methods. Also writes outputs/effect_dump_v8_s101/,
+#    which steps 4-6 read. Use --settings gtsrb/resnet50 for one setting.
+uv run python scripts/repro/rq1_aggregate.py
+
+# 4-6. RQ2-RQ4
+uv run python scripts/repro/rq2_norm_and_direction.py
+uv run python scripts/repro/rq3_fit_eval_gate.py
+uv run python scripts/repro/rq4_sweep_gate_lambda.py
 ```
 
-`rq2_train_fixedpatch.py` trains the FixedPatch ablation checkpoints needed for RQ2 -- `--all`
-does all 12 dataset/backbone settings, or pass `--dataset gtsrb --backbone resnet50` (etc.) to
-train just one.
+Outputs, all under `outputs/repro/` (raw per-setting numbers; the paper tables aggregate them):
 
-Results are written to `outputs/repro/`.
+| Step | Paper | Output file |
+|---|---|---|
+| `rq1_aggregate.py` | RQ1 (repair/regression per method), RQ2 ungated comparison | `rq1_raw_cells.csv` |
+| `rq2_norm_and_direction.py` | RQ2 (patch norm/alignment, direction/magnitude reassignment) | `rq2_norm_direction_raw.json` |
+| `rq3_fit_eval_gate.py` | RQ3 (DPGate vs. input-only gate) | `rq3_raw_s101.json` |
+| `rq4_sweep_gate_lambda.py` | RQ4 (gate lambda sweep) | `rq4_raw.json` |
+
+Per-method intermediate results are kept under `outputs/repro/ckpt_eval/<method>/`.
 
 ---
 
@@ -128,7 +162,7 @@ metrics plus gated RR/Reg/CReg), also printed to stdout.
 ├── configs/                    # experiment configurations
 ├── artifacts/                  # downloaded: checkpoints, split manifests, risk matrices
 ├── outputs/repro/              # reproduced results
-└── data/                       # gtsrb/ auto-downloaded by torchvision; tt100k_signs_clf/, lisa_signs_clf/ downloaded
+└── data/                       # downloaded: gtsrb/, tt100k_signs_clf/, lisa_signs_clf/
 ```
 
 ---
