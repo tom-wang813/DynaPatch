@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Drive all 7 methods (FullFT, HeadFT, Arachne, DistrRep, NNPatch, PatchNAS, DynaPatch) across
-the 12 (dataset, backbone) settings from shipped checkpoints, and assemble
-outputs/repro/{rq1_rr,rq1_summary,rq2_ungated_persetting,rq2_ungated_summary}.csv.
+"""Drive all methods (FullFT, HeadFT, Arachne, DistrRep, FixedPatch, NNPatch, PatchNAS, DynaPatch)
+across the 12 (dataset, backbone) settings from shipped checkpoints, and write one row per
+(method, setting) to outputs/repro/rq1_raw_cells.csv.
 
 Each method is invoked as a subprocess against its own scripts/checkpoint_eval/<method>.py CLI
 (kept as separate processes rather than in-process imports so each method's own sys.path/global
@@ -15,9 +15,9 @@ apply the patch", no recalibration) -- FIXED 2026-09-22, previously used a Reg-m
 reproduces much closer (0.330/0.259). DynaPatch is still run first per setting to populate
 outputs/repro/dynapatch_reg_lookup.json, now only consumed by that unused diagnostic.
 
-FixedPatch is deliberately NOT included here yet -- no shipped checkpoint exists for it (see the
-plan). scripts/checkpoint_eval/fixedpatch.py + scripts/repro/rq2_train_fixedpatch.py add it in a
-later step, at which point rq2_ungated_persetting/summary become fillable.
+FixedPatch (the RQ2 ablation) is scored from its shipped checkpoint,
+artifacts/checkpoints/baselines/FixedPatch/<ds>_<bb>_s101/repair_best.pt, via
+scripts/checkpoint_eval/fixedpatch.py; a setting whose checkpoint is missing is skipped.
 
 Usage:
   uv run python scripts/repro/rq1_aggregate.py --settings gtsrb/resnet50          # one setting
