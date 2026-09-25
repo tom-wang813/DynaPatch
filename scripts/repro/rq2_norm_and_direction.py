@@ -183,12 +183,46 @@ def main() -> None:
             nm = norm_metrics(data)
             rd = direction_magnitude_reassignment(data)
             results[method][label] = {**nm, **rd}
-            print(f"  {method}: {results[method][label]}")
+            print(f"  {method}: n={nm['n']} align={nm['alignment_mean']:.3f} "
+                  f"norm={nm['norm_median']:.2f} gain={nm['margin_gain_median']:.2f} "
+                  f"dir={rd['direction_decrease']} mag={rd['magnitude_decrease']}")
 
     out_path = ROOT / "outputs/repro/rq2_norm_direction_raw.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(results, indent=2))
-    print(f"\nwrote {out_path}")
+
+    # Table rq2_norm: per-input values pooled over all settings -- mean alpha_M, median ||dl||_2,
+    # median dm_rep. Table rq2_direction: mean over settings of the per-setting RR decrease.
+    norm_rows, dir_rows = [], []
+    for method, cells in results.items():
+        c = [v for v in cells.values() if v]
+        if not c:
+            continue
+        norm_rows.append((method, float(np.mean(np.concatenate([v["_alpha"] for v in c]))),
+                          float(np.median(np.concatenate([v["_norm"] for v in c]))),
+                          float(np.median(np.concatenate([v["_dm_rep"] for v in c]))), len(c)))
+        if method != "FixedPatch":  # not part of Table rq2_direction
+            d = [v for v in c if v["direction_decrease"] is not None]
+            dir_rows.append((method, float(np.mean([v["direction_decrease"] for v in d])),
+                             float(np.mean([v["magnitude_decrease"] for v in d])), len(d)))
+
+    print(f"\nTable rq2_norm (seed {SEED})")
+    print(f"{'Method':<18}{'Alignment':>10}{'||dl||_2':>10}{'dm_rep':>9}{'settings':>10}")
+    for m, a, n, g, k in norm_rows:
+        print(f"{m:<18}{a:>10.3f}{n:>10.2f}{g:>9.2f}{k:>10}")
+    print(f"\nTable rq2_direction (seed {SEED})")
+    print(f"{'Method':<18}{'Direction':>10}{'Magnitude':>10}{'settings':>10}")
+    for m, dr, mg, k in dir_rows:
+        print(f"{m:<18}{dr:>10.3f}{mg:>10.3f}{k:>10}")
+
+    table_dir = out_path.parent
+    with (table_dir / "rq2_norm.csv").open("w") as f:
+        f.write("method,alignment,norm,margin_gain,settings\n")
+        f.writelines(f"{m},{a},{n},{g},{k}\n" for m, a, n, g, k in norm_rows)
+    with (table_dir / "rq2_direction.csv").open("w") as f:
+        f.write("method,direction,magnitude,settings\n")
+        f.writelines(f"{m},{dr},{mg},{k}\n" for m, dr, mg, k in dir_rows)
+    print(f"\nwrote {out_path}\nwrote {table_dir}/rq2_norm.csv\nwrote {table_dir}/rq2_direction.csv")
 
 
 if __name__ == "__main__":

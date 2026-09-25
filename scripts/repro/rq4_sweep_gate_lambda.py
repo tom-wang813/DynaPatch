@@ -86,7 +86,29 @@ def main() -> None:
     out_path = ROOT / "outputs/repro/rq4_raw.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(results, indent=2))
-    print(f"\nwrote {out_path}")
+
+    # Table rq4_summary: mean over the settings with a shipped gate; parentheses = relative
+    # change from DynaPatch-NoGate, computed from the 4-decimal values the table shows
+    gated = [r for r in results.values() if r[f"lambda={LAMBDAS[0]}"] is not None]
+    metrics = ("rr_held", "reg", "creg")
+    mean = {k: {m: sum(r[k][m] for r in gated) / len(gated) for m in metrics}
+            for k in ["nogate"] + [f"lambda={lam}" for lam in LAMBDAS]}
+    rows = []
+    print(f"\nTable rq4_summary (seed {SEED}, mean over {len(gated)} settings)")
+    print(f"{'Gate setting':<14}{'RR':>18}{'Reg':>20}{'CReg':>20}")
+    for k, v in mean.items():
+        label = "NoGate" if k == "nogate" else k
+        cells = []
+        for m in metrics:
+            rel = "" if k == "nogate" else f" ({100 * (round(v[m], 4) / round(mean['nogate'][m], 4) - 1):+.1f}%)"
+            cells.append(f"{v[m]:.4f}{rel}")
+        print(f"{label:<14}{cells[0]:>18}{cells[1]:>20}{cells[2]:>20}")
+        rows.append({"gate_setting": label, **v})
+    table_path = ROOT / "outputs/repro/rq4_summary.csv"
+    with table_path.open("w") as f:
+        f.write("gate_setting,rr_held,reg,creg\n")
+        f.writelines(f"{r['gate_setting']},{r['rr_held']},{r['reg']},{r['creg']}\n" for r in rows)
+    print(f"\nwrote {out_path}\nwrote {table_path}")
 
 
 if __name__ == "__main__":

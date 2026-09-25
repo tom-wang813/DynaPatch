@@ -53,6 +53,59 @@ def setting_label(dataset: str, backbone: str) -> str:
     return f"{d}-{b}"
 
 
+# paper table layout: rows in G/T/L x RN/CN/VG/DN order, (display name, method key in the CSV)
+PAPER_ROW_ORDER = [f"{d}-{b}" for _, d in DATASETS for b in ("RN", "CN", "VG", "DN")]
+RQ1_METHODS = [("FullFT", "FullFT"), ("HeadFT", "HeadFT"), ("Arachne", "Arachne"),
+               ("DistrRep", "DistrRep"),
+               ("NNPatch", "NNPatch (tau=0.5 natural threshold, Table rq1_rr op point)"),
+               ("PatchNAS", "PatchNAS (tau=0.5 natural threshold, Table rq1_rr op point)"),
+               ("DynaPatch", "DynaPatch")]
+RQ2_UNGATED_METHODS = [("FixedPatch", "FixedPatch"), ("DynaPatch-NoGate", "DynaPatch-NoGate"),
+                       ("NNPatch", "NNPatch (always-route, ungated op point)"),
+                       ("PatchNAS", "PatchNAS (always-route, ungated op point)")]
+
+
+def print_tables(rows: list[dict]) -> None:
+    """Print tables rq1_rr, rq1_summary, rq2_ungated_persetting, rq2_ungated_summary from the
+    per-(method, setting) rows, and write each as CSV under REPORT_DIR."""
+    cell = {(r["method"], r["setting"]): r for r in rows if r.get("RR_HELD") is not None}
+    order = [s for s in PAPER_ROW_ORDER if any(k[1] == s for k in cell)]
+
+    def mean(key: str, metric: str) -> float | None:
+        v = [cell[(key, s)][metric] for s in order if (key, s) in cell]
+        return sum(v) / len(v) if v else None
+
+    def fmt(v: float | None, digits: int) -> str:
+        return "-" if v is None else f"{v:.{digits}f}"
+
+    def emit(name: str, header: list[str], body: list[list[str]]) -> None:
+        widths = [max(len(x[i]) for x in [header] + body) + 2 for i in range(len(header))]
+        print(f"\nTable {name} (seed {SEED})")
+        for line in [header] + body:
+            print(line[0].ljust(widths[0]) + "".join(x.rjust(w) for x, w in zip(line[1:], widths[1:])))
+        (REPORT_DIR / f"{name}.csv").write_text("\n".join(",".join(x) for x in [header] + body) + "\n")
+
+    # rq1_rr: per-setting RR_held of the 7 RQ1 methods
+    body = [[s] + [fmt(cell.get((k, s), {}).get("RR_HELD"), 3) for _, k in RQ1_METHODS] for s in order]
+    body.append(["Mean"] + [fmt(mean(k, "RR_HELD"), 3) for _, k in RQ1_METHODS])
+    emit("rq1_rr", ["Setting"] + [n for n, _ in RQ1_METHODS], body)
+
+    # rq1_summary / rq2_ungated_summary: mean RR_held / Reg / CReg per method
+    for name, methods, digits in (("rq1_summary", RQ1_METHODS, 3),
+                                  ("rq2_ungated_summary", RQ2_UNGATED_METHODS, 3)):
+        body = [[n, fmt(mean(k, "RR_HELD"), digits), fmt(mean(k, "REG"), 4), fmt(mean(k, "CREG"), 4)]
+                for n, k in methods]
+        emit(name, ["Method", "RR", "Reg", "CReg"], body)
+
+    # rq2_ungated_persetting: FixedPatch vs DynaPatch-NoGate per setting
+    pair = RQ2_UNGATED_METHODS[:2]
+    header = ["Setting"] + [f"{n} {m}" for n, _ in pair for m in ("RR", "Reg", "CReg")]
+    body = [[s] + [fmt(cell.get((k, s), {}).get(m), 4) for _, k in pair for m in ("RR_HELD", "REG", "CREG")]
+            for s in order]
+    body.append(["Mean"] + [fmt(mean(k, m), 4) for _, k in pair for m in ("RR_HELD", "REG", "CREG")])
+    emit("rq2_ungated_persetting", header, body)
+
+
 def run(cmd: list[str]) -> str:
     print(f"$ {' '.join(cmd)}")
     proc = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
@@ -186,6 +239,7 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
     print(f"\nwrote {out_csv} ({len(rows)} rows)")
+    print_tables(rows)
 
 
 if __name__ == "__main__":

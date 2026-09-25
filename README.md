@@ -93,14 +93,15 @@ uv run python scripts/repro/rq3_fit_eval_gate.py
 uv run python scripts/repro/rq4_sweep_gate_lambda.py
 ```
 
-Outputs, all under `outputs/repro/` (raw per-setting numbers; the paper tables aggregate them):
+Each RQ2-RQ4 script prints the corresponding paper tables (seed 101) and writes them as CSV under
+`outputs/repro/`:
 
-| Step | Paper | Output file |
+| Step | Paper table(s) | Output files |
 |---|---|---|
-| `rq1_aggregate.py` | RQ1 (repair/regression per method), RQ2 ungated comparison | `rq1_raw_cells.csv` |
-| `rq2_norm_and_direction.py` | RQ2 (patch norm/alignment, direction/magnitude reassignment) | `rq2_norm_direction_raw.json` |
-| `rq3_fit_eval_gate.py` | RQ3 (DPGate vs. input-only gate) | `rq3_raw_s101.json` |
-| `rq4_sweep_gate_lambda.py` | RQ4 (gate lambda sweep) | `rq4_raw.json` |
+| `rq1_aggregate.py` | RQ1 (repair/regression per method), RQ2 ungated comparison | `rq1_raw_cells.csv` (one row per method and setting) |
+| `rq2_norm_and_direction.py` | `rq2_norm`, `rq2_direction` | `rq2_norm.csv`, `rq2_direction.csv` |
+| `rq3_fit_eval_gate.py` | `rq3_gate_clf`, `rq3_gate_effect` | `rq3_gate_clf.csv`, `rq3_gate_effect.csv` |
+| `rq4_sweep_gate_lambda.py` | `rq4_summary` | `rq4_summary.csv` |
 
 Per-method intermediate results are kept under `outputs/repro/ckpt_eval/<method>/`.
 

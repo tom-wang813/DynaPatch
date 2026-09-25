@@ -139,22 +139,6 @@ def fit_preonly_gate(dataset: str, backbone: str, seed: int) -> FeatureGate | No
     return gate
 
 
-def fit_prepost_refit_gate(dataset: str, backbone: str, seed: int) -> FeatureGate | None:
-    """Independent 9-feature DPGate refit (same clean_calib protocol as fit_preonly_gate, just
-    without slicing to the 3 pre-only features) -- NOT loaded from artifacts/checkpoints/gates/,
-    to check whether the fitting protocol alone reproduces close to the shipped gate's
-    performance."""
-    base_logits, patched_logits, base_correct, patched_correct = _fitting_pool(dataset, backbone, seed)
-    feats = compute_gate_features(base_logits, patched_logits)
-    gain = gain_labels(base_correct, patched_correct)
-    if len(set(gain.tolist())) < 2:
-        return None
-    gate = FeatureGate.fit(feats, gain)
-    GATE_OUT.mkdir(parents=True, exist_ok=True)
-    gate.save(GATE_OUT / f"{dataset}_{backbone}_prepost_refit_s{seed}.json")
-    return gate
-
-
 def load_shipped_prepost_gate(dataset: str, backbone: str, seed: int) -> FeatureGate | None:
     path = SHIPPED_GATE_ROOT / f"{dataset}_{backbone}_s{seed}.json"
     if not path.exists():
@@ -210,9 +194,6 @@ def run_one(dataset: str, backbone: str, seed: int = DEFAULT_SEED) -> dict:
     gate = load_shipped_prepost_gate(dataset, backbone, seed)
     out["prepost"] = evaluate(dataset, backbone, seed, gate, None) if gate is not None else None
 
-    gate = fit_prepost_refit_gate(dataset, backbone, seed)
-    out["prepost_refit"] = evaluate(dataset, backbone, seed, gate, None) if gate is not None else None
-
     return out
 
 
@@ -228,13 +209,35 @@ def main() -> None:
         print(f"=== {dataset}/{backbone} (seed {a.seed}) ===")
         r = run_one(dataset, backbone, a.seed)
         results[f"{dataset}/{backbone}"] = r
-        for tag in ("preonly", "prepost", "prepost_refit"):
+        for tag in ("preonly", "prepost"):
             print(f"  {tag}: {r[tag]}")
 
     out_path = ROOT / f"outputs/repro/rq3_raw_s{a.seed}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(results, indent=2))
-    print(f"\nwrote {out_path}")
+
+    # Tables rq3_gate_clf / rq3_gate_effect: per setting, Pre (DPInput) vs Pre+Post (DPGate),
+    # plus the mean over settings where both variants are available
+    tables = [("rq3_gate_clf", ("accuracy", "precision", "recall", "f1"), 3),
+              ("rq3_gate_effect", ("rr_held", "reg", "creg"), 4)]
+    both = {k: r for k, r in results.items() if r["preonly"] and r["prepost"]}
+    for name, metrics, digits in tables:
+        header = "".join(f"{m + ' Pre':>16}{m + ' Pre+Post':>18}" for m in metrics)
+        print(f"\nTable {name} (seed {a.seed})")
+        print(f"{'Setting':<26}{header}")
+        lines = ["setting," + ",".join(f"{m}_pre,{m}_prepost" for m in metrics)]
+        rows = list(both.items())
+        rows.append(("Mean", {tag: {m: sum(r[tag][m] for r in both.values()) / len(both)
+                                     for m in metrics} for tag in ("preonly", "prepost")}))
+        for setting, r in rows:
+            vals = [r[tag][m] for m in metrics for tag in ("preonly", "prepost")]
+            cells = "".join(f"{v:>16.{digits}f}" if i % 2 == 0 else f"{v:>18.{digits}f}"
+                            for i, v in enumerate(vals))
+            print(f"{setting:<26}{cells}")
+            lines.append(f"{setting}," + ",".join(str(v) for v in vals))
+        (out_path.parent / f"{name}.csv").write_text("\n".join(lines) + "\n")
+    print(f"\nwrote {out_path}\nwrote {out_path.parent}/rq3_gate_clf.csv\n"
+          f"wrote {out_path.parent}/rq3_gate_effect.csv")
 
 
 if __name__ == "__main__":
