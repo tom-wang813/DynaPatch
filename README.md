@@ -74,9 +74,8 @@ uv run python scripts/checkpoint_eval/dynapatch.py \
 gated results next to the ungated ones; without it only the ungated patch is scored.
 
 Same shape for the baselines: `headft.py --baseline {full_ft,head_ft}`, `arachne.py`,
-`distrep.py`, `nnpatch.py`, `patchnas.py`. `--mode checkpoint` (default) scores the released
-baseline checkpoint; `--mode train` retrains the baseline instead. `fixedpatch.py` has no released
-checkpoint -- train it first (step 1 below).
+`distrep.py`, `nnpatch.py`, `patchnas.py`, `fixedpatch.py` (the FixedPatch ablation). All of them
+score the released checkpoints under `artifacts/checkpoints/`.
 
 ### Reproduce the paper's tables
 
@@ -84,11 +83,7 @@ Run the steps **in this order** -- later steps read the outputs of earlier ones,
 input is skipped silently rather than reported as an error.
 
 ```bash
-# 1. Train the FixedPatch ablation (no released checkpoint). Must precede step 3,
-#    otherwise RQ1 skips FixedPatch. Use --dataset X --backbone Y instead of --all for one setting.
-uv run python scripts/repro/rq2_train_fixedpatch.py --all
-
-# 2. Dump FixedPatch's patch logits for RQ2 (one run per setting).
+# 1. Dump FixedPatch's patch logits for RQ2 (inference only, one run per setting).
 for ds in gtsrb tt100k_signs lisa_signs; do
   for bb in resnet50 convnext_tiny densenet121 vgg16; do
     uv run python scripts/checkpoint_eval/fixedpatch.py --dataset $ds --backbone $bb \
@@ -97,11 +92,11 @@ for ds in gtsrb tt100k_signs lisa_signs; do
   done
 done
 
-# 3. RQ1: all 12 settings x all methods. Also writes outputs/effect_dump_v8_s101/,
-#    which steps 4-6 read. Use --settings gtsrb/resnet50 for one setting.
+# 2. RQ1: all 12 settings x all methods. Also writes outputs/effect_dump_v8_s101/,
+#    which steps 3-5 read. Use --settings gtsrb/resnet50 for one setting.
 uv run python scripts/repro/rq1_aggregate.py
 
-# 4-6. RQ2-RQ4
+# 3-5. RQ2-RQ4
 uv run python scripts/repro/rq2_norm_and_direction.py
 uv run python scripts/repro/rq3_fit_eval_gate.py
 uv run python scripts/repro/rq4_sweep_gate_lambda.py
